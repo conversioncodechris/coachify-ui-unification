@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
-import { MessageSquare, Send, EyeOff, Pin, PinOff } from 'lucide-react';
+import { MessageSquare, Send, EyeOff, Pin, PinOff, Plus } from 'lucide-react';
 import ComplianceChatInterface from '../components/ComplianceChatInterface';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../components/ui/tooltip";
+import { useToast } from "../hooks/use-toast";
 
 interface ComplianceTopic {
   icon: string;
@@ -15,6 +15,7 @@ interface ComplianceTopic {
 
 const ComplianceAI = () => {
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
+  const { toast } = useToast();
   const [topics, setTopics] = useState<ComplianceTopic[]>([
     {
       icon: '🏠',
@@ -98,6 +99,12 @@ const ComplianceAI = () => {
     }
   ]);
 
+  const [newTopic, setNewTopic] = useState({
+    icon: '📝',
+    title: '',
+    description: ''
+  });
+
   const handleTopicClick = (topic: string) => {
     setSelectedTopic(topic);
   };
@@ -124,7 +131,13 @@ const ComplianceAI = () => {
     });
   };
 
-  // Sort topics so pinned ones are at the top
+  const handleAddTopicClick = () => {
+    toast({
+      title: "Coming Soon",
+      description: "The ability to add custom topics will be available soon.",
+    });
+  };
+
   const sortedTopics = [...topics].sort((a, b) => {
     if (a.pinned && !b.pinned) return -1;
     if (!a.pinned && b.pinned) return 1;
@@ -206,6 +219,19 @@ const ComplianceAI = () => {
                         )}
                       </div>
                     ))}
+                    
+                    {/* Add Topic Card */}
+                    <div 
+                      className="insta-card cursor-pointer hover:border-insta-blue transition-colors relative group border-dashed border-2"
+                      onClick={handleAddTopicClick}
+                    >
+                      <div className="flex items-center justify-center h-full">
+                        <div className="flex flex-col items-center text-insta-lightText">
+                          <Plus size={24} className="mb-2" />
+                          <span className="font-medium">Add New Topic</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
