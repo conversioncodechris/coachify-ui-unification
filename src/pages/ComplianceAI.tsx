@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import { MessageSquare, Send } from 'lucide-react';
@@ -121,25 +120,22 @@ const ComplianceAI = () => {
                 <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-border p-6">
                   <h2 className="text-2xl font-semibold text-insta-text mb-6">Real Estate Compliance Topics</h2>
                   
-                  <div className="mt-8">
-                    <h3 className="font-medium text-lg mb-4">Popular Real Estate Compliance Topics:</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {complianceTopics.map((topic, index) => (
-                        <div 
-                          key={index} 
-                          className="insta-card cursor-pointer hover:border-insta-blue transition-colors"
-                          onClick={() => handleTopicClick(topic.title)}
-                        >
-                          <div className="flex items-start">
-                            <span className="text-xl mr-2">{topic.icon}</span>
-                            <div>
-                              <div className="font-medium">{topic.title}</div>
-                              <div className="text-sm text-insta-lightText line-clamp-1">{topic.description}</div>
-                            </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {complianceTopics.map((topic, index) => (
+                      <div 
+                        key={index} 
+                        className="insta-card cursor-pointer hover:border-insta-blue transition-colors"
+                        onClick={() => handleTopicClick(topic.title)}
+                      >
+                        <div className="flex items-start">
+                          <span className="text-xl mr-2">{topic.icon}</span>
+                          <div>
+                            <div className="font-medium">{topic.title}</div>
+                            <div className="text-sm text-insta-lightText line-clamp-1">{topic.description}</div>
                           </div>
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
