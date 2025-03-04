@@ -6,7 +6,7 @@ interface AppHeaderProps {
   userAvatar?: string;
 }
 
-const AppHeader: React.FC<AppHeaderProps> = ({ userAvatar = '/lovable-uploads/0dd3499c-aaf2-4314-9ed1-2dfd0277918e.png' }) => {
+const AppHeader: React.FC<AppHeaderProps> = ({ userAvatar }) => {
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -45,7 +45,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ userAvatar = '/lovable-uploads/0d
       <div className="flex items-center">
         <Link to="/profile">
           <img 
-            src={userAvatar} 
+            src={userAvatar || '/lovable-uploads/0dd3499c-aaf2-4314-9ed1-2dfd0277918e.png'} 
             alt="User Avatar" 
             className="w-10 h-10 rounded-full cursor-pointer" 
           />
