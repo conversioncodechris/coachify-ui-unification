@@ -1,6 +1,13 @@
 
 import React, { useState } from 'react';
-import { MessageSquare, ThumbsUp, ThumbsDown, Send } from 'lucide-react';
+import { MessageSquare, ThumbsUp, ThumbsDown, Send, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ComplianceChatInterfaceProps {
   topic: string;
@@ -11,6 +18,13 @@ interface Message {
   sender: 'user' | 'ai';
   content: string;
   timestamp: Date;
+  sources?: Source[];
+}
+
+interface Source {
+  title: string;
+  content: string;
+  url?: string;
 }
 
 const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic, onBackToTopics }) => {
@@ -18,10 +32,32 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
     {
       sender: 'ai',
       content: `Welcome to the ${topic} topic! How can I assist you today?`,
-      timestamp: new Date()
+      timestamp: new Date(),
+      sources: []
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
+  const [isSourcesPanelOpen, setIsSourcesPanelOpen] = useState(false);
+  const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(null);
+
+  // Mock sources for demo
+  const mockSources: Source[] = [
+    {
+      title: 'Fair Housing Act',
+      content: 'The Fair Housing Act is a federal law that prohibits discrimination in housing based on race, color, national origin, religion, sex, familial status, or disability.',
+      url: 'https://www.hud.gov/program_offices/fair_housing_equal_opp/fair_housing_act_overview'
+    },
+    {
+      title: 'NAR Code of Ethics',
+      content: 'The National Association of REALTORS® Code of Ethics establishes standards of ethical conduct for real estate professionals.',
+      url: 'https://www.nar.realtor/about-nar/governing-documents/code-of-ethics/2022-code-of-ethics-standards-of-practice'
+    },
+    {
+      title: 'State Real Estate Commission',
+      content: 'State licensing laws and regulations govern real estate practice within each jurisdiction.',
+      url: 'https://www.arello.org/regulatory-agencies/'
+    }
+  ];
 
   const handleSendMessage = () => {
     if (!inputMessage.trim()) return;
@@ -41,7 +77,8 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
       const aiResponse: Message = {
         sender: 'ai',
         content: `Thank you for your question about ${topic}. This is a simulated response that would typically come from the AI assistant with helpful information about this real estate compliance topic.`,
-        timestamp: new Date()
+        timestamp: new Date(),
+        sources: mockSources
       };
       setMessages(prev => [...prev, aiResponse]);
     }, 1000);
@@ -54,81 +91,200 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
     }
   };
 
-  return (
-    <div className="flex flex-col h-full">
-      <div className="flex p-4 bg-white border-b border-border items-center">
-        <button 
-          onClick={onBackToTopics}
-          className="mr-3 text-insta-blue hover:text-insta-blue/80"
-        >
-          ← Back
-        </button>
-        <div className="bg-insta-gray p-2 rounded-md">
-          <MessageSquare size={20} className="text-insta-blue" />
-        </div>
-        <h2 className="text-lg font-medium ml-4">{topic}</h2>
-      </div>
+  const toggleSourcesPanel = () => {
+    setIsSourcesPanelOpen(!isSourcesPanelOpen);
+    if (!isSourcesPanelOpen) {
+      setActiveSourceIndex(null);
+    }
+  };
 
-      <div className="flex-1 overflow-auto p-4">
-        <div className="max-w-3xl mx-auto space-y-6">
-          {messages.map((message, index) => (
-            <div 
-              key={index} 
-              className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
+  const showSourceDetails = (index: number) => {
+    setActiveSourceIndex(index === activeSourceIndex ? null : index);
+  };
+
+  // Get all unique sources from AI messages
+  const allSources = messages
+    .filter(msg => msg.sender === 'ai' && msg.sources && msg.sources.length > 0)
+    .flatMap(msg => msg.sources || []);
+
+  return (
+    <div className="flex h-full">
+      <div className={cn(
+        "flex flex-col flex-1 h-full transition-all duration-300",
+        isSourcesPanelOpen ? "mr-72" : ""
+      )}>
+        <div className="flex p-4 bg-white border-b border-border items-center">
+          <button 
+            onClick={onBackToTopics}
+            className="mr-3 text-insta-blue hover:text-insta-blue/80"
+          >
+            ← Back
+          </button>
+          <div className="bg-insta-gray p-2 rounded-md">
+            <MessageSquare size={20} className="text-insta-blue" />
+          </div>
+          <h2 className="text-lg font-medium ml-4">{topic}</h2>
+          
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button 
+                  className="ml-auto p-2 rounded-full hover:bg-insta-gray text-insta-lightText"
+                  onClick={toggleSourcesPanel}
+                >
+                  {isSourcesPanelOpen ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {isSourcesPanelOpen ? "Hide sources" : "Show sources"}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+
+        <div className="flex-1 overflow-auto p-4">
+          <div className="max-w-3xl mx-auto space-y-6">
+            {messages.map((message, index) => (
               <div 
-                className={`max-w-[80%] rounded-lg p-4 ${
-                  message.sender === 'user' 
-                    ? 'bg-insta-blue text-white' 
-                    : 'bg-white border border-border'
-                }`}
+                key={index} 
+                className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
               >
-                <div className="flex items-center mb-2">
+                <div 
+                  className={`max-w-[80%] rounded-lg p-4 ${
+                    message.sender === 'user' 
+                      ? 'bg-insta-blue text-white' 
+                      : 'bg-white border border-border'
+                  }`}
+                >
+                  <div className="flex items-center mb-2">
+                    {message.sender === 'ai' && (
+                      <div className="mr-2 bg-insta-gray p-1 rounded-full">
+                        <MessageSquare size={16} className="text-insta-blue" />
+                      </div>
+                    )}
+                    <span className="font-medium">
+                      {message.sender === 'user' ? 'You' : 'Compliance AI'}
+                    </span>
+                  </div>
+                  <p>{message.content}</p>
                   {message.sender === 'ai' && (
-                    <div className="mr-2 bg-insta-gray p-1 rounded-full">
-                      <MessageSquare size={16} className="text-insta-blue" />
+                    <div className="flex items-center mt-2 space-x-2 text-insta-lightText">
+                      <button className="p-1 hover:bg-insta-gray rounded">
+                        <ThumbsUp size={16} />
+                      </button>
+                      <button className="p-1 hover:bg-insta-gray rounded">
+                        <ThumbsDown size={16} />
+                      </button>
+                      {message.sources && message.sources.length > 0 && (
+                        <div className="ml-auto flex items-center">
+                          <FileText size={14} className="mr-1" />
+                          <span className="text-xs">{message.sources.length} sources</span>
+                        </div>
+                      )}
                     </div>
                   )}
-                  <span className="font-medium">
-                    {message.sender === 'user' ? 'You' : 'Compliance AI'}
-                  </span>
                 </div>
-                <p>{message.content}</p>
-                {message.sender === 'ai' && (
-                  <div className="flex items-center mt-2 space-x-2 text-insta-lightText">
-                    <button className="p-1 hover:bg-insta-gray rounded">
-                      <ThumbsUp size={16} />
-                    </button>
-                    <button className="p-1 hover:bg-insta-gray rounded">
-                      <ThumbsDown size={16} />
-                    </button>
-                  </div>
-                )}
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
+
+        <div className="p-4 border-t border-border bg-white">
+          <div className="max-w-3xl mx-auto relative">
+            <textarea
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder={`Ask about ${topic}...`}
+              className="insta-input pr-12 min-h-[60px] resize-none w-full"
+              rows={2}
+            />
+            <button 
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-insta-blue p-2 hover:bg-insta-lightBlue rounded-full"
+              onClick={handleSendMessage}
+            >
+              <Send size={20} />
+            </button>
+          </div>
+          <div className="max-w-3xl mx-auto mt-2 text-xs text-insta-lightText flex items-center">
+            <FileText size={14} className="mr-1" />
+            Sources used by our AI will display here after each response.
+            {allSources.length > 0 && (
+              <button 
+                className="ml-2 text-insta-blue hover:underline"
+                onClick={toggleSourcesPanel}
+              >
+                {isSourcesPanelOpen ? "Hide" : "View"} sources
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
-      <div className="p-4 border-t border-border bg-white">
-        <div className="max-w-3xl mx-auto relative">
-          <textarea
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={`Ask about ${topic}...`}
-            className="insta-input pr-12 min-h-[60px] resize-none w-full"
-            rows={2}
-          />
+      {/* Sources Panel */}
+      <div className={cn(
+        "fixed right-0 top-0 bottom-0 w-72 bg-white border-l border-border transition-transform duration-300 z-10 flex flex-col",
+        isSourcesPanelOpen ? "translate-x-0" : "translate-x-full"
+      )}>
+        <div className="p-4 border-b border-border flex items-center justify-between">
+          <div className="flex items-center">
+            <FileText size={18} className="text-insta-blue mr-2" />
+            <h3 className="font-medium">Sources</h3>
+          </div>
           <button 
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-insta-blue p-2 hover:bg-insta-lightBlue rounded-full"
-            onClick={handleSendMessage}
+            className="p-1 hover:bg-insta-gray rounded-full"
+            onClick={toggleSourcesPanel}
           >
-            <Send size={20} />
+            <ChevronRight size={20} className="text-insta-lightText" />
           </button>
         </div>
-        <div className="max-w-3xl mx-auto mt-2 text-xs text-insta-lightText">
-          Sources used by our AI will display here after each response.
+        
+        <div className="flex-1 overflow-auto p-3">
+          {allSources.length > 0 ? (
+            <div className="space-y-3">
+              {allSources.map((source, index) => (
+                <div 
+                  key={index}
+                  className="border border-border rounded-md overflow-hidden"
+                >
+                  <div 
+                    className="p-3 bg-insta-gray/30 cursor-pointer flex items-center justify-between"
+                    onClick={() => showSourceDetails(index)}
+                  >
+                    <div className="font-medium text-sm">{source.title}</div>
+                    <ChevronRight 
+                      size={16} 
+                      className={cn(
+                        "text-insta-lightText transition-transform duration-200",
+                        activeSourceIndex === index ? "transform rotate-90" : ""
+                      )} 
+                    />
+                  </div>
+                  
+                  {activeSourceIndex === index && (
+                    <div className="p-3 border-t border-border">
+                      <p className="text-sm text-insta-darkText mb-2">{source.content}</p>
+                      {source.url && (
+                        <a 
+                          href={source.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-xs text-insta-blue hover:underline flex items-center"
+                        >
+                          View source
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-full text-insta-lightText">
+              <FileText size={24} className="mb-2 opacity-50" />
+              <p className="text-sm">No sources available</p>
+            </div>
+          )}
         </div>
       </div>
     </div>
