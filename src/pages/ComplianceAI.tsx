@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import { MessageSquare, Send } from 'lucide-react';
@@ -64,7 +63,6 @@ const ComplianceAI = () => {
       title: 'Contracts & Forms',
       description: 'Legal document requirements'
     },
-    // Adding 6 more compliance topics
     {
       icon: '🔍',
       title: 'RESPA Compliance',
@@ -118,14 +116,7 @@ const ComplianceAI = () => {
             />
           ) : (
             <>
-              <div className="fixed top-16 left-0 right-0 z-40 flex p-4 bg-white border-b border-border items-center space-x-4">
-                <div className="bg-insta-gray p-2 rounded-md">
-                  <MessageSquare size={20} className="text-insta-blue" />
-                </div>
-                <h2 className="text-lg font-medium">New Chat</h2>
-              </div>
-              
-              <div className="flex-1 overflow-y-auto p-6 mt-16 pb-24"> {/* Fix scrolling with overflow-y-auto and add bottom padding */}
+              <div className="flex-1 overflow-y-auto p-6 pt-4 pb-24"> {/* Adjusted top padding since header is removed */}
                 <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-border p-6">
                   <h2 className="text-2xl font-semibold text-insta-text mb-6">Real Estate Compliance Topics</h2>
                   
