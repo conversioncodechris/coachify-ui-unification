@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MessageSquare, ThumbsUp, ThumbsDown, Send, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -40,7 +39,6 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
   const [isSourcesPanelOpen, setIsSourcesPanelOpen] = useState(false);
   const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(null);
 
-  // Mock sources for demo
   const mockSources: Source[] = [
     {
       title: 'Fair Housing Act',
@@ -62,7 +60,6 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
   const handleSendMessage = () => {
     if (!inputMessage.trim()) return;
     
-    // Add user message
     const userMessage: Message = {
       sender: 'user',
       content: inputMessage,
@@ -72,7 +69,6 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
     setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
     
-    // Simulate AI response (in real app, would call an API)
     setTimeout(() => {
       const aiResponse: Message = {
         sender: 'ai',
@@ -102,7 +98,6 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
     setActiveSourceIndex(index === activeSourceIndex ? null : index);
   };
 
-  // Get all unique sources from AI messages
   const allSources = messages
     .filter(msg => msg.sender === 'ai' && msg.sources && msg.sources.length > 0)
     .flatMap(msg => msg.sources || []);
@@ -110,7 +105,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
   return (
     <div className="flex h-full">
       <div className={cn(
-        "flex flex-col flex-1 h-full transition-all duration-300",
+        "flex flex-col flex-1 h-full transition-all duration-300 relative",
         isSourcesPanelOpen ? "mr-72" : ""
       )}>
         <div className="flex p-4 bg-white border-b border-border items-center">
@@ -129,10 +124,18 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
             <Tooltip>
               <TooltipTrigger asChild>
                 <button 
-                  className="ml-auto p-2 rounded-full hover:bg-insta-gray text-insta-lightText"
+                  className={cn(
+                    "ml-auto p-2 rounded-full hover:bg-insta-gray transition-colors",
+                    isSourcesPanelOpen ? "text-insta-blue bg-insta-lightBlue" : "text-insta-lightText"
+                  )}
                   onClick={toggleSourcesPanel}
                 >
-                  {isSourcesPanelOpen ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+                  <div className="relative">
+                    {isSourcesPanelOpen ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+                    {!isSourcesPanelOpen && allSources.length > 0 && (
+                      <span className="absolute -top-1 -right-1 w-2 h-2 bg-insta-blue rounded-full" />
+                    )}
+                  </div>
                 </button>
               </TooltipTrigger>
               <TooltipContent>
@@ -219,23 +222,34 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
             )}
           </div>
         </div>
+        
+        {!isSourcesPanelOpen && allSources.length > 0 && (
+          <div 
+            className="absolute right-0 top-16 bottom-0 w-1 bg-insta-lightBlue cursor-pointer"
+            onClick={toggleSourcesPanel}
+          />
+        )}
       </div>
 
-      {/* Sources Panel */}
       <div className={cn(
-        "fixed right-0 top-0 bottom-0 w-72 bg-white border-l border-border transition-transform duration-300 z-10 flex flex-col",
+        "fixed right-0 top-0 bottom-0 w-72 bg-white border-l border-border transition-transform duration-300 z-10 flex flex-col shadow-sm",
         isSourcesPanelOpen ? "translate-x-0" : "translate-x-full"
       )}>
-        <div className="p-4 border-b border-border flex items-center justify-between">
+        <div className="p-4 border-b border-border flex items-center justify-between bg-insta-gray/30">
           <div className="flex items-center">
             <FileText size={18} className="text-insta-blue mr-2" />
             <h3 className="font-medium">Sources</h3>
+            {allSources.length > 0 && (
+              <span className="ml-2 text-xs bg-insta-blue text-white rounded-full px-2 py-0.5">
+                {allSources.length}
+              </span>
+            )}
           </div>
           <button 
-            className="p-1 hover:bg-insta-gray rounded-full"
+            className="p-1 hover:bg-insta-gray rounded-full text-insta-blue"
             onClick={toggleSourcesPanel}
           >
-            <ChevronRight size={20} className="text-insta-lightText" />
+            <ChevronRight size={20} />
           </button>
         </div>
         
@@ -245,24 +259,27 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
               {allSources.map((source, index) => (
                 <div 
                   key={index}
-                  className="border border-border rounded-md overflow-hidden"
+                  className="border border-border rounded-md overflow-hidden transition-all duration-200 hover:border-insta-blue/50"
                 >
                   <div 
-                    className="p-3 bg-insta-gray/30 cursor-pointer flex items-center justify-between"
+                    className={cn(
+                      "p-3 cursor-pointer flex items-center justify-between",
+                      activeSourceIndex === index ? "bg-insta-lightBlue" : "bg-insta-gray/30"
+                    )}
                     onClick={() => showSourceDetails(index)}
                   >
                     <div className="font-medium text-sm">{source.title}</div>
                     <ChevronRight 
                       size={16} 
                       className={cn(
-                        "text-insta-lightText transition-transform duration-200",
+                        "text-insta-blue transition-transform duration-200",
                         activeSourceIndex === index ? "transform rotate-90" : ""
                       )} 
                     />
                   </div>
                   
                   {activeSourceIndex === index && (
-                    <div className="p-3 border-t border-border">
+                    <div className="p-3 border-t border-border bg-white">
                       <p className="text-sm text-insta-darkText mb-2">{source.content}</p>
                       {source.url && (
                         <a 
