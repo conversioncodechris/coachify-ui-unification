@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -68,13 +69,20 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
+				brand: {
+					black: '#000000',
+					darkGray: '#6D6E70',
+					gray: '#929496',
+					lightGray: '#BBBCBF',
+					white: '#FFFFFF',
+				},
 				insta: {
-					blue: '#0080FF',
-					lightBlue: '#E6F3FF',
-					gray: '#F5F7FA',
-					darkGray: '#444',
-					text: '#333',
-					lightText: '#666',
+					blue: '#000000',      // Changed from blue to black
+					lightBlue: '#BBBCBF', // Changed from lightBlue to light gray
+					gray: '#F5F7FA',      // Keep as is for contrast
+					darkGray: '#6D6E70',  // Changed to brand dark gray
+					text: '#000000',      // Changed to black
+					lightText: '#6D6E70', // Changed to dark gray
 				}
 			},
 			borderRadius: {

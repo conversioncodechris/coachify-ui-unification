@@ -5,83 +5,83 @@
 
 @layer base {
   :root {
-    --background: 210 20% 98%;
-    --foreground: 222 47% 11%;
+    --background: 0 0% 98%;
+    --foreground: 0 0% 0%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 0 0% 0%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 0 0% 0%;
 
-    --primary: 212 100% 50%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 20% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
 
-    --muted: 210 20% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 210 30% 96%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 222 84% 5%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 0%;
 
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 240 5% 26%;
-    --sidebar-primary: 212 100% 50%;
+    --sidebar-foreground: 0 0% 43%;
+    --sidebar-primary: 0 0% 0%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 20% 96%;
-    --sidebar-accent-foreground: 240 6% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 0 0% 89.8%;
+    --sidebar-ring: 0 0% 0%;
   }
 
   .dark {
-    --background: 222 47% 11%;
-    --foreground: 210 40% 98%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
 
-    --card: 222 47% 11%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 222 47% 11%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 212 100% 50%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 217 33% 18%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 217 33% 18%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
 
-    --accent: 217 33% 18%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 217 33% 18%;
-    --input: 217 33% 18%;
-    --ring: 213 27% 84%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 83.9%;
 
-    --sidebar-background: 240 6% 10%;
-    --sidebar-foreground: 240 5% 96%;
-    --sidebar-primary: 224 76% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 4% 16%;
-    --sidebar-accent-foreground: 240 5% 96%;
-    --sidebar-border: 240 4% 16%;
-    --sidebar-ring: 217 91% 60%;
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 0 0% 80%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 0 0% 90%;
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: 0 0% 80%;
   }
 }
 
@@ -109,34 +109,34 @@
   }
   
   .insta-nav-tab {
-    @apply px-4 py-3 text-insta-darkGray font-medium transition-all duration-200 border-b-2 border-transparent hover:text-insta-blue font-urbanist;
+    @apply px-4 py-3 text-brand-darkGray font-medium transition-all duration-200 border-b-2 border-transparent hover:text-brand-black font-urbanist;
   }
   
   .insta-nav-tab.active {
-    @apply text-insta-blue border-insta-blue;
+    @apply text-brand-black border-brand-black;
   }
   
   .insta-sidebar-item {
-    @apply flex items-center gap-3 px-4 py-2 rounded-md text-insta-darkGray hover:bg-insta-lightBlue transition-all duration-200 font-montserrat;
+    @apply flex items-center gap-3 px-4 py-2 rounded-md text-brand-darkGray hover:bg-brand-lightGray transition-all duration-200 font-montserrat;
   }
   
   .insta-sidebar-item.active {
-    @apply bg-insta-lightBlue text-insta-blue font-medium;
+    @apply bg-brand-lightGray text-brand-black font-medium;
   }
   
   .insta-input {
-    @apply w-full px-4 py-2 rounded-md border border-border bg-white focus:outline-none focus:ring-2 focus:ring-insta-blue/20 transition-all duration-200 font-montserrat;
+    @apply w-full px-4 py-2 rounded-md border border-border bg-white focus:outline-none focus:ring-2 focus:ring-brand-lightGray transition-all duration-200 font-montserrat;
   }
   
   .insta-button-primary {
-    @apply px-4 py-2 bg-insta-blue text-white rounded-md hover:bg-insta-blue/90 transition-all duration-200 font-urbanist font-medium;
+    @apply px-4 py-2 bg-brand-black text-white rounded-md hover:bg-opacity-90 transition-all duration-200 font-urbanist font-medium;
   }
   
   .insta-button-secondary {
-    @apply px-4 py-2 bg-white text-insta-darkGray border border-border rounded-md hover:bg-insta-lightBlue transition-all duration-200 font-urbanist font-medium;
+    @apply px-4 py-2 bg-white text-brand-darkGray border border-border rounded-md hover:bg-brand-lightGray transition-all duration-200 font-urbanist font-medium;
   }
   
   .insta-chip {
-    @apply inline-flex items-center px-3 py-1 text-sm rounded-full bg-insta-lightBlue text-insta-blue font-montserrat;
+    @apply inline-flex items-center px-3 py-1 text-sm rounded-full bg-brand-lightGray text-brand-black font-montserrat;
   }
 }
