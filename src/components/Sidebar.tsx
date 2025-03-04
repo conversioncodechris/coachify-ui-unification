@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, MessageSquare, Plus, FileText } from 'lucide-react';
@@ -63,9 +64,9 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
   return (
     <aside className="w-64 h-[calc(100vh-4rem)] bg-insta-gray border-r border-border overflow-auto">
       <div className="p-4 text-sm font-medium text-insta-darkGray uppercase">
-        {type === 'compliance' && 'Navigation'}
+        {type === 'compliance' && ''}
         {type === 'content' && 'Type'}
-        {type === 'coach' && 'Navigation'}
+        {type === 'coach' && ''}
       </div>
       
       <nav className="flex flex-col space-y-1 px-2">
