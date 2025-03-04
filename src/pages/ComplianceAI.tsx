@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
 import { MessageSquare, Send } from 'lucide-react';
@@ -75,7 +76,7 @@ const ComplianceAI = () => {
 
   return (
     <div className="flex flex-col h-screen bg-background">
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden pt-16"> {/* Add padding for fixed header */}
         <Sidebar type="compliance" />
         
         <div className="flex flex-col flex-1 overflow-hidden">
@@ -86,14 +87,14 @@ const ComplianceAI = () => {
             />
           ) : (
             <>
-              <div className="flex p-4 bg-white border-b border-border items-center space-x-4">
+              <div className="fixed top-16 left-0 right-0 z-40 flex p-4 bg-white border-b border-border items-center space-x-4">
                 <div className="bg-insta-gray p-2 rounded-md">
                   <MessageSquare size={20} className="text-insta-blue" />
                 </div>
                 <h2 className="text-lg font-medium">New Chat</h2>
               </div>
               
-              <div className="flex-1 overflow-auto p-6">
+              <div className="flex-1 overflow-auto p-6 mt-16"> {/* Add margin for the fixed header */}
                 <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-border p-6">
                   <h2 className="text-2xl font-semibold text-insta-text mb-6">Real Estate Compliance Topics</h2>
                   
@@ -120,7 +121,7 @@ const ComplianceAI = () => {
                 </div>
               </div>
               
-              <div className="p-4 border-t border-border bg-white">
+              <div className="fixed bottom-0 left-0 right-0 z-40 p-4 border-t border-border bg-white">
                 <div className="max-w-3xl mx-auto relative">
                   <input 
                     type="text" 

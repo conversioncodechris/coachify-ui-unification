@@ -123,12 +123,12 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
     .flatMap(msg => msg.sources || []);
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full pt-16 pb-[120px]"> {/* Add padding for fixed header and footer */}
       <div className={cn(
         "flex flex-col flex-1 h-full transition-all duration-300 relative",
         isSourcesPanelOpen ? "mr-72" : ""
       )}>
-        <div className="flex p-4 bg-white border-b border-border items-center">
+        <div className="fixed top-16 left-0 right-0 z-40 flex p-4 bg-white border-b border-border items-center">
           <button 
             onClick={onBackToTopics}
             className="mr-3 text-insta-blue hover:text-insta-blue/80"
@@ -165,7 +165,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
           </TooltipProvider>
         </div>
 
-        <div className="flex-1 overflow-auto p-4">
+        <div className="flex-1 overflow-auto p-4 mt-16"> {/* Add margin for the fixed topic header */}
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((message, index) => (
               <div 
@@ -212,7 +212,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
           </div>
         </div>
 
-        <div className="p-4 border-t border-border bg-white">
+        <div className="fixed bottom-0 left-0 right-0 z-40 p-4 border-t border-border bg-white">
           <div className="max-w-3xl mx-auto relative">
             <textarea
               value={inputMessage}
@@ -252,7 +252,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
       </div>
 
       <div className={cn(
-        "fixed right-0 top-0 bottom-0 w-72 bg-white border-l border-border transition-transform duration-300 z-10 flex flex-col shadow-lg",
+        "fixed right-0 top-16 bottom-0 w-72 bg-white border-l border-border transition-transform duration-300 z-10 flex flex-col shadow-lg",
         isSourcesPanelOpen ? "translate-x-0" : "translate-x-full"
       )}>
         <div className="p-4 border-b border-border flex items-center justify-between bg-insta-gray/30">
