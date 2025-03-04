@@ -14,7 +14,7 @@ import AppHeader from "./components/AppHeader";
 const queryClient = new QueryClient();
 
 // User avatar URL
-const userAvatarUrl = "/lovable-uploads/0dd3499c-aaf2-4314-9ed1-2dfd0277918e.png";
+const userAvatarUrl = "/lovable-uploads/4cee2dca-3183-4356-a206-c5d44201ce91.png";
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
