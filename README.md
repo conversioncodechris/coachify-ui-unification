@@ -1,69 +1,45 @@
-# Welcome to your Lovable project
 
-## Project info
+# InstaAI Platform UI
 
-**URL**: https://lovable.dev/projects/cf93500b-832e-470d-ae43-de712b9e3292
+A unified platform with three AI-powered tools:
 
-## How can I edit this code?
+- **Coach AI**: Personalized AI coaching for real estate professionals
+- **Mortgage AI**: Mortgage expertise and guidance
+- **Content AI**: Content generation for various platforms
 
-There are several ways of editing your application.
+## Design Principles
 
-**Use Lovable**
+This platform follows minimalist design principles inspired by modern web applications:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/cf93500b-832e-470d-ae43-de712b9e3292) and start prompting.
+- Clean, uncluttered interfaces
+- Intuitive navigation
+- Consistent styling across all features
+- Smooth animations and transitions
+- Responsive design for all screen sizes
 
-Changes made via Lovable will be committed automatically to this repo.
+## Features
 
-**Use your preferred IDE**
+- Unified navigation system
+- Consistent sidebar navigation
+- Persona-based interaction in Coach AI
+- Topic-based guidance in Mortgage AI
+- Multi-platform content generation in Content AI
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Development
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+This project is built with:
 
-Follow these steps:
+- React
+- TypeScript
+- Tailwind CSS
+- shadcn/ui components
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## Getting Started
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+```bash
+# Install dependencies
+npm install
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the development server
 npm run dev
 ```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/cf93500b-832e-470d-ae43-de712b9e3292) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
