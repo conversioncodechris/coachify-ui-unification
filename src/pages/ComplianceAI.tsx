@@ -1,9 +1,20 @@
+
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
-import { MessageSquare, Send, EyeOff, Pin, PinOff, Plus } from 'lucide-react';
+import { MessageSquare, Send, EyeOff, Pin, PinOff, Plus, X } from 'lucide-react';
 import ComplianceChatInterface from '../components/ComplianceChatInterface';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../components/ui/tooltip";
 import { useToast } from "../hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "../components/ui/dialog";
+import { Input } from "../components/ui/input";
+import { Button } from "../components/ui/button";
+import { Label } from "../components/ui/label";
 
 interface ComplianceTopic {
   icon: string;
@@ -12,6 +23,11 @@ interface ComplianceTopic {
   hidden?: boolean;
   pinned?: boolean;
 }
+
+const EMOJI_OPTIONS = [
+  '📝', '🏠', '⚖️', '🤝', '💰', '📱', '🔒', '🌎', '📊', '📋', 
+  '🔍', '💼', '🏘️', '🧾', '🔐', '📣', '🔔', '💡', '📚', '🛡️'
+];
 
 const ComplianceAI = () => {
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
@@ -104,6 +120,8 @@ const ComplianceAI = () => {
     title: '',
     description: ''
   });
+  
+  const [isAddTopicOpen, setIsAddTopicOpen] = useState(false);
 
   const handleTopicClick = (topic: string) => {
     setSelectedTopic(topic);
@@ -132,10 +150,49 @@ const ComplianceAI = () => {
   };
 
   const handleAddTopicClick = () => {
-    toast({
-      title: "Coming Soon",
-      description: "The ability to add custom topics will be available soon.",
+    setNewTopic({
+      icon: '📝',
+      title: '',
+      description: ''
     });
+    setIsAddTopicOpen(true);
+  };
+  
+  const handleAddTopicSubmit = () => {
+    // Validate form
+    if (!newTopic.title.trim() || !newTopic.description.trim()) {
+      toast({
+        title: "Missing information",
+        description: "Please provide both a title and description.",
+      });
+      return;
+    }
+    
+    if (newTopic.title.includes('\n') || newTopic.description.includes('\n')) {
+      toast({
+        title: "Invalid format",
+        description: "Title and description must be single line text.",
+      });
+      return;
+    }
+
+    // Add new topic
+    setTopics(prevTopics => [...prevTopics, { 
+      ...newTopic,
+      title: newTopic.title.trim(),
+      description: newTopic.description.trim()
+    }]);
+    
+    setIsAddTopicOpen(false);
+    
+    toast({
+      title: "Topic Added",
+      description: `"${newTopic.title}" has been added to your topics.`,
+    });
+  };
+
+  const handleSelectEmoji = (emoji: string) => {
+    setNewTopic(prev => ({ ...prev, icon: emoji }));
   };
 
   const sortedTopics = [...topics].sort((a, b) => {
@@ -255,6 +312,64 @@ const ComplianceAI = () => {
           )}
         </div>
       </div>
+      
+      {/* Add Topic Dialog */}
+      <Dialog open={isAddTopicOpen} onOpenChange={setIsAddTopicOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Add New Compliance Topic</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="icon">Icon</Label>
+              <div className="flex flex-wrap gap-2 max-h-[100px] overflow-y-auto p-2 border rounded-md">
+                {EMOJI_OPTIONS.map((emoji, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    className={`p-2 text-xl rounded hover:bg-gray-100 ${newTopic.icon === emoji ? 'bg-gray-200' : ''}`}
+                    onClick={() => handleSelectEmoji(emoji)}
+                  >
+                    {emoji}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="title">Topic Title</Label>
+              <Input 
+                id="title"
+                value={newTopic.title} 
+                onChange={(e) => {
+                  // Prevent newlines from being entered
+                  const value = e.target.value.replace(/[\r\n]/g, '');
+                  setNewTopic(prev => ({ ...prev, title: value }))
+                }}
+                placeholder="Enter topic title"
+                maxLength={40}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="description">Description</Label>
+              <Input
+                id="description"
+                value={newTopic.description}
+                onChange={(e) => {
+                  // Prevent newlines from being entered
+                  const value = e.target.value.replace(/[\r\n]/g, '');
+                  setNewTopic(prev => ({ ...prev, description: value }))
+                }}
+                placeholder="Brief description (one line)"
+                maxLength={60}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsAddTopicOpen(false)}>Cancel</Button>
+            <Button onClick={handleAddTopicSubmit}>Add Topic</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
