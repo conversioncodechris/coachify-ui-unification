@@ -9,8 +9,12 @@ import NotFound from "./pages/NotFound";
 import ComplianceAI from "./pages/ComplianceAI";
 import ContentAI from "./pages/ContentAI";
 import CoachAI from "./pages/CoachAI";
+import AppHeader from "./components/AppHeader";
 
 const queryClient = new QueryClient();
+
+// User avatar URL
+const userAvatarUrl = "/lovable-uploads/0dd3499c-aaf2-4314-9ed1-2dfd0277918e.png";
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -18,6 +22,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <AppHeader userAvatar={userAvatarUrl} />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/compliance/*" element={<ComplianceAI />} />
