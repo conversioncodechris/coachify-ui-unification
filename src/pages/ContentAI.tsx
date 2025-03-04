@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import AppHeader from '../components/AppHeader';
 import Sidebar from '../components/Sidebar';
-import { FileText, Search, Sparkles } from 'lucide-react';
+import { FileText, Search, Sparkles, User } from 'lucide-react';
 
 const ContentAI = () => {
   const [contentType, setContentType] = useState('blog');
