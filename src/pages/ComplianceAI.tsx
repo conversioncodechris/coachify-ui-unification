@@ -1,6 +1,4 @@
-
 import React, { useState } from 'react';
-import AppHeader from '../components/AppHeader';
 import Sidebar from '../components/Sidebar';
 import { MessageSquare, Send } from 'lucide-react';
 import ComplianceChatInterface from '../components/ComplianceChatInterface';
@@ -77,8 +75,6 @@ const ComplianceAI = () => {
 
   return (
     <div className="flex flex-col h-screen bg-background">
-      <AppHeader />
-      
       <div className="flex flex-1 overflow-hidden">
         <Sidebar type="compliance" />
         

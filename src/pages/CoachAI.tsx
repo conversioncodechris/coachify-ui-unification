@@ -1,6 +1,5 @@
 
 import React from 'react';
-import AppHeader from '../components/AppHeader';
 import Sidebar from '../components/Sidebar';
 import WelcomeMessage from '../components/WelcomeMessage';
 import PersonaCard from '../components/PersonaCard';
@@ -23,8 +22,6 @@ const CoachAI = () => {
 
   return (
     <div className="flex flex-col h-screen bg-background">
-      <AppHeader />
-      
       <div className="flex flex-1 overflow-hidden">
         <Sidebar type="coach" />
         
