@@ -134,7 +134,7 @@ const ComplianceAI = () => {
                             <span className="text-xl mr-2">{topic.icon}</span>
                             <div>
                               <div className="font-medium">{topic.title}</div>
-                              <div className="text-sm text-insta-lightText">{topic.description}</div>
+                              <div className="text-sm text-insta-lightText line-clamp-1">{topic.description}</div>
                             </div>
                           </div>
                         </div>
