@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import { MessageSquare, Send, EyeOff, Pin, PinOff, Plus, X } from 'lucide-react';
@@ -277,9 +276,9 @@ const ComplianceAI = () => {
                       </div>
                     ))}
                     
-                    {/* Add Topic Card */}
+                    {/* Add Topic Card - fixed height to match other cards */}
                     <div 
-                      className="insta-card cursor-pointer hover:border-insta-blue transition-colors relative group border-dashed border-2"
+                      className="insta-card cursor-pointer hover:border-insta-blue transition-colors relative group border-dashed border-2 h-[102px]" 
                       onClick={handleAddTopicClick}
                     >
                       <div className="flex items-center justify-center h-full">
