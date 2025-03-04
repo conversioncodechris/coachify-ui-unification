@@ -33,12 +33,24 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
       sender: 'ai',
       content: `Welcome to the ${topic} topic! How can I assist you today?`,
       timestamp: new Date(),
-      sources: []
+      sources: [
+        {
+          title: 'Fair Housing Act',
+          content: 'The Fair Housing Act is a federal law that prohibits discrimination in housing based on race, color, national origin, religion, sex, familial status, or disability.',
+          url: 'https://www.hud.gov/program_offices/fair_housing_equal_opp/fair_housing_act_overview'
+        },
+        {
+          title: 'Recent Legal Precedents',
+          content: 'This fictitious source contains information about recent court cases affecting real estate compliance requirements and best practices for agents.',
+          url: 'https://example.com/legal-precedents'
+        }
+      ]
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
-  const [isSourcesPanelOpen, setIsSourcesPanelOpen] = useState(false);
-  const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(null);
+  // Default to open to make it visible initially
+  const [isSourcesPanelOpen, setIsSourcesPanelOpen] = useState(true);
+  const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(0);
 
   const mockSources: Source[] = [
     {
@@ -83,6 +95,8 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
         sources: mockSources
       };
       setMessages(prev => [...prev, aiResponse]);
+      // Open sources panel when AI responds
+      setIsSourcesPanelOpen(true);
     }, 1000);
   };
 
@@ -96,7 +110,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
   const toggleSourcesPanel = () => {
     setIsSourcesPanelOpen(!isSourcesPanelOpen);
     if (!isSourcesPanelOpen) {
-      setActiveSourceIndex(null);
+      setActiveSourceIndex(0);
     }
   };
 
@@ -231,14 +245,14 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
         
         {!isSourcesPanelOpen && allSources.length > 0 && (
           <div 
-            className="absolute right-0 top-16 bottom-0 w-1 bg-insta-lightBlue cursor-pointer"
+            className="absolute right-0 top-16 bottom-0 w-1 bg-insta-blue cursor-pointer animate-pulse"
             onClick={toggleSourcesPanel}
           />
         )}
       </div>
 
       <div className={cn(
-        "fixed right-0 top-0 bottom-0 w-72 bg-white border-l border-border transition-transform duration-300 z-10 flex flex-col shadow-sm",
+        "fixed right-0 top-0 bottom-0 w-72 bg-white border-l border-border transition-transform duration-300 z-10 flex flex-col shadow-lg",
         isSourcesPanelOpen ? "translate-x-0" : "translate-x-full"
       )}>
         <div className="p-4 border-b border-border flex items-center justify-between bg-insta-gray/30">
@@ -265,7 +279,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
               {allSources.map((source, index) => (
                 <div 
                   key={index}
-                  className="border border-border rounded-md overflow-hidden transition-all duration-200 hover:border-insta-blue/50"
+                  className="border border-border rounded-md overflow-hidden transition-all duration-200 hover:border-insta-blue/50 hover:shadow-md"
                 >
                   <div 
                     className={cn(
