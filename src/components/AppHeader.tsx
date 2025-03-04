@@ -22,10 +22,10 @@ const AppHeader: React.FC<AppHeaderProps> = ({ userAvatar = '/lovable-uploads/06
         
         <nav className="flex">
           <Link 
-            to="/mortgage" 
-            className={`insta-nav-tab ${currentPath.includes('/mortgage') ? 'active' : ''}`}
+            to="/compliance" 
+            className={`insta-nav-tab ${currentPath.includes('/compliance') ? 'active' : ''}`}
           >
-            Mortgage AI
+            Compliance AI
           </Link>
           <Link 
             to="/content" 

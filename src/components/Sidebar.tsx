@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Home, MessageSquare, Plus, FileText } from 'lucide-react';
 
 interface SidebarProps {
-  type: 'mortgage' | 'content' | 'coach';
+  type: 'compliance' | 'content' | 'coach';
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ type }) => {
@@ -12,10 +11,10 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
   const currentPath = location.pathname;
 
   // Define sidebar items based on type
-  const getMortgageItems = () => [
-    { icon: <Home size={20} />, label: 'Dashboard', path: '/mortgage' },
-    { icon: <MessageSquare size={20} />, label: 'Chats', path: '/mortgage/chats' },
-    { icon: <Plus size={20} />, label: 'New Chat', path: '/mortgage/new-chat' },
+  const getComplianceItems = () => [
+    { icon: <Home size={20} />, label: 'Dashboard', path: '/compliance' },
+    { icon: <MessageSquare size={20} />, label: 'Chats', path: '/compliance/chats' },
+    { icon: <Plus size={20} />, label: 'New Chat', path: '/compliance/new-chat' },
   ];
 
   const getContentItems = () => [
@@ -54,7 +53,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
   ];
 
   const sidebarItems = {
-    mortgage: getMortgageItems(),
+    compliance: getComplianceItems(),
     content: getContentItems(),
     coach: getCoachItems(),
   };
@@ -64,7 +63,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
   return (
     <aside className="w-64 h-[calc(100vh-4rem)] bg-insta-gray border-r border-border overflow-auto">
       <div className="p-4 text-sm font-medium text-insta-darkGray uppercase">
-        {type === 'mortgage' && 'Navigation'}
+        {type === 'compliance' && 'Navigation'}
         {type === 'content' && 'Type'}
         {type === 'coach' && 'Navigation'}
       </div>

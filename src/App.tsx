@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import MortgageAI from "./pages/MortgageAI";
+import ComplianceAI from "./pages/ComplianceAI";
 import ContentAI from "./pages/ContentAI";
 import CoachAI from "./pages/CoachAI";
 
@@ -20,7 +20,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/mortgage/*" element={<MortgageAI />} />
+          <Route path="/compliance/*" element={<ComplianceAI />} />
           <Route path="/content/*" element={<ContentAI />} />
           <Route path="/coach/*" element={<CoachAI />} />
           <Route path="*" element={<NotFound />} />
