@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
-import { MessageSquare, Send } from 'lucide-react';
+import { MessageSquare, Send, EyeOff, Pin, PinOff } from 'lucide-react';
 import ComplianceChatInterface from '../components/ComplianceChatInterface';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../components/ui/tooltip";
 
 interface ComplianceTopic {
   icon: string;
   title: string;
   description: string;
+  hidden?: boolean;
+  pinned?: boolean;
 }
 
 const ComplianceAI = () => {
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
-  
-  const complianceTopics: ComplianceTopic[] = [
+  const [topics, setTopics] = useState<ComplianceTopic[]>([
     {
       icon: '🏠',
       title: 'Fair Housing Laws',
@@ -93,7 +96,7 @@ const ComplianceAI = () => {
       title: 'Advertising Regulations',
       description: 'Truth in advertising requirements'
     }
-  ];
+  ]);
 
   const handleTopicClick = (topic: string) => {
     setSelectedTopic(topic);
@@ -102,6 +105,31 @@ const ComplianceAI = () => {
   const handleBackToTopics = () => {
     setSelectedTopic(null);
   };
+
+  const handleHideTopic = (index: number, event: React.MouseEvent) => {
+    event.stopPropagation();
+    setTopics(prevTopics => {
+      const updatedTopics = [...prevTopics];
+      updatedTopics[index].hidden = true;
+      return updatedTopics;
+    });
+  };
+
+  const handleTogglePin = (index: number, event: React.MouseEvent) => {
+    event.stopPropagation();
+    setTopics(prevTopics => {
+      const updatedTopics = [...prevTopics];
+      updatedTopics[index].pinned = !updatedTopics[index].pinned;
+      return updatedTopics;
+    });
+  };
+
+  // Sort topics so pinned ones are at the top
+  const sortedTopics = [...topics].sort((a, b) => {
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    return 0;
+  }).filter(topic => !topic.hidden);
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -121,10 +149,10 @@ const ComplianceAI = () => {
                   <h2 className="text-2xl font-semibold text-insta-text mb-6">Real Estate Compliance Topics</h2>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {complianceTopics.map((topic, index) => (
+                    {sortedTopics.map((topic, index) => (
                       <div 
                         key={index} 
-                        className="insta-card cursor-pointer hover:border-insta-blue transition-colors"
+                        className="insta-card cursor-pointer hover:border-insta-blue transition-colors relative group"
                         onClick={() => handleTopicClick(topic.title)}
                       >
                         <div className="flex items-start">
@@ -134,6 +162,48 @@ const ComplianceAI = () => {
                             <div className="text-sm text-insta-lightText line-clamp-1">{topic.description}</div>
                           </div>
                         </div>
+                        
+                        {/* Action buttons on hover */}
+                        <div className="absolute top-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <button 
+                                  className="text-insta-lightText hover:text-insta-text bg-white rounded-full p-1 shadow-sm"
+                                  onClick={(e) => handleHideTopic(topics.findIndex(t => t.title === topic.title), e)}
+                                >
+                                  <EyeOff size={16} />
+                                </button>
+                              </TooltipTrigger>
+                              <TooltipContent side="top">
+                                <p>Hide this topic</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                          
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <button 
+                                  className={`text-insta-lightText hover:text-insta-text bg-white rounded-full p-1 shadow-sm ${topic.pinned ? 'text-insta-blue' : ''}`}
+                                  onClick={(e) => handleTogglePin(topics.findIndex(t => t.title === topic.title), e)}
+                                >
+                                  {topic.pinned ? <PinOff size={16} /> : <Pin size={16} />}
+                                </button>
+                              </TooltipTrigger>
+                              <TooltipContent side="top">
+                                <p>{topic.pinned ? 'Unpin this topic' : 'Pin this topic'}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
+                        
+                        {/* Pin indicator */}
+                        {topic.pinned && (
+                          <div className="absolute top-0 left-0 bg-insta-blue text-white p-1 text-xs rounded-tl-md rounded-br-md">
+                            <Pin size={12} />
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
