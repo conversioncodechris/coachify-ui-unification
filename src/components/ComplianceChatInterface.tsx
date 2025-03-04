@@ -165,7 +165,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
           </TooltipProvider>
         </div>
 
-        <div className="flex-1 overflow-auto p-4 mt-16"> {/* Add margin for the fixed topic header */}
+        <div className="flex-1 overflow-y-auto p-4 mt-16"> {/* Fix scrolling with overflow-y-auto */}
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((message, index) => (
               <div 
@@ -273,7 +273,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
           </button>
         </div>
         
-        <div className="flex-1 overflow-auto p-3">
+        <div className="flex-1 overflow-y-auto p-3"> {/* Fix scrolling with overflow-y-auto */}
           {allSources.length > 0 ? (
             <div className="space-y-3">
               {allSources.map((source, index) => (

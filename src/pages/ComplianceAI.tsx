@@ -63,6 +63,37 @@ const ComplianceAI = () => {
       icon: '📋',
       title: 'Contracts & Forms',
       description: 'Legal document requirements'
+    },
+    // Adding 6 more compliance topics
+    {
+      icon: '🔍',
+      title: 'RESPA Compliance',
+      description: 'Real Estate Settlement Procedures Act rules'
+    },
+    {
+      icon: '💼',
+      title: 'Broker Supervision',
+      description: 'Requirements for managing agents'
+    },
+    {
+      icon: '🏘️',
+      title: 'Property Management Laws',
+      description: 'Landlord-tenant regulations'
+    },
+    {
+      icon: '🧾',
+      title: 'Tax Compliance',
+      description: 'Real estate tax reporting requirements'
+    },
+    {
+      icon: '🔐',
+      title: 'Wire Fraud Prevention',
+      description: 'Security protocols for transactions'
+    },
+    {
+      icon: '📣',
+      title: 'Advertising Regulations',
+      description: 'Truth in advertising requirements'
     }
   ];
 
@@ -94,7 +125,7 @@ const ComplianceAI = () => {
                 <h2 className="text-lg font-medium">New Chat</h2>
               </div>
               
-              <div className="flex-1 overflow-auto p-6 mt-16"> {/* Add margin for the fixed header */}
+              <div className="flex-1 overflow-y-auto p-6 mt-16 pb-24"> {/* Fix scrolling with overflow-y-auto and add bottom padding */}
                 <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-border p-6">
                   <h2 className="text-2xl font-semibold text-insta-text mb-6">Real Estate Compliance Topics</h2>
                   
