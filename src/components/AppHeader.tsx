@@ -6,7 +6,7 @@ interface AppHeaderProps {
   userAvatar?: string;
 }
 
-const AppHeader: React.FC<AppHeaderProps> = ({ userAvatar = '/lovable-uploads/066ef2a3-5787-48f2-9af2-f9f7fe3754c9.png' }) => {
+const AppHeader: React.FC<AppHeaderProps> = ({ userAvatar = '/lovable-uploads/0dd3499c-aaf2-4314-9ed1-2dfd0277918e.png' }) => {
   const location = useLocation();
   const currentPath = location.pathname;
 

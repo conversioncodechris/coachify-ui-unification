@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { MessageSquare, ThumbsUp, ThumbsDown, Send, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -54,6 +55,11 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
       title: 'State Real Estate Commission',
       content: 'State licensing laws and regulations govern real estate practice within each jurisdiction.',
       url: 'https://www.arello.org/regulatory-agencies/'
+    },
+    {
+      title: 'Recent Legal Precedents',
+      content: 'This fictitious source contains information about recent court cases affecting real estate compliance requirements and best practices for agents.',
+      url: 'https://example.com/legal-precedents'
     }
   ];
 
