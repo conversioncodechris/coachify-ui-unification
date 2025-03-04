@@ -21,7 +21,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ userAvatar }) => {
           />
         </Link>
         
-        <nav className="flex">
+        <nav className="flex font-urbanist">
           <Link 
             to="/compliance" 
             className={`insta-nav-tab ${currentPath.includes('/compliance') ? 'active' : ''}`}

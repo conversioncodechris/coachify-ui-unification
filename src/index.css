@@ -91,13 +91,17 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-montserrat;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-urbanist font-semibold;
   }
 }
 
 @layer components {
   .insta-card {
-    @apply bg-white rounded-lg shadow-sm border border-border p-6 transition-all duration-300 hover:shadow-md;
+    @apply bg-white rounded-lg shadow-sm border border-border p-6 transition-all duration-300 hover:shadow-md font-montserrat;
   }
   
   .insta-persona-card {
@@ -105,7 +109,7 @@
   }
   
   .insta-nav-tab {
-    @apply px-4 py-3 text-insta-darkGray font-medium transition-all duration-200 border-b-2 border-transparent hover:text-insta-blue;
+    @apply px-4 py-3 text-insta-darkGray font-medium transition-all duration-200 border-b-2 border-transparent hover:text-insta-blue font-urbanist;
   }
   
   .insta-nav-tab.active {
@@ -113,7 +117,7 @@
   }
   
   .insta-sidebar-item {
-    @apply flex items-center gap-3 px-4 py-2 rounded-md text-insta-darkGray hover:bg-insta-lightBlue transition-all duration-200;
+    @apply flex items-center gap-3 px-4 py-2 rounded-md text-insta-darkGray hover:bg-insta-lightBlue transition-all duration-200 font-montserrat;
   }
   
   .insta-sidebar-item.active {
@@ -121,18 +125,18 @@
   }
   
   .insta-input {
-    @apply w-full px-4 py-2 rounded-md border border-border bg-white focus:outline-none focus:ring-2 focus:ring-insta-blue/20 transition-all duration-200;
+    @apply w-full px-4 py-2 rounded-md border border-border bg-white focus:outline-none focus:ring-2 focus:ring-insta-blue/20 transition-all duration-200 font-montserrat;
   }
   
   .insta-button-primary {
-    @apply px-4 py-2 bg-insta-blue text-white rounded-md hover:bg-insta-blue/90 transition-all duration-200;
+    @apply px-4 py-2 bg-insta-blue text-white rounded-md hover:bg-insta-blue/90 transition-all duration-200 font-urbanist font-medium;
   }
   
   .insta-button-secondary {
-    @apply px-4 py-2 bg-white text-insta-darkGray border border-border rounded-md hover:bg-insta-lightBlue transition-all duration-200;
+    @apply px-4 py-2 bg-white text-insta-darkGray border border-border rounded-md hover:bg-insta-lightBlue transition-all duration-200 font-urbanist font-medium;
   }
   
   .insta-chip {
-    @apply inline-flex items-center px-3 py-1 text-sm rounded-full bg-insta-lightBlue text-insta-blue;
+    @apply inline-flex items-center px-3 py-1 text-sm rounded-full bg-insta-lightBlue text-insta-blue font-montserrat;
   }
 }
