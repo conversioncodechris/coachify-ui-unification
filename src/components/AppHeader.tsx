@@ -14,10 +14,11 @@ const AppHeader: React.FC<AppHeaderProps> = ({ userAvatar }) => {
     <header className="flex items-center justify-between h-16 px-4 border-b border-border bg-white">
       <div className="flex items-center">
         <Link to="/" className="flex items-center mr-8">
-          <h1 className="text-xl font-bold flex items-center">
-            <span>INSTA</span>
-            <span className="text-insta-blue">AI</span>
-          </h1>
+          <img 
+            src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" 
+            alt="GAIRE Logo" 
+            className="h-8" 
+          />
         </Link>
         
         <nav className="flex">
