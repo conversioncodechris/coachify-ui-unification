@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { MessageSquare, ThumbsUp, ThumbsDown, Send, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -47,6 +48,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
+  // Default to open to make it visible initially
   const [isSourcesPanelOpen, setIsSourcesPanelOpen] = useState(true);
   const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(0);
 
@@ -93,6 +95,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
         sources: mockSources
       };
       setMessages(prev => [...prev, aiResponse]);
+      // Open sources panel when AI responds
       setIsSourcesPanelOpen(true);
     }, 1000);
   };
@@ -120,7 +123,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
     .flatMap(msg => msg.sources || []);
 
   return (
-    <div className="flex h-full pt-16 pb-[120px]">
+    <div className="flex h-full pt-16 pb-[120px]"> {/* Add padding for fixed header and footer */}
       <div className={cn(
         "flex flex-col flex-1 h-full transition-all duration-300 relative",
         isSourcesPanelOpen ? "mr-72" : ""
@@ -162,7 +165,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
           </TooltipProvider>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 mt-16">
+        <div className="flex-1 overflow-y-auto p-4 mt-16"> {/* Fix scrolling with overflow-y-auto */}
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((message, index) => (
               <div 
@@ -228,7 +231,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
           </div>
           <div className="max-w-3xl mx-auto mt-2 text-xs text-insta-lightText flex items-center">
             <FileText size={14} className="mr-1" />
-            Sources used by our AI will displayed on the right hand side after each response.
+            Sources used by our AI will display here after each response.
             {allSources.length > 0 && (
               <button 
                 className="ml-2 text-insta-blue hover:underline"
@@ -270,7 +273,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
           </button>
         </div>
         
-        <div className="flex-1 overflow-y-auto p-3">
+        <div className="flex-1 overflow-y-auto p-3"> {/* Fix scrolling with overflow-y-auto */}
           {allSources.length > 0 ? (
             <div className="space-y-3">
               {allSources.map((source, index) => (

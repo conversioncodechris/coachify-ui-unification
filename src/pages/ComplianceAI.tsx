@@ -156,7 +156,7 @@ const ComplianceAI = () => {
                   </button>
                 </div>
                 <div className="max-w-3xl mx-auto mt-2 text-center text-xs text-insta-lightText">
-                  Sources used by our AI will displayed on the right hand side after each response. Start chatting to see references.
+                  Sources used by our AI will display here after each response. Start chatting to see references.
                 </div>
               </div>
             </>
