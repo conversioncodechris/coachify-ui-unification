@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Home, MessageSquare, Plus, FileText, Pin, Eye, Edit2, EyeOff, PinOff } from 'lucide-react';
@@ -38,7 +37,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
         setActiveChats(JSON.parse(savedChats));
       }
     }
-  }, [type, location.pathname]); // Add location.pathname to dependencies to refresh when route changes
+  }, [type, location.pathname]);
 
   const saveChats = (chats: ChatItem[]) => {
     localStorage.setItem('complianceActiveChats', JSON.stringify(chats));
@@ -53,7 +52,6 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
       chat.path === path ? { ...chat, pinned: !chat.pinned } : chat
     );
     
-    // Sort to put pinned chats first
     const sortedChats = [
       ...updatedChats.filter(chat => chat.pinned),
       ...updatedChats.filter(chat => !chat.pinned)
@@ -132,7 +130,6 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
       onClick: (e: React.MouseEvent) => {
         e.preventDefault();
         navigate('/compliance');
-        // Clear selected topic if we're starting a new chat
         if (currentPath.includes('/compliance/chat/')) {
           console.log('Starting new chat - navigating to compliance page');
         }
@@ -244,7 +241,6 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
                         )}
                       >
                         <div className="flex items-center max-w-[55%]">
-                          {subItem.pinned && <Pin size={12} className="mr-1 flex-shrink-0 text-insta-blue" />}
                           <span className="truncate" title={subItem.label}>
                             {subItem.label}
                           </span>
@@ -305,6 +301,12 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
                             </Tooltip>
                           </TooltipProvider>
                         </div>
+                        
+                        {subItem.pinned && (
+                          <div className="absolute top-0 left-0 bg-insta-blue text-white p-1 text-xs rounded-tl-md rounded-br-md">
+                            <Pin size={12} />
+                          </div>
+                        )}
                       </Link>
                     )}
                   </div>
