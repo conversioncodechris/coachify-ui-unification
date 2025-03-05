@@ -1,0 +1,25 @@
+
+import React from 'react';
+import { Plus } from 'lucide-react';
+
+interface AddTopicCardProps {
+  onClick: () => void;
+}
+
+const AddTopicCard: React.FC<AddTopicCardProps> = ({ onClick }) => {
+  return (
+    <div 
+      className="insta-card cursor-pointer hover:border-insta-blue transition-colors relative group border-dashed border-2 h-[102px]" 
+      onClick={onClick}
+    >
+      <div className="flex items-center justify-center h-full">
+        <div className="flex flex-col items-center text-insta-lightText">
+          <Plus size={24} className="mb-2" />
+          <span className="font-medium">Add New Topic</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AddTopicCard;
