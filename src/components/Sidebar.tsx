@@ -238,12 +238,12 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
                       <Link
                         to={subItem.path}
                         className={cn(
-                          "insta-sidebar-item text-sm flex items-center justify-between pr-1",
+                          "insta-sidebar-item text-sm flex items-center justify-between pr-2",
                           currentPath === subItem.path ? 'active' : '',
                           'group'
                         )}
                       >
-                        <div className="flex items-center max-w-[60%]">
+                        <div className="flex items-center max-w-[55%]">
                           {subItem.pinned && <Pin size={12} className="mr-1 flex-shrink-0 text-insta-blue" />}
                           <span className="truncate" title={subItem.label}>
                             {subItem.label}
