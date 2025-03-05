@@ -52,7 +52,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
-  const [isSourcesPanelOpen, setIsSourcesPanelOpen] = useState(true);
+  const [isSourcesPanelOpen, setIsSourcesPanelOpen] = useState(false);
   const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(0);
   const [showSuggestions, setShowSuggestions] = useState(true);
 
