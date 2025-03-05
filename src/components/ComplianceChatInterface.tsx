@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { MessageSquare, ThumbsUp, ThumbsDown, Send, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -233,8 +234,13 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
                       </button>
                       {message.sources && message.sources.length > 0 && (
                         <div className="ml-auto flex items-center">
-                          <FileText size={14} className="mr-1" />
-                          <span className="text-xs">{message.sources.length} sources</span>
+                          <button 
+                            onClick={toggleSourcesPanel}
+                            className="flex items-center text-insta-blue hover:underline"
+                          >
+                            <FileText size={14} className="mr-1" />
+                            <span className="text-xs">{message.sources.length} sources</span>
+                          </button>
                         </div>
                       )}
                     </div>
