@@ -150,7 +150,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
                   <div className="relative">
                     {isSourcesPanelOpen ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
                     {!isSourcesPanelOpen && allSources.length > 0 && (
-                      <span className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full" />
+                      <span className="absolute -top-1 -right-1 w-2 h-2 bg-insta-blue rounded-full" />
                     )}
                   </div>
                 </button>
@@ -242,7 +242,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
         
         {!isSourcesPanelOpen && allSources.length > 0 && (
           <div 
-            className="absolute right-0 top-16 bottom-0 w-1 bg-destructive cursor-pointer animate-pulse"
+            className="absolute right-0 top-16 bottom-0 w-1 bg-insta-blue cursor-pointer animate-pulse"
             onClick={toggleSourcesPanel}
           />
         )}
