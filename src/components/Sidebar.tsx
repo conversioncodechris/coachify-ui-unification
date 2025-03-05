@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Home, MessageSquare, Plus, FileText, Pin, Eye, Edit2, EyeOff, PinOff } from 'lucide-react';
@@ -241,7 +242,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
                         )}
                       >
                         <div className="flex items-center max-w-[55%]">
-                          <span className="truncate pl-4" title={subItem.label}>
+                          <span className="truncate pl-1" title={subItem.label}>
                             {subItem.label}
                           </span>
                         </div>
