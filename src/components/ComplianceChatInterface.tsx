@@ -289,7 +289,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
           </div>
           <div className="max-w-3xl mx-auto mt-2 text-xs text-insta-lightText flex items-center">
             <FileText size={14} className="mr-1" />
-            Sources used by our AI will display here after each response.
+            Sources used by our AI will display in the right-hand column after each response.
             {allSources.length > 0 && (
               <button 
                 className="ml-2 text-insta-blue hover:underline"

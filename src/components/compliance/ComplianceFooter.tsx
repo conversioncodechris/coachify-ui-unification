@@ -20,7 +20,7 @@ const ComplianceFooter: React.FC<ComplianceFooterProps> = ({ placeholder }) => {
         </button>
       </div>
       <div className="max-w-3xl mx-auto mt-2 text-center text-xs text-insta-lightText">
-        Sources used by our AI will display here after each response. Start chatting to see references.
+        Sources used by our AI will display in the right-hand column after each response.
       </div>
     </div>
   );
