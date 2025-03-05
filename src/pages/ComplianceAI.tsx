@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
@@ -27,8 +28,8 @@ const ComplianceAI = () => {
       const savedChats = localStorage.getItem('complianceActiveChats');
       if (savedChats) {
         const activeChats = JSON.parse(savedChats);
-        const currentChat = activeChats.find((chat: {title: string, path: string}) => 
-          chat.path.includes(chatId)
+        const currentChat = activeChats.find((chat: {title: string, path: string, hidden?: boolean}) => 
+          chat.path.includes(chatId) && !chat.hidden
         );
         
         if (currentChat) {

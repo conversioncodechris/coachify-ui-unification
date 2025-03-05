@@ -1,17 +1,35 @@
 
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, MessageSquare, Plus, FileText } from 'lucide-react';
+import { Home, MessageSquare, Plus, FileText, Pin, Eye, Edit2, EyeOff, PinOff } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 interface SidebarProps {
   type: 'compliance' | 'content' | 'coach';
 }
 
+interface ChatItem {
+  title: string;
+  path: string;
+  hidden?: boolean;
+  pinned?: boolean;
+}
+
 const Sidebar: React.FC<SidebarProps> = ({ type }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const currentPath = location.pathname;
-  const [activeChats, setActiveChats] = useState<{title: string, path: string}[]>([]);
+  const [activeChats, setActiveChats] = useState<ChatItem[]>([]);
+  const [editingChat, setEditingChat] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState("");
 
   useEffect(() => {
     if (type === 'compliance') {
@@ -22,13 +40,90 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
     }
   }, [type, location.pathname]); // Add location.pathname to dependencies to refresh when route changes
 
+  const saveChats = (chats: ChatItem[]) => {
+    localStorage.setItem('complianceActiveChats', JSON.stringify(chats));
+    setActiveChats(chats);
+  };
+
+  const handlePinChat = (path: string, event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const updatedChats = activeChats.map(chat => 
+      chat.path === path ? { ...chat, pinned: !chat.pinned } : chat
+    );
+    
+    // Sort to put pinned chats first
+    const sortedChats = [
+      ...updatedChats.filter(chat => chat.pinned),
+      ...updatedChats.filter(chat => !chat.pinned)
+    ];
+    
+    saveChats(sortedChats);
+    
+    toast({
+      title: updatedChats.find(c => c.path === path)?.pinned 
+        ? "Chat pinned" 
+        : "Chat unpinned",
+      description: "Your chats have been updated.",
+    });
+  };
+
+  const handleHideChat = (path: string, event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const updatedChats = activeChats.map(chat => 
+      chat.path === path ? { ...chat, hidden: !chat.hidden } : chat
+    );
+    
+    saveChats(updatedChats);
+    
+    toast({
+      title: updatedChats.find(c => c.path === path)?.hidden 
+        ? "Chat hidden" 
+        : "Chat visible",
+      description: "Your chats have been updated.",
+    });
+  };
+
+  const handleRenameClick = (path: string, currentTitle: string, event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setEditingChat(path);
+    setEditValue(currentTitle);
+  };
+
+  const handleRenameSubmit = (path: string, event: React.FormEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    if (editValue.trim()) {
+      const updatedChats = activeChats.map(chat => 
+        chat.path === path ? { ...chat, title: editValue.trim() } : chat
+      );
+      
+      saveChats(updatedChats);
+      setEditingChat(null);
+      
+      toast({
+        title: "Chat renamed",
+        description: "Your chat has been updated.",
+      });
+    }
+  };
+
   const getComplianceItems = () => [
     { icon: <Home size={20} />, label: 'Dashboard', path: '/compliance' },
     { icon: <MessageSquare size={20} />, label: 'Chats', path: '/compliance/chats', 
-      subItems: activeChats.map(chat => ({
-        label: chat.title,
-        path: chat.path
-      }))
+      subItems: activeChats
+        .filter(chat => !chat.hidden)
+        .map(chat => ({
+          label: chat.title,
+          path: chat.path,
+          pinned: chat.pinned,
+          originalChat: chat
+        }))
     },
     { 
       icon: <Plus size={20} />, 
@@ -120,13 +215,99 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
             {'subItems' in item && item.subItems && item.subItems.length > 0 && (
               <div className="ml-8 mt-1 space-y-1">
                 {item.subItems.map((subItem, subIndex) => (
-                  <Link
-                    key={subIndex}
-                    to={subItem.path}
-                    className={`insta-sidebar-item text-sm ${currentPath === subItem.path ? 'active' : ''}`}
+                  <div 
+                    key={subIndex} 
+                    className="relative group"
                   >
-                    <span>{subItem.label}</span>
-                  </Link>
+                    {editingChat === subItem.path ? (
+                      <form 
+                        onSubmit={(e) => handleRenameSubmit(subItem.path, e)}
+                        onClick={(e) => e.stopPropagation()}
+                        className="px-2"
+                      >
+                        <input
+                          type="text"
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          autoFocus
+                          className="w-full text-sm border border-insta-lightBlue rounded p-1"
+                          onBlur={() => setEditingChat(null)}
+                        />
+                      </form>
+                    ) : (
+                      <Link
+                        to={subItem.path}
+                        className={cn(
+                          "insta-sidebar-item text-sm flex justify-between",
+                          currentPath === subItem.path ? 'active' : '',
+                          'group'
+                        )}
+                      >
+                        <div className="flex items-center">
+                          {subItem.pinned && <Pin size={12} className="mr-1 text-insta-blue" />}
+                          <span className="truncate">
+                            {subItem.label}
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <button 
+                                  onClick={(e) => handlePinChat(subItem.path, e)}
+                                  className="p-1 hover:bg-background rounded"
+                                >
+                                  {subItem.pinned ? 
+                                    <PinOff size={14} className="text-insta-lightText" /> : 
+                                    <Pin size={14} className="text-insta-lightText" />
+                                  }
+                                </button>
+                              </TooltipTrigger>
+                              <TooltipContent side="right">
+                                <p>{subItem.pinned ? 'Unpin chat' : 'Pin chat'}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                          
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <button 
+                                  onClick={(e) => handleRenameClick(subItem.path, subItem.label, e)}
+                                  className="p-1 hover:bg-background rounded"
+                                >
+                                  <Edit2 size={14} className="text-insta-lightText" />
+                                </button>
+                              </TooltipTrigger>
+                              <TooltipContent side="right">
+                                <p>Rename chat</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                          
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <button 
+                                  onClick={(e) => handleHideChat(subItem.path, e)}
+                                  className="p-1 hover:bg-background rounded"
+                                >
+                                  {('originalChat' in subItem && subItem.originalChat?.hidden) ? 
+                                    <Eye size={14} className="text-insta-lightText" /> : 
+                                    <EyeOff size={14} className="text-insta-lightText" />
+                                  }
+                                </button>
+                              </TooltipTrigger>
+                              <TooltipContent side="right">
+                                <p>{('originalChat' in subItem && subItem.originalChat?.hidden) ? 'Show chat' : 'Hide chat'}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
+                      </Link>
+                    )}
+                  </div>
                 ))}
               </div>
             )}
