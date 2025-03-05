@@ -241,7 +241,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
                         )}
                       >
                         <div className="flex items-center max-w-[55%]">
-                          <span className="truncate" title={subItem.label}>
+                          <span className="truncate pl-4" title={subItem.label}>
                             {subItem.label}
                           </span>
                         </div>
@@ -303,8 +303,8 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
                         </div>
                         
                         {subItem.pinned && (
-                          <div className="absolute top-0 left-0 bg-insta-blue text-white p-1 text-xs rounded-tl-md rounded-br-md">
-                            <Pin size={12} />
+                          <div className="absolute top-0 left-0 bg-insta-blue text-white p-0.5 text-xs rounded-tl-md rounded-br-md w-3 h-3 flex items-center justify-center">
+                            <Pin size={8} />
                           </div>
                         )}
                       </Link>
