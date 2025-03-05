@@ -100,7 +100,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
         sources: mockSources
       };
       setMessages(prev => [...prev, aiResponse]);
-      setIsSourcesPanelOpen(true);
+      // Removed: setIsSourcesPanelOpen(true);
     }, 1000);
   };
 
