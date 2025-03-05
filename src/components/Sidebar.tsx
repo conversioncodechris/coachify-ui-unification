@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Home, MessageSquare, Plus, FileText, Pin, Eye, Edit2, EyeOff, PinOff } from 'lucide-react';
@@ -247,7 +246,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
                           </span>
                         </div>
                         
-                        <div className="flex items-center space-x-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+                        <div className="flex items-center space-x-0 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger asChild>
