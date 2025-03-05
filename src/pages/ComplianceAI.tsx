@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import ComplianceChatInterface from '../components/ComplianceChatInterface';
 import { useToast } from "../hooks/use-toast";
@@ -17,6 +17,7 @@ const ComplianceAI = () => {
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const { toast } = useToast();
   const location = useLocation();
+  const navigate = useNavigate();
   
   const chatMatch = location.pathname.match(/\/compliance\/chat\/(\d+)/);
   const chatId = chatMatch ? chatMatch[1] : null;
@@ -34,6 +35,8 @@ const ComplianceAI = () => {
           setSelectedTopic(currentChat.title);
         }
       }
+    } else {
+      setSelectedTopic(null);
     }
   }, [chatId, location.pathname]);
 

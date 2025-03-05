@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/tooltip";
 import { getQuestionsForTopic } from '@/data/complianceQuestions';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 interface ComplianceChatInterfaceProps {
   topic: string;
@@ -29,6 +30,7 @@ interface Source {
 }
 
 const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic, onBackToTopics }) => {
+  const navigate = useNavigate();
   const topicQuestions = getQuestionsForTopic(topic);
   
   const [messages, setMessages] = useState<Message[]>([
@@ -74,9 +76,11 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
         });
         
         localStorage.setItem('complianceActiveChats', JSON.stringify(activeChats));
+        
+        navigate(chatPath, { replace: true });
       }
     }
-  }, [topic]);
+  }, [topic, navigate]);
 
   const mockSources: Source[] = [
     {
@@ -122,7 +126,6 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
         sources: mockSources
       };
       setMessages(prev => [...prev, aiResponse]);
-      // Removed: setIsSourcesPanelOpen(true);
     }, 1000);
   };
 
@@ -241,7 +244,6 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
             ))}
           </div>
           
-          {/* Suggested Questions */}
           {showSuggestions && (
             <div className="max-w-3xl mx-auto mt-6 mb-2">
               <div className="border border-border rounded-lg p-4 bg-white">

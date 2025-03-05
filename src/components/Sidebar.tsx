@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Home, MessageSquare, Plus, FileText } from 'lucide-react';
@@ -19,7 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
         setActiveChats(JSON.parse(savedChats));
       }
     }
-  }, [type]);
+  }, [type, location.pathname]); // Add location.pathname to dependencies to refresh when route changes
 
   const getComplianceItems = () => [
     { icon: <Home size={20} />, label: 'Dashboard', path: '/compliance' },
@@ -36,6 +37,10 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
       onClick: (e: React.MouseEvent) => {
         e.preventDefault();
         navigate('/compliance');
+        // Clear selected topic if we're starting a new chat
+        if (currentPath.includes('/compliance/chat/')) {
+          console.log('Starting new chat - navigating to compliance page');
+        }
       }
     },
   ];
