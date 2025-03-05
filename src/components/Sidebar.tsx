@@ -241,7 +241,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
                           'group'
                         )}
                       >
-                        <div className="flex items-center max-w-[55%]">
+                        <div className="flex items-center max-w-[65%]">
                           <span className="truncate pl-1" title={subItem.label}>
                             {subItem.label}
                           </span>
