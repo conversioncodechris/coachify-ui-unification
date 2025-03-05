@@ -150,7 +150,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
                   <div className="relative">
                     {isSourcesPanelOpen ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
                     {!isSourcesPanelOpen && allSources.length > 0 && (
-                      <span className="absolute -top-1 -right-1 w-2 h-2 bg-insta-blue rounded-full" />
+                      <span className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full" />
                     )}
                   </div>
                 </button>
