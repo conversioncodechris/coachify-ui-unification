@@ -33,7 +33,9 @@ const TopicCard: React.FC<TopicCardProps> = ({
 }) => {
   return (
     <div 
-      className="insta-card cursor-pointer hover:border-insta-blue transition-colors relative group"
+      className={`insta-card cursor-pointer transition-colors relative group ${
+        topic.pinned ? 'border-[#BBBCBF] border-2' : 'hover:border-insta-blue border'
+      }`}
       onClick={() => onTopicClick(topic.title)}
     >
       <div className="flex items-start">

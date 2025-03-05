@@ -237,6 +237,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
                         className={cn(
                           "insta-sidebar-item text-sm flex items-center justify-between pr-2",
                           currentPath === subItem.path ? 'active' : '',
+                          subItem.pinned ? 'border border-[#BBBCBF]' : '',
                           'group'
                         )}
                       >
