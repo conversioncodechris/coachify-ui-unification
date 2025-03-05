@@ -17,7 +17,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ userAvatar }) => {
           <img 
             src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" 
             alt="GAIRE Logo" 
-            className="h-12" 
+            className="h-[3.03rem]" 
           />
         </Link>
         
