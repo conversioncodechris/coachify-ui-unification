@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MessageSquare, ThumbsUp, ThumbsDown, Send, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -48,7 +47,6 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
     }
   ]);
   const [inputMessage, setInputMessage] = useState('');
-  // Default to open to make it visible initially
   const [isSourcesPanelOpen, setIsSourcesPanelOpen] = useState(true);
   const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(0);
 
@@ -95,7 +93,6 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
         sources: mockSources
       };
       setMessages(prev => [...prev, aiResponse]);
-      // Open sources panel when AI responds
       setIsSourcesPanelOpen(true);
     }, 1000);
   };
@@ -123,7 +120,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
     .flatMap(msg => msg.sources || []);
 
   return (
-    <div className="flex h-full pt-16 pb-[120px]"> {/* Add padding for fixed header and footer */}
+    <div className="flex h-full pt-16 pb-[120px]">
       <div className={cn(
         "flex flex-col flex-1 h-full transition-all duration-300 relative",
         isSourcesPanelOpen ? "mr-72" : ""
@@ -153,7 +150,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
                   <div className="relative">
                     {isSourcesPanelOpen ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
                     {!isSourcesPanelOpen && allSources.length > 0 && (
-                      <span className="absolute -top-1 -right-1 w-2 h-2 bg-insta-blue rounded-full" />
+                      <span className="absolute -top-1 -right-1 w-2 h-2 bg-destructive rounded-full" />
                     )}
                   </div>
                 </button>
@@ -165,7 +162,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
           </TooltipProvider>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 mt-16"> {/* Fix scrolling with overflow-y-auto */}
+        <div className="flex-1 overflow-y-auto p-4 mt-16">
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((message, index) => (
               <div 
@@ -245,7 +242,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
         
         {!isSourcesPanelOpen && allSources.length > 0 && (
           <div 
-            className="absolute right-0 top-16 bottom-0 w-1 bg-insta-blue cursor-pointer animate-pulse"
+            className="absolute right-0 top-16 bottom-0 w-1 bg-destructive cursor-pointer animate-pulse"
             onClick={toggleSourcesPanel}
           />
         )}
@@ -273,7 +270,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
           </button>
         </div>
         
-        <div className="flex-1 overflow-y-auto p-3"> {/* Fix scrolling with overflow-y-auto */}
+        <div className="flex-1 overflow-y-auto p-3">
           {allSources.length > 0 ? (
             <div className="space-y-3">
               {allSources.map((source, index) => (
