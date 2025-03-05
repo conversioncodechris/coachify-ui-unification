@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MessageSquare, ThumbsUp, ThumbsDown, Send, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -55,6 +54,29 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
   const [isSourcesPanelOpen, setIsSourcesPanelOpen] = useState(false);
   const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(0);
   const [showSuggestions, setShowSuggestions] = useState(true);
+
+  useEffect(() => {
+    if (topic) {
+      const savedChats = localStorage.getItem('complianceActiveChats');
+      let activeChats = savedChats ? JSON.parse(savedChats) : [];
+      
+      const chatExists = activeChats.some((chat: {title: string, path: string}) => 
+        chat.title === topic
+      );
+      
+      if (!chatExists) {
+        const chatId = Date.now().toString();
+        const chatPath = `/compliance/chat/${chatId}`;
+        
+        activeChats.push({
+          title: topic,
+          path: chatPath
+        });
+        
+        localStorage.setItem('complianceActiveChats', JSON.stringify(activeChats));
+      }
+    }
+  }, [topic]);
 
   const mockSources: Source[] = [
     {

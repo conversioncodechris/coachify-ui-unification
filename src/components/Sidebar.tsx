@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Home, MessageSquare, Plus, FileText } from 'lucide-react';
 
 interface SidebarProps {
@@ -9,13 +8,36 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ type }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const currentPath = location.pathname;
+  const [activeChats, setActiveChats] = useState<{title: string, path: string}[]>([]);
 
-  // Define sidebar items based on type
+  useEffect(() => {
+    if (type === 'compliance') {
+      const savedChats = localStorage.getItem('complianceActiveChats');
+      if (savedChats) {
+        setActiveChats(JSON.parse(savedChats));
+      }
+    }
+  }, [type]);
+
   const getComplianceItems = () => [
     { icon: <Home size={20} />, label: 'Dashboard', path: '/compliance' },
-    { icon: <MessageSquare size={20} />, label: 'Chats', path: '/compliance/chats' },
-    { icon: <Plus size={20} />, label: 'New Chat', path: '/compliance/new-chat' },
+    { icon: <MessageSquare size={20} />, label: 'Chats', path: '/compliance/chats', 
+      subItems: activeChats.map(chat => ({
+        label: chat.title,
+        path: chat.path
+      }))
+    },
+    { 
+      icon: <Plus size={20} />, 
+      label: 'New Chat', 
+      path: '/compliance/new-chat',
+      onClick: (e: React.MouseEvent) => {
+        e.preventDefault();
+        navigate('/compliance');
+      }
+    },
   ];
 
   const getContentItems = () => [
@@ -72,15 +94,25 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
       <nav className="flex flex-col space-y-1 px-2">
         {items.map((item, index) => (
           <div key={index}>
-            <Link
-              to={item.path}
-              className={`insta-sidebar-item ${currentPath === item.path ? 'active' : ''}`}
-            >
-              {item.icon}
-              <span>{item.label}</span>
-            </Link>
+            {item.onClick ? (
+              <button
+                onClick={item.onClick}
+                className={`insta-sidebar-item w-full text-left ${currentPath === item.path ? 'active' : ''}`}
+              >
+                {item.icon}
+                <span>{item.label}</span>
+              </button>
+            ) : (
+              <Link
+                to={item.path}
+                className={`insta-sidebar-item ${currentPath === item.path ? 'active' : ''}`}
+              >
+                {item.icon}
+                <span>{item.label}</span>
+              </Link>
+            )}
             
-            {'subItems' in item && item.subItems && (
+            {'subItems' in item && item.subItems && item.subItems.length > 0 && (
               <div className="ml-8 mt-1 space-y-1">
                 {item.subItems.map((subItem, subIndex) => (
                   <Link

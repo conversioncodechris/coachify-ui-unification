@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import ComplianceChatInterface from '../components/ComplianceChatInterface';
 import { useToast } from "../hooks/use-toast";
@@ -15,6 +16,27 @@ const EMOJI_OPTIONS = [
 const ComplianceAI = () => {
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const { toast } = useToast();
+  const location = useLocation();
+  
+  const chatMatch = location.pathname.match(/\/compliance\/chat\/(\d+)/);
+  const chatId = chatMatch ? chatMatch[1] : null;
+  
+  useEffect(() => {
+    if (chatId) {
+      const savedChats = localStorage.getItem('complianceActiveChats');
+      if (savedChats) {
+        const activeChats = JSON.parse(savedChats);
+        const currentChat = activeChats.find((chat: {title: string, path: string}) => 
+          chat.path.includes(chatId)
+        );
+        
+        if (currentChat) {
+          setSelectedTopic(currentChat.title);
+        }
+      }
+    }
+  }, [chatId, location.pathname]);
+
   const [topics, setTopics] = useState<ComplianceTopic[]>([
     {
       icon: '🏠',
@@ -142,7 +164,6 @@ const ComplianceAI = () => {
   };
   
   const handleAddTopicSubmit = () => {
-    // Validate form
     if (!newTopic.title.trim() || !newTopic.description.trim()) {
       toast({
         title: "Missing information",
@@ -159,7 +180,6 @@ const ComplianceAI = () => {
       return;
     }
 
-    // Add new topic
     setTopics(prevTopics => [...prevTopics, { 
       ...newTopic,
       title: newTopic.title.trim(),
