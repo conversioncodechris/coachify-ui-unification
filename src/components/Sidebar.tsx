@@ -243,14 +243,14 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
                           'group'
                         )}
                       >
-                        <div className="flex items-center">
-                          {subItem.pinned && <Pin size={12} className="mr-1 text-insta-blue" />}
-                          <span className="truncate">
+                        <div className="flex items-center max-w-[70%]">
+                          {subItem.pinned && <Pin size={12} className="mr-1 flex-shrink-0 text-insta-blue" />}
+                          <span className="truncate" title={subItem.label}>
                             {subItem.label}
                           </span>
                         </div>
                         
-                        <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger asChild>
