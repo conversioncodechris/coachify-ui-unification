@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { MessageSquare, ThumbsUp, ThumbsDown, Send, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -7,6 +8,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { getQuestionsForTopic } from '@/data/complianceQuestions';
+import { Button } from '@/components/ui/button';
 
 interface ComplianceChatInterfaceProps {
   topic: string;
@@ -27,10 +30,12 @@ interface Source {
 }
 
 const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic, onBackToTopics }) => {
+  const topicQuestions = getQuestionsForTopic(topic);
+  
   const [messages, setMessages] = useState<Message[]>([
     {
       sender: 'ai',
-      content: `Welcome to the ${topic} topic! How can I assist you today?`,
+      content: `Welcome to the ${topic} topic! Here are some common questions you might have:`,
       timestamp: new Date(),
       sources: [
         {
@@ -49,6 +54,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
   const [inputMessage, setInputMessage] = useState('');
   const [isSourcesPanelOpen, setIsSourcesPanelOpen] = useState(true);
   const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(0);
+  const [showSuggestions, setShowSuggestions] = useState(true);
 
   const mockSources: Source[] = [
     {
@@ -73,17 +79,18 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
     }
   ];
 
-  const handleSendMessage = () => {
-    if (!inputMessage.trim()) return;
+  const handleSendMessage = (message: string = inputMessage) => {
+    if (!message.trim()) return;
     
     const userMessage: Message = {
       sender: 'user',
-      content: inputMessage,
+      content: message,
       timestamp: new Date()
     };
     
     setMessages(prev => [...prev, userMessage]);
     setInputMessage('');
+    setShowSuggestions(false);
     
     setTimeout(() => {
       const aiResponse: Message = {
@@ -113,6 +120,10 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
 
   const showSourceDetails = (index: number) => {
     setActiveSourceIndex(index === activeSourceIndex ? null : index);
+  };
+
+  const handleSuggestedQuestion = (question: string) => {
+    handleSendMessage(question);
   };
 
   const allSources = messages
@@ -207,6 +218,32 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
               </div>
             ))}
           </div>
+          
+          {/* Suggested Questions */}
+          {showSuggestions && (
+            <div className="max-w-3xl mx-auto mt-6 mb-2">
+              <div className="border border-border rounded-lg p-4 bg-white">
+                <p className="text-sm font-medium mb-3">Common questions about {topic}:</p>
+                <div className="space-y-2">
+                  {topicQuestions.map((question, index) => (
+                    <div key={index} className="flex gap-2">
+                      <span className="bg-insta-lightBlue text-insta-blue w-6 h-6 flex items-center justify-center rounded-full font-medium flex-shrink-0">
+                        {index + 1}
+                      </span>
+                      <Button 
+                        variant="outline" 
+                        className="text-left justify-start h-auto py-2 flex-1 border-insta-gray hover:bg-insta-lightBlue hover:text-insta-blue"
+                        onClick={() => handleSuggestedQuestion(question)}
+                      >
+                        {question}
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-insta-lightText mt-3">Or ask your own question below if not listed</p>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="fixed bottom-0 left-0 right-0 z-40 p-4 border-t border-border bg-white">
@@ -221,7 +258,7 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
             />
             <button 
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-insta-blue p-2 hover:bg-insta-lightBlue rounded-full"
-              onClick={handleSendMessage}
+              onClick={() => handleSendMessage()}
             >
               <Send size={20} />
             </button>
