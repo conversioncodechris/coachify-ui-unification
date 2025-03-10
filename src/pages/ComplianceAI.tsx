@@ -16,12 +16,30 @@ const ComplianceAI = () => {
   const chatMatch = location.pathname.match(/\/compliance\/chat\/(\d+)/);
   const chatId = chatMatch ? chatMatch[1] : null;
   
-  const { currentTopic, createNewChatSession } = useComplianceChatSessions(chatMatch ? topics.find(t => 
-    t.title === localStorage.getItem('complianceActiveChats') ? 
-      JSON.parse(localStorage.getItem('complianceActiveChats') || '[]')
-        .find((chat: {title: string}) => chat.title === t.title)?.title 
-      : null
-  )?.title || null : null, chatId);
+  // Get initial topic from localStorage if available
+  const getInitialTopic = () => {
+    if (!chatId) return null;
+    
+    try {
+      const savedChats = localStorage.getItem('complianceActiveChats');
+      if (savedChats) {
+        const activeChats = JSON.parse(savedChats);
+        const currentChat = activeChats.find((chat: any) => 
+          chat.path.includes(chatId)
+        );
+        return currentChat ? currentChat.title : null;
+      }
+    } catch (error) {
+      console.error('Error parsing active chats from localStorage:', error);
+    }
+    
+    return null;
+  };
+
+  const { currentTopic, createNewChatSession } = useComplianceChatSessions(
+    getInitialTopic(),
+    chatId
+  );
 
   const handleTopicClick = (topic: string) => {
     createNewChatSession(topic);
