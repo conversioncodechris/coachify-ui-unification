@@ -16,7 +16,8 @@ const ComplianceAI = () => {
   const chatMatch = location.pathname.match(/\/compliance\/chat\/(\d+)/);
   const chatId = chatMatch ? chatMatch[1] : null;
   
-  const { currentTopic, createNewChatSession } = useComplianceChatSessions(currentTopic, chatId);
+  // Pass null instead of currentTopic, which hasn't been declared yet
+  const { currentTopic, createNewChatSession } = useComplianceChatSessions(null, chatId);
 
   const handleTopicClick = (topic: string) => {
     createNewChatSession(topic);

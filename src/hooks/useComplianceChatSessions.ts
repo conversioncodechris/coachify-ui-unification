@@ -9,11 +9,11 @@ interface ChatSession {
 }
 
 export const useComplianceChatSessions = (
-  topic: string | null,
+  initialTopic: string | null,
   chatId: string | null
 ) => {
   const navigate = useNavigate();
-  const [currentTopic, setCurrentTopic] = useState<string | null>(null);
+  const [currentTopic, setCurrentTopic] = useState<string | null>(initialTopic);
 
   useEffect(() => {
     if (chatId) {
