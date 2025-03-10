@@ -55,6 +55,11 @@ const ContentAI = () => {
     }
   }, [location.pathname, setActiveChats]);
 
+  const handleBackToTopics = () => {
+    // Navigate and remove current chat from active path
+    navigate('/content');
+  };
+
   const handleTopicClick = (topic: string) => {
     try {
       const savedChats = localStorage.getItem('contentActiveChats');
@@ -89,7 +94,7 @@ const ContentAI = () => {
           {currentTopic && chatId ? (
             <ContentChatInterface 
               topic={currentTopic} 
-              onBackToTopics={() => navigate('/content')} 
+              onBackToTopics={handleBackToTopics} 
             />
           ) : (
             <TopicsManager

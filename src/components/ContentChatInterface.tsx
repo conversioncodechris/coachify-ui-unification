@@ -69,11 +69,6 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
     }
   ];
 
-  const handleBackClick = () => {
-    // Navigate directly to the content route
-    navigate('/content');
-  };
-
   const handleSendMessage = (message: string) => {
     if (!message.trim()) return;
     
@@ -117,7 +112,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
       <div className="flex flex-col flex-1 h-full transition-all duration-300 relative">
         <ChatHeader 
           topic={topic}
-          onBackToTopics={handleBackClick}
+          onBackToTopics={onBackToTopics}
           isSourcesPanelOpen={isSourcesPanelOpen}
           toggleSourcesPanel={toggleSourcesPanel}
           allSourcesLength={allSources.length}
