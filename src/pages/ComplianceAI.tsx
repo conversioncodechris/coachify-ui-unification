@@ -17,7 +17,6 @@ const ComplianceAI = () => {
   const chatMatch = location.pathname.match(/\/compliance\/chat\/(\d+)/);
   const chatId = chatMatch ? chatMatch[1] : null;
   
-  // Get initial topic from localStorage if available
   const getInitialTopic = () => {
     if (!chatId) return null;
     
@@ -25,10 +24,20 @@ const ComplianceAI = () => {
       const savedChats = localStorage.getItem('complianceActiveChats');
       if (savedChats) {
         const activeChats = JSON.parse(savedChats);
+        console.log('Active chats:', activeChats);
+        console.log('Looking for chat with path:', `/compliance/chat/${chatId}`);
+        
+        // First try exact path match
         const currentChat = activeChats.find((chat: any) => 
-          chat.path === `/compliance/chat/${chatId}`  // Use exact path matching
+          chat.path === `/compliance/chat/${chatId}` && !chat.hidden
         );
-        return currentChat ? currentChat.title : null;
+        
+        if (currentChat) {
+          console.log('Found chat by path:', currentChat);
+          return currentChat.title;
+        }
+        
+        return null;
       }
     } catch (error) {
       console.error('Error parsing active chats from localStorage:', error);
@@ -47,14 +56,20 @@ const ComplianceAI = () => {
       const savedChats = localStorage.getItem('complianceActiveChats');
       let activeChats = savedChats ? JSON.parse(savedChats) : [];
       
-      // Find existing chat with exact title match that isn't hidden
-      const existingChat = activeChats.find((chat: any) => 
-        chat.title === topic && !chat.hidden
-      );
+      console.log('Handling click for topic:', topic);
+      console.log('Current active chats:', activeChats);
+      
+      // Clean existing chats to ensure no duplicates
+      activeChats = activeChats.filter((chat: any) => !chat.hidden);
+      
+      // Look for exact topic match
+      const existingChat = activeChats.find((chat: any) => chat.title === topic);
       
       if (existingChat) {
+        console.log('Found existing chat:', existingChat);
         navigate(existingChat.path);
       } else {
+        console.log('Creating new chat for topic:', topic);
         createNewChatSession(topic);
       }
     } catch (error) {
