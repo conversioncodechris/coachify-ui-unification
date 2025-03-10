@@ -16,15 +16,18 @@ const ComplianceAI = () => {
   const chatMatch = location.pathname.match(/\/compliance\/chat\/(\d+)/);
   const chatId = chatMatch ? chatMatch[1] : null;
   
-  // Pass null instead of currentTopic, which hasn't been declared yet
-  const { currentTopic, createNewChatSession } = useComplianceChatSessions(null, chatId);
+  const { currentTopic, createNewChatSession } = useComplianceChatSessions(chatMatch ? topics.find(t => 
+    t.title === localStorage.getItem('complianceActiveChats') ? 
+      JSON.parse(localStorage.getItem('complianceActiveChats') || '[]')
+        .find((chat: {title: string}) => chat.title === t.title)?.title 
+      : null
+  )?.title || null : null, chatId);
 
   const handleTopicClick = (topic: string) => {
     createNewChatSession(topic);
   };
 
   const handleBackToTopics = () => {
-    // Just navigate to the main compliance page
     window.history.pushState({}, '', '/compliance');
     window.dispatchEvent(new PopStateEvent('popstate'));
   };
