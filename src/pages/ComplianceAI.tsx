@@ -26,7 +26,7 @@ const ComplianceAI = () => {
       if (savedChats) {
         const activeChats = JSON.parse(savedChats);
         const currentChat = activeChats.find((chat: any) => 
-          chat.path.includes(`/compliance/chat/${chatId}`)
+          chat.path === `/compliance/chat/${chatId}`  // Use exact path matching
         );
         return currentChat ? currentChat.title : null;
       }
@@ -43,11 +43,11 @@ const ComplianceAI = () => {
   );
 
   const handleTopicClick = (topic: string) => {
-    // Find existing chat or create new one
     try {
       const savedChats = localStorage.getItem('complianceActiveChats');
       let activeChats = savedChats ? JSON.parse(savedChats) : [];
       
+      // Find existing chat with exact title match that isn't hidden
       const existingChat = activeChats.find((chat: any) => 
         chat.title === topic && !chat.hidden
       );
