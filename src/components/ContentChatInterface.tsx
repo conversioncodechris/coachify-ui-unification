@@ -6,6 +6,7 @@ import ChatMessage from './content/ChatMessage';
 import MessageInput from './content/MessageInput';
 import SourcesPanel from './content/SourcesPanel';
 import SuggestedQuestions from './content/SuggestedQuestions';
+import { useNavigate } from 'react-router-dom';
 
 interface ContentChatInterfaceProps {
   topic: string;
@@ -13,6 +14,7 @@ interface ContentChatInterfaceProps {
 }
 
 const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBackToTopics }) => {
+  const navigate = useNavigate();
   const suggestedQuestions = [
     `What makes a good ${topic}?`,
     `What length should my ${topic} be?`,
@@ -67,6 +69,11 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
     }
   ];
 
+  const handleBackClick = () => {
+    // Navigate directly to the content route
+    navigate('/content');
+  };
+
   const handleSendMessage = (message: string) => {
     if (!message.trim()) return;
     
@@ -110,7 +117,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
       <div className="flex flex-col flex-1 h-full transition-all duration-300 relative">
         <ChatHeader 
           topic={topic}
-          onBackToTopics={onBackToTopics}
+          onBackToTopics={handleBackClick}
           isSourcesPanelOpen={isSourcesPanelOpen}
           toggleSourcesPanel={toggleSourcesPanel}
           allSourcesLength={allSources.length}

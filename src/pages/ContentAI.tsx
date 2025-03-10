@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ContentSidebar from '../components/ContentSidebar';
@@ -77,10 +78,6 @@ const ContentAI = () => {
     }
   };
 
-  const handleBackToTopics = () => {
-    navigate('/content');
-  };
-
   return (
     <div className="flex flex-col h-screen bg-background">
       <div className="flex flex-1 overflow-hidden pt-16">
@@ -92,7 +89,7 @@ const ContentAI = () => {
           {currentTopic && chatId ? (
             <ContentChatInterface 
               topic={currentTopic} 
-              onBackToTopics={handleBackToTopics} 
+              onBackToTopics={() => navigate('/content')} 
             />
           ) : (
             <TopicsManager
