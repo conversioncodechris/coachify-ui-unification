@@ -56,7 +56,6 @@ const ContentAI = () => {
   }, [location.pathname, setActiveChats]);
 
   const handleBackToTopics = () => {
-    // Use React Router navigate instead of window.location to prevent full page reload
     navigate('/content');
   };
 

@@ -113,7 +113,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
     .flatMap(msg => msg.sources || []);
 
   return (
-    <div className="flex h-full pt-16 pb-[120px]">
+    <div className="flex h-full">
       <div className={cn(
         "flex flex-col flex-1 h-full transition-all duration-300 relative",
         isSourcesPanelOpen ? "mr-72" : ""
