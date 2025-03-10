@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import Sidebar from '../components/Sidebar';
+import ContentSidebar from '../components/ContentSidebar';
 import TopicsManager from '../components/content/TopicsManager';
 import ChatSessionManager from '../components/content/ChatSessionManager';
 import ContentChatInterface from '../components/ContentChatInterface';
@@ -30,7 +30,7 @@ const ContentAI = () => {
   return (
     <div className="flex flex-col h-screen bg-background">
       <div className="flex flex-1 overflow-hidden pt-16">
-        <Sidebar type="content" />
+        <ContentSidebar />
         
         <div className="flex flex-col flex-1 overflow-hidden">
           <ChatSessionManager topic={currentTopic} chatId={chatId} />
