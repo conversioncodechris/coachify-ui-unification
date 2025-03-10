@@ -56,8 +56,8 @@ const ContentAI = () => {
   }, [location.pathname, setActiveChats]);
 
   const handleBackToTopics = () => {
-    // Force a hard navigation to the content page to reset state
-    window.location.href = '/content';
+    // Use React Router navigate instead of window.location to prevent full page reload
+    navigate('/content');
   };
 
   const handleTopicClick = (topic: string) => {
@@ -92,7 +92,7 @@ const ContentAI = () => {
           <ChatSessionManager topic={currentTopic} chatId={chatId} />
           
           {currentTopic && chatId ? (
-            <div className="absolute inset-0 top-[64px]">
+            <div className="absolute inset-0 top-0">
               <ContentChatInterface 
                 topic={currentTopic} 
                 onBackToTopics={handleBackToTopics} 

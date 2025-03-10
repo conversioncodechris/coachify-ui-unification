@@ -5,6 +5,7 @@ import ChatMessage from './content/ChatMessage';
 import MessageInput from './content/MessageInput';
 import SourcesPanel from './content/SourcesPanel';
 import SuggestedQuestions from './content/SuggestedQuestions';
+import { useNavigate } from 'react-router-dom';
 
 interface ContentChatInterfaceProps {
   topic: string;
@@ -12,6 +13,7 @@ interface ContentChatInterfaceProps {
 }
 
 const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBackToTopics }) => {
+  const navigate = useNavigate();
   const suggestedQuestions = [
     `What makes a good ${topic}?`,
     `What length should my ${topic} be?`,
@@ -100,6 +102,10 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
     handleSendMessage(question);
   };
 
+  const handleBackToTopics = () => {
+    navigate('/content');
+  };
+
   const allSources = messages
     .filter(msg => msg.sender === 'ai' && msg.sources && msg.sources.length > 0)
     .flatMap(msg => msg.sources || []);
@@ -109,13 +115,13 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
       <div className="flex-1 h-full transition-all duration-300 relative">
         <ChatHeader 
           topic={topic}
-          onBackToTopics={onBackToTopics}
+          onBackToTopics={handleBackToTopics}
           isSourcesPanelOpen={isSourcesPanelOpen}
           toggleSourcesPanel={toggleSourcesPanel}
           allSourcesLength={allSources.length}
         />
 
-        <div className="flex-1 overflow-y-auto p-4 pt-20">
+        <div className="flex-1 overflow-y-auto p-4 pt-[5rem]">
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((message, index) => (
               <ChatMessage

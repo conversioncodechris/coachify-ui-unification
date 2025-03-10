@@ -25,7 +25,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   allSourcesLength
 }) => {
   return (
-    <div className="absolute top-0 left-0 right-0 z-40 flex p-4 bg-white border-b border-border items-center">
+    <div className="fixed top-16 left-0 right-0 z-40 flex p-4 bg-white border-b border-border items-center">
       <button 
         onClick={onBackToTopics}
         className="mr-3 text-insta-blue hover:text-insta-blue/80"
