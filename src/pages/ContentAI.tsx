@@ -56,8 +56,7 @@ const ContentAI = () => {
   }, [location.pathname, setActiveChats]);
 
   const handleBackToTopics = () => {
-    // Navigate and remove current chat from active path
-    navigate('/content');
+    navigate('/content', { replace: true });
   };
 
   const handleTopicClick = (topic: string) => {

@@ -6,7 +6,6 @@ import ChatMessage from './content/ChatMessage';
 import MessageInput from './content/MessageInput';
 import SourcesPanel from './content/SourcesPanel';
 import SuggestedQuestions from './content/SuggestedQuestions';
-import { useNavigate } from 'react-router-dom';
 
 interface ContentChatInterfaceProps {
   topic: string;
@@ -14,7 +13,6 @@ interface ContentChatInterfaceProps {
 }
 
 const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBackToTopics }) => {
-  const navigate = useNavigate();
   const suggestedQuestions = [
     `What makes a good ${topic}?`,
     `What length should my ${topic} be?`,
