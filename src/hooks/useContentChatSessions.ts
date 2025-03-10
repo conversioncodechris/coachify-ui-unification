@@ -40,24 +40,39 @@ export const useContentChatSessions = (
     let activeChats = savedChats ? JSON.parse(savedChats) : [];
     
     const chatExists = activeChats.some((chat: ChatSession) => 
-      chat.title === topicTitle
+      chat.title === topicTitle && !chat.hidden
     );
     
     if (!chatExists) {
-      const newChatId = Date.now().toString();
-      const chatPath = `/content/chat/${newChatId}`;
+      // Check if there's a hidden chat with this topic
+      const hiddenChat = activeChats.find((chat: ChatSession) => 
+        chat.title === topicTitle && chat.hidden
+      );
       
-      activeChats.push({
-        title: topicTitle,
-        path: chatPath
-      });
-      
-      localStorage.setItem('contentActiveChats', JSON.stringify(activeChats));
-      navigate(chatPath, { replace: true });
+      if (hiddenChat) {
+        // Unhide the existing chat
+        const updatedChats = activeChats.map((chat: ChatSession) => 
+          chat.title === topicTitle ? { ...chat, hidden: false } : chat
+        );
+        localStorage.setItem('contentActiveChats', JSON.stringify(updatedChats));
+        navigate(hiddenChat.path, { replace: true });
+      } else {
+        // Create a new chat
+        const newChatId = Date.now().toString();
+        const chatPath = `/content/chat/${newChatId}`;
+        
+        activeChats.push({
+          title: topicTitle,
+          path: chatPath
+        });
+        
+        localStorage.setItem('contentActiveChats', JSON.stringify(activeChats));
+        navigate(chatPath, { replace: true });
+      }
     } else {
       // Find the existing chat and navigate to it
       const existingChat = activeChats.find((chat: ChatSession) => 
-        chat.title === topicTitle
+        chat.title === topicTitle && !chat.hidden
       );
       if (existingChat) {
         navigate(existingChat.path, { replace: true });

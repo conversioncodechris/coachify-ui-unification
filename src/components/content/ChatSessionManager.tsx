@@ -34,6 +34,14 @@ const ChatSessionManager: React.FC<ChatSessionManagerProps> = ({
         localStorage.setItem('contentActiveChats', JSON.stringify(activeChats));
         
         navigate(chatPath, { replace: true });
+      } else {
+        // Find existing chat and navigate to it
+        const existingChat = activeChats.find((chat: {title: string, path: string}) => 
+          chat.title === topic
+        );
+        if (existingChat) {
+          navigate(existingChat.path, { replace: true });
+        }
       }
     }
   }, [topic, chatId, navigate]);
