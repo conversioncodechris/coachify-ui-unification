@@ -106,8 +106,8 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
     .flatMap(msg => msg.sources || []);
 
   return (
-    <div className="flex h-full pt-16 pb-[120px]">
-      <div className="flex flex-col flex-1 h-full transition-all duration-300 relative">
+    <div className="flex flex-col h-full">
+      <div className="flex-1 h-full transition-all duration-300 relative">
         <ChatHeader 
           topic={topic}
           onBackToTopics={onBackToTopics}
@@ -116,7 +116,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
           allSourcesLength={allSources.length}
         />
 
-        <div className="flex-1 overflow-y-auto p-4 mt-16">
+        <div className="flex-1 overflow-y-auto p-4">
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((message, index) => (
               <ChatMessage
