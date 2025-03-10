@@ -88,16 +88,14 @@ const ContentAI = () => {
       <div className="flex flex-1 overflow-hidden pt-16">
         <ContentSidebar />
         
-        <main className="flex flex-col flex-1 overflow-hidden relative">
+        <div className="flex flex-col flex-1 overflow-hidden">
           <ChatSessionManager topic={currentTopic} chatId={chatId} />
           
           {currentTopic && chatId ? (
-            <div className="absolute inset-0 top-0">
-              <ContentChatInterface 
-                topic={currentTopic} 
-                onBackToTopics={handleBackToTopics} 
-              />
-            </div>
+            <ContentChatInterface 
+              topic={currentTopic} 
+              onBackToTopics={handleBackToTopics} 
+            />
           ) : (
             <TopicsManager
               topics={topics}
@@ -106,7 +104,7 @@ const ContentAI = () => {
               emojiOptions={DEFAULT_EMOJI_OPTIONS}
             />
           )}
-        </main>
+        </div>
       </div>
     </div>
   );
