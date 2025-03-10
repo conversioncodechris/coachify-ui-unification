@@ -92,7 +92,7 @@ const ContentAI = () => {
           <ChatSessionManager topic={currentTopic} chatId={chatId} />
           
           {currentTopic && chatId ? (
-            <div className="absolute inset-0">
+            <div className="absolute inset-0 top-[64px]">
               <ContentChatInterface 
                 topic={currentTopic} 
                 onBackToTopics={handleBackToTopics} 

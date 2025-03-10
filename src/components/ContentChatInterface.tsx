@@ -116,7 +116,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
           allSourcesLength={allSources.length}
         />
 
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-auto p-4 pt-16">
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((message, index) => (
               <ChatMessage
