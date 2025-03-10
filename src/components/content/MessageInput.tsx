@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
-import { BookOpen, Send } from 'lucide-react';
-import { Button } from '../ui/button';
+import { Send, FileText } from 'lucide-react';
 
 interface MessageInputProps {
   topic: string;
@@ -11,55 +10,57 @@ interface MessageInputProps {
   isSourcesPanelOpen: boolean;
 }
 
-const MessageInput: React.FC<MessageInputProps> = ({
-  topic,
-  onSendMessage,
-  toggleSourcesPanel,
+const MessageInput: React.FC<MessageInputProps> = ({ 
+  topic, 
+  onSendMessage, 
+  toggleSourcesPanel, 
   allSourcesLength,
   isSourcesPanelOpen
 }) => {
-  const [message, setMessage] = useState('');
-  
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (message.trim()) {
-      onSendMessage(message);
-      setMessage('');
+  const [inputMessage, setInputMessage] = useState('');
+
+  const handleSendMessage = () => {
+    if (!inputMessage.trim()) return;
+    onSendMessage(inputMessage);
+    setInputMessage('');
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
     }
   };
-  
+
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 p-4 border-t border-border bg-white">
-      <div className="max-w-3xl mx-auto">
-        {allSourcesLength > 0 && !isSourcesPanelOpen && (
-          <div className="flex justify-end mb-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={toggleSourcesPanel}
-              className="flex items-center gap-1 text-xs py-1 px-2 h-auto"
-            >
-              <BookOpen size={14} />
-              <span>View Sources ({allSourcesLength})</span>
-            </Button>
-          </div>
-        )}
-        
-        <form onSubmit={handleSubmit} className="relative">
-          <input 
-            type="text" 
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder={`Ask about ${topic}...`} 
-            className="insta-input pr-12"
-          />
+      <div className="max-w-3xl mx-auto relative">
+        <textarea
+          value={inputMessage}
+          onChange={(e) => setInputMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder={`Ask about ${topic}...`}
+          className="insta-input pr-12 min-h-[60px] resize-none w-full"
+          rows={2}
+        />
+        <button 
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-insta-blue p-2 hover:bg-insta-lightBlue rounded-full"
+          onClick={handleSendMessage}
+        >
+          <Send size={20} />
+        </button>
+      </div>
+      <div className="max-w-3xl mx-auto mt-2 text-xs text-insta-lightText flex items-center">
+        <FileText size={14} className="mr-1" />
+        Sources used by our AI will display in the right-hand column after each response.
+        {allSourcesLength > 0 && (
           <button 
-            type="submit"
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-insta-blue"
+            className="ml-2 text-insta-blue hover:underline"
+            onClick={toggleSourcesPanel}
           >
-            <Send size={20} />
+            {isSourcesPanelOpen ? "Hide" : "View"} sources
           </button>
-        </form>
+        )}
       </div>
     </div>
   );

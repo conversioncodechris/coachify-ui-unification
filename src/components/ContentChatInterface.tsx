@@ -1,7 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { cn } from '@/lib/utils';
+import React, { useState } from 'react';
 import { Message, Source } from './content/ContentTypes';
 import ChatHeader from './content/ChatHeader';
 import ChatMessage from './content/ChatMessage';
@@ -15,7 +13,6 @@ interface ContentChatInterfaceProps {
 }
 
 const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBackToTopics }) => {
-  const navigate = useNavigate();
   const suggestedQuestions = [
     `What makes a good ${topic}?`,
     `What length should my ${topic} be?`,
@@ -46,31 +43,6 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
   const [isSourcesPanelOpen, setIsSourcesPanelOpen] = useState(false);
   const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(0);
   const [showSuggestions, setShowSuggestions] = useState(true);
-
-  useEffect(() => {
-    if (topic) {
-      const savedChats = localStorage.getItem('contentActiveChats');
-      let activeChats = savedChats ? JSON.parse(savedChats) : [];
-      
-      const chatExists = activeChats.some((chat: {title: string, path: string}) => 
-        chat.title === topic
-      );
-      
-      if (!chatExists) {
-        const chatId = Date.now().toString();
-        const chatPath = `/content/chat/${chatId}`;
-        
-        activeChats.push({
-          title: topic,
-          path: chatPath
-        });
-        
-        localStorage.setItem('contentActiveChats', JSON.stringify(activeChats));
-        
-        navigate(chatPath, { replace: true });
-      }
-    }
-  }, [topic, navigate]);
 
   const mockSources: Source[] = [
     {
@@ -135,10 +107,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
 
   return (
     <div className="flex h-full pt-16 pb-[120px]">
-      <div className={cn(
-        "flex flex-col flex-1 h-full transition-all duration-300 relative",
-        isSourcesPanelOpen ? "mr-72" : ""
-      )}>
+      <div className="flex flex-col flex-1 h-full transition-all duration-300 relative">
         <ChatHeader 
           topic={topic}
           onBackToTopics={onBackToTopics}
