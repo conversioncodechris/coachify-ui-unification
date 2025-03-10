@@ -1,9 +1,8 @@
 
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import { getQuestionsForTopic } from '@/data/complianceQuestions';
 import { cn } from '@/lib/utils';
-import { Message, Source } from './compliance/ComplianceTypes';
+import { Message, Source } from './content/ContentTypes';
 import ChatHeader from './compliance/ChatHeader';
 import ChatMessage from './compliance/ChatMessage';
 import MessageInput from './compliance/MessageInput';
@@ -16,7 +15,6 @@ interface ComplianceChatInterfaceProps {
 }
 
 const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic, onBackToTopics }) => {
-  const navigate = useNavigate();
   const topicQuestions = getQuestionsForTopic(topic);
   
   const [messages, setMessages] = useState<Message[]>([
@@ -41,31 +39,6 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
   const [isSourcesPanelOpen, setIsSourcesPanelOpen] = useState(false);
   const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(0);
   const [showSuggestions, setShowSuggestions] = useState(true);
-
-  useEffect(() => {
-    if (topic) {
-      const savedChats = localStorage.getItem('complianceActiveChats');
-      let activeChats = savedChats ? JSON.parse(savedChats) : [];
-      
-      const chatExists = activeChats.some((chat: {title: string, path: string}) => 
-        chat.title === topic
-      );
-      
-      if (!chatExists) {
-        const chatId = Date.now().toString();
-        const chatPath = `/compliance/chat/${chatId}`;
-        
-        activeChats.push({
-          title: topic,
-          path: chatPath
-        });
-        
-        localStorage.setItem('complianceActiveChats', JSON.stringify(activeChats));
-        
-        navigate(chatPath, { replace: true });
-      }
-    }
-  }, [topic, navigate]);
 
   const mockSources: Source[] = [
     {

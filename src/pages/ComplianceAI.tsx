@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import ComplianceChatInterface from '../components/ComplianceChatInterface';
 import TopicsManager from '../components/compliance/TopicsManager';
@@ -12,6 +12,7 @@ import { ComplianceTopic } from '../components/compliance/TopicCard';
 const ComplianceAI = () => {
   const [topics, setTopics] = useState<ComplianceTopic[]>(DEFAULT_TOPICS);
   const location = useLocation();
+  const navigate = useNavigate();
   
   const chatMatch = location.pathname.match(/\/compliance\/chat\/(\d+)/);
   const chatId = chatMatch ? chatMatch[1] : null;
@@ -25,7 +26,7 @@ const ComplianceAI = () => {
       if (savedChats) {
         const activeChats = JSON.parse(savedChats);
         const currentChat = activeChats.find((chat: any) => 
-          chat.path.includes(chatId)
+          chat.path.includes(`/compliance/chat/${chatId}`)
         );
         return currentChat ? currentChat.title : null;
       }
@@ -42,12 +43,28 @@ const ComplianceAI = () => {
   );
 
   const handleTopicClick = (topic: string) => {
-    createNewChatSession(topic);
+    // Find existing chat or create new one
+    try {
+      const savedChats = localStorage.getItem('complianceActiveChats');
+      let activeChats = savedChats ? JSON.parse(savedChats) : [];
+      
+      const existingChat = activeChats.find((chat: any) => 
+        chat.title === topic && !chat.hidden
+      );
+      
+      if (existingChat) {
+        navigate(existingChat.path);
+      } else {
+        createNewChatSession(topic);
+      }
+    } catch (error) {
+      console.error('Error handling topic click:', error);
+      createNewChatSession(topic);
+    }
   };
 
   const handleBackToTopics = () => {
-    window.history.pushState({}, '', '/compliance');
-    window.dispatchEvent(new PopStateEvent('popstate'));
+    navigate('/compliance');
   };
 
   return (
@@ -58,7 +75,7 @@ const ComplianceAI = () => {
         <div className="flex flex-col flex-1 overflow-hidden">
           <ChatSessionManager topic={currentTopic} chatId={chatId} />
           
-          {currentTopic ? (
+          {currentTopic && chatId ? (
             <ComplianceChatInterface 
               topic={currentTopic} 
               onBackToTopics={handleBackToTopics} 
