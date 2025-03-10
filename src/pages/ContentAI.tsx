@@ -56,7 +56,8 @@ const ContentAI = () => {
   }, [location.pathname, setActiveChats]);
 
   const handleBackToTopics = () => {
-    navigate('/content', { replace: true });
+    // Force a hard navigation to the content page to reset state
+    window.location.href = '/content';
   };
 
   const handleTopicClick = (topic: string) => {
