@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Message, Source } from './content/ContentTypes';
 import ChatHeader from './content/ChatHeader';
 import ChatMessage from './content/ChatMessage';
