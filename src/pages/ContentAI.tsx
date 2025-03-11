@@ -72,7 +72,7 @@ const ContentAI = () => {
       
       if (existingChat) {
         localStorage.setItem('contentActiveChats', JSON.stringify(activeChats));
-        navigate(existingChat.path);
+        navigate(existingChat.path, { replace: true });
       } else {
         createNewChatSession(topic);
       }

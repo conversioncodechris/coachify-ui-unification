@@ -1,5 +1,5 @@
+
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Message, Source } from './content/ContentTypes';
 import ChatHeader from './content/ChatHeader';
 import ChatMessage from './content/ChatMessage';
@@ -14,7 +14,6 @@ interface ContentChatInterfaceProps {
 }
 
 const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBackToTopics }) => {
-  const navigate = useNavigate();
   const suggestedQuestions = [
     `What makes a good ${topic}?`,
     `What length should my ${topic} be?`,
@@ -103,29 +102,25 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
     handleSendMessage(question);
   };
 
-  const handleBackToTopics = () => {
-    onBackToTopics();
-  };
-
   const allSources = messages
     .filter(msg => msg.sender === 'ai' && msg.sources && msg.sources.length > 0)
     .flatMap(msg => msg.sources || []);
 
   return (
-    <div className="flex h-full pt-16 pb-[120px]">
+    <div className="flex h-full">
       <div className={cn(
         "flex flex-col flex-1 h-full transition-all duration-300 relative",
         isSourcesPanelOpen ? "mr-72" : ""
       )}>
         <ChatHeader 
           topic={topic}
-          onBackToTopics={handleBackToTopics}
+          onBackToTopics={onBackToTopics}
           isSourcesPanelOpen={isSourcesPanelOpen}
           toggleSourcesPanel={toggleSourcesPanel}
           allSourcesLength={allSources.length}
         />
 
-        <div className="flex-1 overflow-y-auto p-4 mt-16">
+        <div className="flex-1 overflow-y-auto p-4 pt-20">
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((message, index) => (
               <ChatMessage
@@ -158,7 +153,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
         
         {!isSourcesPanelOpen && allSources.length > 0 && (
           <div 
-            className="absolute right-0 top-16 bottom-0 w-1 bg-insta-blue cursor-pointer animate-pulse"
+            className="absolute right-0 top-0 bottom-0 w-1 bg-insta-blue cursor-pointer animate-pulse"
             onClick={toggleSourcesPanel}
           />
         )}
