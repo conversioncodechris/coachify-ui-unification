@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ContentSidebar from '../components/ContentSidebar';
@@ -53,10 +54,6 @@ const ContentAI = () => {
       }
     }
   }, [location.pathname, setActiveChats]);
-
-  const handleBackToTopics = () => {
-    navigate('/content', { replace: true });
-  };
 
   const handleTopicClick = (topic: string) => {
     try {

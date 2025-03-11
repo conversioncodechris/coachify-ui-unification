@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MessageSquare, ChevronRight, ChevronLeft } from 'lucide-react';
+import { MessageSquare, ChevronRight, ChevronLeft, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import {
   Tooltip,
@@ -25,20 +25,20 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  const handleBack = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    navigate('/content', { replace: true });
+  const handleBack = () => {
+    // Use direct window.location navigation to force a complete navigation
+    window.location.href = '/content';
   };
 
   return (
     <div className="fixed top-16 left-0 right-0 z-40 flex p-4 bg-white border-b border-border items-center">
       <button 
         onClick={handleBack}
-        className="mr-3 text-insta-blue hover:text-insta-blue/80"
+        className="mr-3 text-insta-blue hover:text-insta-blue/80 flex items-center"
         type="button"
       >
-        ← Back
+        <ArrowLeft size={16} className="mr-1" />
+        Back
       </button>
       <div className="bg-insta-gray p-2 rounded-md">
         <MessageSquare size={20} className="text-insta-blue" />
