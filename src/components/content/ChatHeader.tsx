@@ -29,6 +29,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
       <button 
         onClick={onBackToTopics}
         className="mr-3 text-insta-blue hover:text-insta-blue/80"
+        type="button"
       >
         ← Back
       </button>
@@ -46,6 +47,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
                 isSourcesPanelOpen ? "text-insta-blue bg-insta-lightBlue" : "text-insta-lightText"
               )}
               onClick={toggleSourcesPanel}
+              type="button"
             >
               <div className="relative">
                 {isSourcesPanelOpen ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
