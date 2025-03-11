@@ -44,18 +44,18 @@ const MessageInput: React.FC<MessageInputProps> = ({
           rows={2}
         />
         <button 
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-insta-blue p-2 hover:bg-insta-lightBlue rounded-full"
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 p-2 hover:bg-gray-100 rounded-full"
           onClick={handleSendMessage}
         >
           <Send size={20} />
         </button>
       </div>
-      <div className="max-w-3xl mx-auto mt-2 text-xs text-insta-lightText flex items-center">
+      <div className="max-w-3xl mx-auto mt-2 text-xs text-gray-500 flex items-center">
         <FileText size={14} className="mr-1" />
         Sources used by our AI will display in the right-hand column after each response.
         {allSourcesLength > 0 && (
           <button 
-            className="ml-2 text-insta-blue hover:underline"
+            className="ml-2 text-gray-600 hover:underline"
             onClick={toggleSourcesPanel}
           >
             {isSourcesPanelOpen ? "Hide" : "View"} sources
