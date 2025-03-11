@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Message, Source } from './content/ContentTypes';
@@ -105,7 +104,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
   };
 
   const handleBackToTopics = () => {
-    navigate('/content', { replace: true });
+    onBackToTopics();
   };
 
   const allSources = messages
@@ -120,7 +119,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
       )}>
         <ChatHeader 
           topic={topic}
-          onBackToTopics={onBackToTopics}
+          onBackToTopics={handleBackToTopics}
           isSourcesPanelOpen={isSourcesPanelOpen}
           toggleSourcesPanel={toggleSourcesPanel}
           allSourcesLength={allSources.length}
