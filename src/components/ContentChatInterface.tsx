@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Message, Source } from './content/ContentTypes';
@@ -104,7 +105,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
   };
 
   const handleBackToTopics = () => {
-    navigate('/content');
+    navigate('/content', { replace: true });
   };
 
   const allSources = messages
@@ -112,67 +113,65 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
     .flatMap(msg => msg.sources || []);
 
   return (
-    <div className="flex flex-col h-full overflow-hidden">
-      <ChatHeader 
-        topic={topic}
-        onBackToTopics={onBackToTopics}
-        isSourcesPanelOpen={isSourcesPanelOpen}
-        toggleSourcesPanel={toggleSourcesPanel}
-        allSourcesLength={allSources.length}
-      />
+    <div className="flex h-full pt-16 pb-[120px]">
+      <div className={cn(
+        "flex flex-col flex-1 h-full transition-all duration-300 relative",
+        isSourcesPanelOpen ? "mr-72" : ""
+      )}>
+        <ChatHeader 
+          topic={topic}
+          onBackToTopics={onBackToTopics}
+          isSourcesPanelOpen={isSourcesPanelOpen}
+          toggleSourcesPanel={toggleSourcesPanel}
+          allSourcesLength={allSources.length}
+        />
 
-      <div className="flex h-full pt-16 pb-[120px] overflow-hidden">
-        <div className={cn(
-          "flex flex-col flex-1 h-full transition-all duration-300 relative overflow-hidden",
-          isSourcesPanelOpen ? "mr-72" : ""
-        )}>
-          <div className="flex-1 overflow-y-auto p-4">
-            <div className="max-w-3xl mx-auto space-y-6">
-              {messages.map((message, index) => (
-                <ChatMessage
-                  key={index}
-                  content={message.content}
-                  sender={message.sender}
-                  sources={message.sources}
-                  timestamp={message.timestamp}
-                  toggleSourcesPanel={toggleSourcesPanel}
-                />
-              ))}
-            </div>
-            
-            {showSuggestions && (
-              <SuggestedQuestions
-                topic={topic}
-                questions={suggestedQuestions}
-                onSelectQuestion={handleSuggestedQuestion}
+        <div className="flex-1 overflow-y-auto p-4 mt-16">
+          <div className="max-w-3xl mx-auto space-y-6">
+            {messages.map((message, index) => (
+              <ChatMessage
+                key={index}
+                content={message.content}
+                sender={message.sender}
+                sources={message.sources}
+                timestamp={message.timestamp}
+                toggleSourcesPanel={toggleSourcesPanel}
               />
-            )}
+            ))}
           </div>
-
-          <MessageInput
-            topic={topic}
-            onSendMessage={handleSendMessage}
-            toggleSourcesPanel={toggleSourcesPanel}
-            allSourcesLength={allSources.length}
-            isSourcesPanelOpen={isSourcesPanelOpen}
-          />
           
-          {!isSourcesPanelOpen && allSources.length > 0 && (
-            <div 
-              className="absolute right-0 top-16 bottom-0 w-1 bg-insta-blue cursor-pointer animate-pulse"
-              onClick={toggleSourcesPanel}
+          {showSuggestions && (
+            <SuggestedQuestions
+              topic={topic}
+              questions={suggestedQuestions}
+              onSelectQuestion={handleSuggestedQuestion}
             />
           )}
         </div>
 
-        <SourcesPanel
-          isOpen={isSourcesPanelOpen}
-          togglePanel={toggleSourcesPanel}
-          sources={allSources}
-          activeSourceIndex={activeSourceIndex}
-          setActiveSourceIndex={setActiveSourceIndex}
+        <MessageInput
+          topic={topic}
+          onSendMessage={handleSendMessage}
+          toggleSourcesPanel={toggleSourcesPanel}
+          allSourcesLength={allSources.length}
+          isSourcesPanelOpen={isSourcesPanelOpen}
         />
+        
+        {!isSourcesPanelOpen && allSources.length > 0 && (
+          <div 
+            className="absolute right-0 top-16 bottom-0 w-1 bg-insta-blue cursor-pointer animate-pulse"
+            onClick={toggleSourcesPanel}
+          />
+        )}
       </div>
+
+      <SourcesPanel
+        isOpen={isSourcesPanelOpen}
+        togglePanel={toggleSourcesPanel}
+        sources={allSources}
+        activeSourceIndex={activeSourceIndex}
+        setActiveSourceIndex={setActiveSourceIndex}
+      />
     </div>
   );
 };
