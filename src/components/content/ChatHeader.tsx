@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { MessageSquare, ChevronRight, ChevronLeft, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -29,7 +30,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   };
 
   return (
-    <div className="fixed top-16 left-0 right-0 z-40 flex p-4 bg-white border-b border-border items-center">
+    <div className="fixed top-[64px] left-0 right-0 z-40 flex p-4 bg-white border-b border-border items-center">
       <button 
         onClick={handleBack}
         className="mr-3 text-gray-600 hover:text-gray-800 flex items-center"

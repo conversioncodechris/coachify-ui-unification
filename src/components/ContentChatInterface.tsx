@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Message, Source } from './content/ContentTypes';
 import ChatHeader from './content/ChatHeader';
@@ -105,7 +106,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic }) =>
     .flatMap(msg => msg.sources || []);
 
   return (
-    <div className="flex h-full pt-16">
+    <div className="flex h-full pt-[64px]">
       <div className={cn(
         "flex flex-col flex-1 h-full transition-all duration-300 relative",
         isSourcesPanelOpen ? "mr-72" : ""
@@ -117,7 +118,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic }) =>
           allSourcesLength={allSources.length}
         />
 
-        <div className="flex-1 overflow-y-auto p-4 mt-16 pb-[120px]">
+        <div className="flex-1 overflow-y-auto p-4 mt-[64px] pb-[120px]">
           <div className="max-w-3xl mx-auto space-y-6">
             {messages.map((message, index) => (
               <ChatMessage
@@ -150,7 +151,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic }) =>
         
         {!isSourcesPanelOpen && allSources.length > 0 && (
           <div 
-            className="absolute right-0 top-16 bottom-0 w-1 bg-insta-blue cursor-pointer animate-pulse"
+            className="absolute right-0 top-[64px] bottom-0 w-1 bg-gray-300 cursor-pointer animate-pulse"
             onClick={toggleSourcesPanel}
           />
         )}
