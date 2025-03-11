@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Message, Source } from './content/ContentTypes';
 import ChatHeader from './content/ChatHeader';
@@ -10,10 +9,9 @@ import { cn } from '@/lib/utils';
 
 interface ContentChatInterfaceProps {
   topic: string;
-  onBackToTopics: () => void;
 }
 
-const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBackToTopics }) => {
+const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic }) => {
   const suggestedQuestions = [
     `What makes a good ${topic}?`,
     `What length should my ${topic} be?`,
@@ -114,7 +112,6 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic, onBa
       )}>
         <ChatHeader 
           topic={topic}
-          onBackToTopics={onBackToTopics}
           isSourcesPanelOpen={isSourcesPanelOpen}
           toggleSourcesPanel={toggleSourcesPanel}
           allSourcesLength={allSources.length}

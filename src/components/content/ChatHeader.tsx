@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { MessageSquare, ChevronRight, ChevronLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import {
   Tooltip,
   TooltipContent,
@@ -11,7 +12,6 @@ import { cn } from '@/lib/utils';
 
 interface ChatHeaderProps {
   topic: string;
-  onBackToTopics: () => void;
   isSourcesPanelOpen: boolean;
   toggleSourcesPanel: () => void;
   allSourcesLength: number;
@@ -19,15 +19,22 @@ interface ChatHeaderProps {
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({
   topic,
-  onBackToTopics,
   isSourcesPanelOpen,
   toggleSourcesPanel,
   allSourcesLength
 }) => {
+  const navigate = useNavigate();
+
+  const handleBack = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate('/content', { replace: true });
+  };
+
   return (
     <div className="fixed top-16 left-0 right-0 z-40 flex p-4 bg-white border-b border-border items-center">
       <button 
-        onClick={onBackToTopics}
+        onClick={handleBack}
         className="mr-3 text-insta-blue hover:text-insta-blue/80"
         type="button"
       >

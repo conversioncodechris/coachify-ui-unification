@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ContentSidebar from '../components/ContentSidebar';
@@ -56,7 +55,6 @@ const ContentAI = () => {
   }, [location.pathname, setActiveChats]);
 
   const handleBackToTopics = () => {
-    // Clear any active chat state and navigate back to content page
     navigate('/content', { replace: true });
   };
 
@@ -92,10 +90,7 @@ const ContentAI = () => {
           <ChatSessionManager topic={currentTopic} chatId={chatId} />
           
           {currentTopic && chatId ? (
-            <ContentChatInterface 
-              topic={currentTopic} 
-              onBackToTopics={handleBackToTopics} 
-            />
+            <ContentChatInterface topic={currentTopic} />
           ) : (
             <TopicsManager
               topics={topics}
