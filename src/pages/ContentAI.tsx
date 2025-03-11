@@ -56,7 +56,7 @@ const ContentAI = () => {
   }, [location.pathname, setActiveChats]);
 
   const handleBackToTopics = () => {
-    navigate('/content', { replace: true });
+    navigate('/content');
   };
 
   const handleTopicClick = (topic: string) => {
@@ -72,7 +72,7 @@ const ContentAI = () => {
       
       if (existingChat) {
         localStorage.setItem('contentActiveChats', JSON.stringify(activeChats));
-        navigate(existingChat.path, { replace: true });
+        navigate(existingChat.path);
       } else {
         createNewChatSession(topic);
       }
