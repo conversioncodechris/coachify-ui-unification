@@ -56,7 +56,7 @@ const ContentAI = () => {
   }, [location.pathname, setActiveChats]);
 
   const handleBackToTopics = () => {
-    // Force a hard navigation to reset the state
+    // Clear any active chat state and navigate back to content page
     navigate('/content', { replace: true });
   };
 
