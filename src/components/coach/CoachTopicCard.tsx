@@ -42,7 +42,16 @@ const CoachTopicCard: React.FC<CoachTopicCardProps> = ({
         <span className="text-xl mr-2 inline-flex whitespace-nowrap">{topic.icon}</span>
         <div>
           <div className="font-medium">{topic.title}</div>
-          <div className="text-sm text-insta-lightText line-clamp-1">{topic.description}</div>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="text-sm text-insta-lightText line-clamp-1">{topic.description}</div>
+              </TooltipTrigger>
+              <TooltipContent side="bottom" className="max-w-[250px]">
+                <p>{topic.description}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
       
