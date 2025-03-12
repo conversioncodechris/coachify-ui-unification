@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Message, Source } from './content/ContentTypes';
 import ChatHeader from './content/ChatHeader';
@@ -110,15 +111,17 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic }) =>
         "flex flex-col flex-1 h-full transition-all duration-300 relative",
         isSourcesPanelOpen ? "mr-72" : ""
       )}>
-        <ChatHeader 
-          topic={topic}
-          isSourcesPanelOpen={isSourcesPanelOpen}
-          toggleSourcesPanel={toggleSourcesPanel}
-          allSourcesLength={allSources.length}
-        />
+        <div className="absolute top-0 left-0 right-0 z-10">
+          <ChatHeader 
+            topic={topic}
+            isSourcesPanelOpen={isSourcesPanelOpen}
+            toggleSourcesPanel={toggleSourcesPanel}
+            allSourcesLength={allSources.length}
+          />
+        </div>
 
-        <div className="flex-1 overflow-y-auto p-4 pt-24 pb-[120px]">
-          <div className="max-w-3xl mx-auto space-y-6">
+        <div className="flex-1 overflow-y-auto p-4 pt-20 pb-32">
+          <div className="max-w-3xl mx-auto space-y-6 mt-4">
             {messages.map((message, index) => (
               <ChatMessage
                 key={index}
@@ -140,13 +143,15 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic }) =>
           )}
         </div>
 
-        <MessageInput
-          topic={topic}
-          onSendMessage={handleSendMessage}
-          toggleSourcesPanel={toggleSourcesPanel}
-          allSourcesLength={allSources.length}
-          isSourcesPanelOpen={isSourcesPanelOpen}
-        />
+        <div className="absolute bottom-0 left-0 right-0">
+          <MessageInput
+            topic={topic}
+            onSendMessage={handleSendMessage}
+            toggleSourcesPanel={toggleSourcesPanel}
+            allSourcesLength={allSources.length}
+            isSourcesPanelOpen={isSourcesPanelOpen}
+          />
+        </div>
         
         {!isSourcesPanelOpen && allSources.length > 0 && (
           <div 
