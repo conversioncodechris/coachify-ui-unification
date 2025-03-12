@@ -25,27 +25,29 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   allSourcesLength
 }) => {
   return (
-    <div className="fixed top-16 left-0 right-0 z-40 flex p-4 bg-white border-b border-border items-center">
+    <div className="bg-white border-b border-border p-4 flex items-center">
       <button 
         onClick={onBackToTopics}
-        className="mr-3 text-insta-blue hover:text-insta-blue/80"
+        className="mr-3 text-gray-600 hover:text-gray-800 flex items-center"
+        type="button"
       >
         ← Back
       </button>
-      <div className="bg-insta-gray p-2 rounded-md">
-        <MessageSquare size={20} className="text-insta-blue" />
+      <div className="bg-gray-100 p-2 rounded-md">
+        <MessageSquare size={20} className="text-gray-600" />
       </div>
-      <h2 className="text-lg font-medium ml-4">{topic}</h2>
+      <h2 className="text-lg font-medium ml-4 text-gray-800">{topic}</h2>
       
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <button 
               className={cn(
-                "ml-auto p-2 rounded-full hover:bg-insta-gray transition-colors",
-                isSourcesPanelOpen ? "text-insta-blue bg-insta-lightBlue" : "text-insta-lightText"
+                "ml-auto p-2 rounded-full hover:bg-gray-100 transition-colors",
+                isSourcesPanelOpen ? "text-gray-800 bg-gray-200" : "text-gray-500"
               )}
               onClick={toggleSourcesPanel}
+              type="button"
             >
               <div className="relative">
                 {isSourcesPanelOpen ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}

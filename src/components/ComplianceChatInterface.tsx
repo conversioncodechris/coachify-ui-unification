@@ -102,21 +102,23 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
     .flatMap(msg => msg.sources || []);
 
   return (
-    <div className="flex h-full pt-16 pb-[120px]">
+    <div className="flex h-full">
       <div className={cn(
         "flex flex-col flex-1 h-full transition-all duration-300 relative",
         isSourcesPanelOpen ? "mr-72" : ""
       )}>
-        <ChatHeader 
-          topic={topic}
-          onBackToTopics={onBackToTopics}
-          isSourcesPanelOpen={isSourcesPanelOpen}
-          toggleSourcesPanel={toggleSourcesPanel}
-          allSourcesLength={allSources.length}
-        />
+        <div className="absolute top-0 left-0 right-0 z-10">
+          <ChatHeader 
+            topic={topic}
+            onBackToTopics={onBackToTopics}
+            isSourcesPanelOpen={isSourcesPanelOpen}
+            toggleSourcesPanel={toggleSourcesPanel}
+            allSourcesLength={allSources.length}
+          />
+        </div>
 
-        <div className="flex-1 overflow-y-auto p-4 mt-16">
-          <div className="max-w-3xl mx-auto space-y-6">
+        <div className="flex-1 overflow-y-auto p-4 pt-[64px] pb-32">
+          <div className="max-w-3xl mx-auto space-y-6 mt-4">
             {messages.map((message, index) => (
               <ChatMessage
                 key={index}
@@ -138,17 +140,19 @@ const ComplianceChatInterface: React.FC<ComplianceChatInterfaceProps> = ({ topic
           )}
         </div>
 
-        <MessageInput
-          topic={topic}
-          onSendMessage={handleSendMessage}
-          toggleSourcesPanel={toggleSourcesPanel}
-          allSourcesLength={allSources.length}
-          isSourcesPanelOpen={isSourcesPanelOpen}
-        />
+        <div className="absolute bottom-0 left-0 right-0">
+          <MessageInput
+            topic={topic}
+            onSendMessage={handleSendMessage}
+            toggleSourcesPanel={toggleSourcesPanel}
+            allSourcesLength={allSources.length}
+            isSourcesPanelOpen={isSourcesPanelOpen}
+          />
+        </div>
         
         {!isSourcesPanelOpen && allSources.length > 0 && (
           <div 
-            className="absolute right-0 top-16 bottom-0 w-1 bg-insta-blue cursor-pointer animate-pulse"
+            className="absolute right-0 top-[64px] bottom-0 w-1 bg-gray-300 cursor-pointer animate-pulse"
             onClick={toggleSourcesPanel}
           />
         )}
