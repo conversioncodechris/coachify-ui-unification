@@ -26,7 +26,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   const navigate = useNavigate();
 
   const handleBack = () => {
-    window.location.href = '/content';
+    navigate('/content');
   };
 
   return (
