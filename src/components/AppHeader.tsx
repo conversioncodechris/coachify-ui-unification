@@ -1,6 +1,9 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { Moon, Sun } from 'lucide-react';
+import { useTheme } from './ThemeProvider';
+import { Button } from './ui/button';
 
 interface AppHeaderProps {
   userAvatar?: string;
@@ -9,9 +12,10 @@ interface AppHeaderProps {
 const AppHeader: React.FC<AppHeaderProps> = ({ userAvatar }) => {
   const location = useLocation();
   const currentPath = location.pathname;
+  const { theme, setTheme } = useTheme();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between h-16 px-4 border-b border-border bg-white">
+    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between h-16 px-4 border-b border-border bg-background">
       <div className="flex items-center">
         <Link to="/" className="flex items-center mr-8">
           <img 
@@ -43,7 +47,20 @@ const AppHeader: React.FC<AppHeaderProps> = ({ userAvatar }) => {
         </nav>
       </div>
       
-      <div className="flex items-center">
+      <div className="flex items-center gap-3">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          aria-label="Toggle theme"
+        >
+          {theme === "dark" ? (
+            <Sun className="h-5 w-5" />
+          ) : (
+            <Moon className="h-5 w-5" />
+          )}
+        </Button>
+        
         <Link to="/profile">
           <img 
             src={userAvatar || '/lovable-uploads/0dd3499c-aaf2-4314-9ed1-2dfd0277918e.png'} 

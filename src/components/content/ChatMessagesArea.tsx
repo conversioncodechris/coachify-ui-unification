@@ -11,6 +11,8 @@ interface ChatMessagesAreaProps {
   suggestedQuestions: string[];
   toggleSourcesPanel: () => void;
   onSuggestedQuestionSelect: (question: string) => void;
+  onEditMessage?: (id: string, newContent: string) => void;
+  onDeleteMessage?: (id: string) => void;
 }
 
 const ChatMessagesArea: React.FC<ChatMessagesAreaProps> = ({
@@ -19,19 +21,24 @@ const ChatMessagesArea: React.FC<ChatMessagesAreaProps> = ({
   showSuggestions,
   suggestedQuestions,
   toggleSourcesPanel,
-  onSuggestedQuestionSelect
+  onSuggestedQuestionSelect,
+  onEditMessage,
+  onDeleteMessage
 }) => {
   return (
     <div className="flex-1 overflow-y-auto p-4 pt-[64px] pb-32">
       <div className="max-w-3xl mx-auto space-y-6 mt-4">
-        {messages.map((message, index) => (
+        {messages.map((message) => (
           <ChatMessage
-            key={index}
+            key={message.id || message.timestamp.toString()}
+            id={message.id}
             content={message.content}
             sender={message.sender}
             sources={message.sources}
             timestamp={message.timestamp}
             toggleSourcesPanel={toggleSourcesPanel}
+            onEdit={onEditMessage}
+            onDelete={onDeleteMessage}
           />
         ))}
       </div>
