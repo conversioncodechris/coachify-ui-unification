@@ -39,7 +39,7 @@ const CoachTopicCard: React.FC<CoachTopicCardProps> = ({
       onClick={() => onTopicClick(topic.title)}
     >
       <div className="flex items-start">
-        <span className="text-xl mr-2 inline-flex">{topic.icon}</span>
+        <span className="text-xl mr-2 inline-flex whitespace-nowrap">{topic.icon}</span>
         <div>
           <div className="font-medium">{topic.title}</div>
           <div className="text-sm text-insta-lightText line-clamp-1">{topic.description}</div>
