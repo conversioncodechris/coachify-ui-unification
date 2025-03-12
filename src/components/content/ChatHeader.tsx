@@ -16,29 +16,21 @@ interface ChatHeaderProps {
   isSourcesPanelOpen: boolean;
   toggleSourcesPanel: () => void;
   allSourcesLength: number;
+  onBackToTopics: () => void;
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({
   topic,
   isSourcesPanelOpen,
   toggleSourcesPanel,
-  allSourcesLength
+  allSourcesLength,
+  onBackToTopics
 }) => {
-  const navigate = useNavigate();
-
-  const handleBack = () => {
-    // Clear localStorage completely
-    localStorage.removeItem('contentActiveChats');
-    
-    // Force navigation with replace to prevent history issues
-    navigate('/content', { replace: true });
-  };
-
   return (
     <div className="bg-white border-b border-border p-4 flex items-center">
       <Button 
         variant="ghost"
-        onClick={handleBack}
+        onClick={onBackToTopics}
         className="mr-3 text-gray-600 hover:text-gray-800 flex items-center h-9 px-2"
         type="button"
         size="sm"

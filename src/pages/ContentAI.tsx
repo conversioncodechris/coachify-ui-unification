@@ -66,6 +66,14 @@ const ContentAI = () => {
   const handleTopicClick = (topic: string) => {
     createNewChatSession(topic);
   };
+  
+  const handleBackToTopics = () => {
+    // Clear localStorage for content chats
+    localStorage.removeItem('contentActiveChats');
+    
+    // Force navigation with replace to prevent history issues
+    navigate('/content', { replace: true });
+  };
 
   return (
     <div className="flex flex-col h-screen bg-background">
@@ -76,7 +84,10 @@ const ContentAI = () => {
           <ChatSessionManager topic={currentTopic} chatId={chatId} />
           
           {currentTopic && chatId ? (
-            <ContentChatInterface topic={currentTopic} />
+            <ContentChatInterface 
+              topic={currentTopic}
+              onBackToTopics={handleBackToTopics}
+            />
           ) : (
             <TopicsManager
               topics={topics}

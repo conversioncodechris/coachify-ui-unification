@@ -10,9 +10,13 @@ import { cn } from '@/lib/utils';
 
 interface ContentChatInterfaceProps {
   topic: string;
+  onBackToTopics: () => void;
 }
 
-const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic }) => {
+const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ 
+  topic,
+  onBackToTopics
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const suggestedQuestions = [
@@ -26,8 +30,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic }) =>
   // Check if topic exists and chat session is valid, if not, redirect to content page
   useEffect(() => {
     if (!topic) {
-      localStorage.removeItem('contentActiveChats');
-      navigate('/content', { replace: true });
+      onBackToTopics();
       return;
     }
     
@@ -42,22 +45,19 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic }) =>
         );
         
         if (!matchingChat) {
-          // Chat not found, clear storage and redirect
-          localStorage.removeItem('contentActiveChats');
-          navigate('/content', { replace: true });
+          // Chat not found, redirect
+          onBackToTopics();
         }
       } catch (error) {
-        // JSON parse error, clear storage and redirect
+        // JSON parse error, redirect
         console.error('Error verifying chat session:', error);
-        localStorage.removeItem('contentActiveChats');
-        navigate('/content', { replace: true });
+        onBackToTopics();
       }
     } else {
-      // No active chats in storage, clear and redirect
-      localStorage.removeItem('contentActiveChats');
-      navigate('/content', { replace: true });
+      // No active chats in storage, redirect
+      onBackToTopics();
     }
-  }, [topic, navigate, location.pathname]);
+  }, [topic, navigate, location.pathname, onBackToTopics]);
   
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -155,6 +155,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic }) =>
             isSourcesPanelOpen={isSourcesPanelOpen}
             toggleSourcesPanel={toggleSourcesPanel}
             allSourcesLength={allSources.length}
+            onBackToTopics={onBackToTopics}
           />
         </div>
 
