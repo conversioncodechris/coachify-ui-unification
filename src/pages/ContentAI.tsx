@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import ContentSidebar from '../components/ContentSidebar';
+import ContentSidebar from '../components/sidebar/ContentSidebar'; // Updated import
 import TopicsManager from '../components/content/TopicsManager';
 import ChatSessionManager from '../components/content/ChatSessionManager';
 import ContentChatInterface from '../components/ContentChatInterface';
