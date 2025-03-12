@@ -10,8 +10,8 @@ interface ChatMessageProps {
   sources?: Source[];
   timestamp: Date;
   toggleSourcesPanel: () => void;
-  onDelete?: (id: string) => void;
-  onEdit?: (id: string, newContent: string) => void;
+  onEdit?: (content: string) => void;
+  onDelete?: () => void;
 }
 
 const ChatMessage: React.FC<ChatMessageProps> = ({
@@ -21,22 +21,22 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
   sources,
   timestamp,
   toggleSourcesPanel,
-  onDelete,
-  onEdit
+  onEdit,
+  onDelete
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState(content);
 
   const handleEdit = () => {
-    if (onEdit && id) {
-      onEdit(id, editedContent);
+    if (onEdit) {
+      onEdit(editedContent);
       setIsEditing(false);
     }
   };
 
   const handleDelete = () => {
-    if (onDelete && id) {
-      onDelete(id);
+    if (onDelete) {
+      onDelete();
     }
   };
 
