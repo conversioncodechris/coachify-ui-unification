@@ -33,8 +33,8 @@ const TopicCard: React.FC<TopicCardProps> = ({
 }) => {
   return (
     <div 
-      className={`insta-card cursor-pointer transition-colors relative group ${
-        topic.pinned ? 'border-[#BBBCBF] border-2' : 'hover:border-insta-blue border'
+      className={`insta-card cursor-pointer transition-colors relative group dark:bg-gray-900 dark:text-white dark:border-gray-700 ${
+        topic.pinned ? 'border-[#BBBCBF] border-2 dark:border-gray-600' : 'hover:border-insta-blue border dark:hover:border-blue-500'
       }`}
       onClick={() => onTopicClick(topic.title)}
     >
@@ -42,7 +42,7 @@ const TopicCard: React.FC<TopicCardProps> = ({
         <span className="text-xl mr-2">{topic.icon}</span>
         <div>
           <div className="font-medium">{topic.title}</div>
-          <div className="text-sm text-insta-lightText line-clamp-1">{topic.description}</div>
+          <div className="text-sm text-insta-lightText line-clamp-1 dark:text-gray-300">{topic.description}</div>
         </div>
       </div>
       
@@ -52,7 +52,7 @@ const TopicCard: React.FC<TopicCardProps> = ({
           <Tooltip>
             <TooltipTrigger asChild>
               <button 
-                className="text-insta-lightText hover:text-insta-text bg-white rounded-full p-1 shadow-sm"
+                className="text-insta-lightText hover:text-insta-text bg-white rounded-full p-1 shadow-sm dark:bg-gray-800 dark:text-gray-300 dark:hover:text-white"
                 onClick={(e) => onHideTopic(index, e)}
               >
                 <EyeOff size={16} />
@@ -68,7 +68,7 @@ const TopicCard: React.FC<TopicCardProps> = ({
           <Tooltip>
             <TooltipTrigger asChild>
               <button 
-                className={`text-insta-lightText hover:text-insta-text bg-white rounded-full p-1 shadow-sm ${topic.pinned ? 'text-insta-blue' : ''}`}
+                className={`text-insta-lightText hover:text-insta-text bg-white rounded-full p-1 shadow-sm dark:bg-gray-800 dark:text-gray-300 dark:hover:text-white ${topic.pinned ? 'text-insta-blue dark:text-blue-400' : ''}`}
                 onClick={(e) => onTogglePin(index, e)}
               >
                 {topic.pinned ? <PinOff size={16} /> : <Pin size={16} />}
@@ -83,7 +83,7 @@ const TopicCard: React.FC<TopicCardProps> = ({
       
       {/* Pin indicator */}
       {topic.pinned && (
-        <div className="absolute top-0 left-0 bg-insta-blue text-white p-1 text-xs rounded-tl-md rounded-br-md">
+        <div className="absolute top-0 left-0 bg-insta-blue text-white p-1 text-xs rounded-tl-md rounded-br-md dark:bg-blue-600">
           <Pin size={12} />
         </div>
       )}

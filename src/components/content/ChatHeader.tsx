@@ -27,11 +27,11 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   onBackToTopics
 }) => {
   return (
-    <div className="bg-white border-b border-border p-4 flex items-center">
+    <div className="bg-white border-b border-border p-4 flex items-center dark:bg-gray-900 dark:border-gray-700">
       <Button 
         variant="ghost"
         onClick={onBackToTopics}
-        className="mr-3 text-gray-600 hover:text-gray-800 flex items-center h-9 px-2"
+        className="mr-3 text-gray-600 hover:text-gray-800 flex items-center h-9 px-2 dark:text-gray-300 dark:hover:text-white"
         type="button"
         size="sm"
       >
@@ -39,18 +39,18 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
         Back
       </Button>
       
-      <div className="bg-gray-100 p-2 rounded-md">
-        <MessageSquare size={20} className="text-gray-600" />
+      <div className="bg-gray-100 p-2 rounded-md dark:bg-gray-800">
+        <MessageSquare size={20} className="text-gray-600 dark:text-gray-300" />
       </div>
-      <h2 className="text-lg font-medium ml-4 text-gray-800">{topic}</h2>
+      <h2 className="text-lg font-medium ml-4 text-gray-800 dark:text-white">{topic}</h2>
       
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <button 
               className={cn(
-                "ml-auto p-2 rounded-full hover:bg-gray-100 transition-colors",
-                isSourcesPanelOpen ? "text-gray-800 bg-gray-200" : "text-gray-500"
+                "ml-auto p-2 rounded-full hover:bg-gray-100 transition-colors dark:hover:bg-gray-800",
+                isSourcesPanelOpen ? "text-gray-800 bg-gray-200 dark:bg-gray-700 dark:text-white" : "text-gray-500 dark:text-gray-400"
               )}
               onClick={toggleSourcesPanel}
               type="button"
