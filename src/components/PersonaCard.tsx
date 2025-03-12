@@ -34,9 +34,9 @@ const PersonaCard: React.FC<PersonaCardProps> = ({
         )}
       </div>
       <div className="p-4">
-        <h3 className="font-medium text-brand-black">{name}</h3>
-        <p className="text-sm text-brand-darkGray mt-1 line-clamp-1">{description}</p>
-        <div className="text-xs text-brand-gray mt-2">@InstaAI</div>
+        <h3 className="font-medium text-foreground">{name}</h3>
+        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{description}</p>
+        <div className="text-xs text-muted-foreground mt-2">@InstaAI</div>
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ interface NavigationItem {
   icon: React.ReactNode;
   label: string;
   path: string;
-  subItems?: SubItem[] | ChatItem[];
+  subItems?: SubItem[];
   onClick?: (e: React.MouseEvent) => void;
 }
 
@@ -64,7 +64,7 @@ const CoachSidebar = () => {
       icon: <MessageSquare size={20} />, 
       label: 'Chats', 
       path: '/coach/chats',
-      subItems: activeChats
+      subItems: activeChats.length > 0 ? activeChats : []
     },
     { 
       icon: <Plus size={20} />, 
@@ -75,8 +75,8 @@ const CoachSidebar = () => {
   ];
 
   return (
-    <aside className="w-64 h-[calc(100vh-4rem)] bg-insta-gray border-r border-border overflow-auto">
-      <div className="p-4 text-sm font-medium text-insta-darkGray uppercase">
+    <aside className="w-64 h-[calc(100vh-4rem)] bg-sidebar border-r border-border overflow-auto">
+      <div className="p-4 text-sm font-medium text-sidebar-foreground uppercase">
         Coach
       </div>
       
@@ -90,17 +90,17 @@ const CoachSidebar = () => {
               onClick={item.onClick}
             />
             
-            {'subItems' in item && item.subItems && (
+            {item.subItems && item.subItems.length > 0 && (
               <ChatList
                 chats={
                   item.label === "Chats" 
-                    ? Array.isArray(item.subItems) ? item.subItems as ChatItem[] : []
-                    : Array.isArray(item.subItems) 
-                      ? (item.subItems as SubItem[]).map(subItem => ({
-                          title: subItem.label,
-                          path: subItem.path
-                        })) 
-                      : []
+                    ? activeChats
+                    : item.subItems.map(subItem => ({
+                        title: subItem.label,
+                        path: subItem.path,
+                        hidden: false,
+                        pinned: false
+                      }))
                 }
                 onPinChat={handlePinChat}
                 onHideChat={handleHideChat}
