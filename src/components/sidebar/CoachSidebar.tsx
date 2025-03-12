@@ -17,6 +17,7 @@ interface NavigationItem {
   label: string;
   path: string;
   subItems?: SubItem[];
+  chats?: ChatItem[];
   onClick?: (e: React.MouseEvent) => void;
 }
 
@@ -64,7 +65,7 @@ const CoachSidebar = () => {
       icon: <MessageSquare size={20} />, 
       label: 'Chats', 
       path: '/coach/chats',
-      subItems: activeChats.length > 0 ? activeChats : []
+      chats: activeChats
     },
     { 
       icon: <Plus size={20} />, 
@@ -92,16 +93,21 @@ const CoachSidebar = () => {
             
             {item.subItems && item.subItems.length > 0 && (
               <ChatList
-                chats={
-                  item.label === "Chats" 
-                    ? activeChats
-                    : item.subItems.map(subItem => ({
-                        title: subItem.label,
-                        path: subItem.path,
-                        hidden: false,
-                        pinned: false
-                      }))
-                }
+                chats={item.subItems.map(subItem => ({
+                  title: subItem.label,
+                  path: subItem.path,
+                  hidden: false,
+                  pinned: false
+                }))}
+                onPinChat={handlePinChat}
+                onHideChat={handleHideChat}
+                onRenameChat={handleRenameChat}
+              />
+            )}
+            
+            {item.chats && item.chats.length > 0 && (
+              <ChatList
+                chats={item.chats}
                 onPinChat={handlePinChat}
                 onHideChat={handleHideChat}
                 onRenameChat={handleRenameChat}
