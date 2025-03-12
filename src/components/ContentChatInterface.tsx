@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Message, Source } from './content/ContentTypes';
 import ChatHeader from './content/ChatHeader';
 import ChatMessage from './content/ChatMessage';
@@ -12,6 +14,7 @@ interface ContentChatInterfaceProps {
 }
 
 const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic }) => {
+  const navigate = useNavigate();
   const suggestedQuestions = [
     `What makes a good ${topic}?`,
     `What length should my ${topic} be?`,
@@ -19,6 +22,14 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic }) =>
     `Best practices for ${topic} content?`,
     `What should I avoid in my ${topic}?`
   ];
+  
+  // Check if topic exists, if not, redirect to content page
+  useEffect(() => {
+    if (!topic) {
+      localStorage.removeItem('contentActiveChats');
+      navigate('/content', { replace: true });
+    }
+  }, [topic, navigate]);
   
   const [messages, setMessages] = useState<Message[]>([
     {

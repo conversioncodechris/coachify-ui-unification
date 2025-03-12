@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -27,17 +28,18 @@ export const useContentChatSessions = (
           if (currentChat) {
             setCurrentTopic(currentChat.title);
           } else {
-            // Clear storage and redirect
+            // Chat not found or hidden, clear storage and redirect
             localStorage.removeItem('contentActiveChats');
             navigate('/content', { replace: true });
           }
         } catch (error) {
-          // Clear storage and redirect on error
+          // JSON parse error, clear storage and redirect
+          console.error('Error parsing active chats:', error);
           localStorage.removeItem('contentActiveChats');
           navigate('/content', { replace: true });
         }
       } else {
-        // No active chats, clear and redirect
+        // No active chats in storage, clear and redirect
         localStorage.removeItem('contentActiveChats');
         navigate('/content', { replace: true });
       }
@@ -50,8 +52,18 @@ export const useContentChatSessions = (
     if (!topicTitle) return;
 
     try {
+      // Always clear any existing activeChats to avoid state conflicts
+      let activeChats = [];
       const savedChats = localStorage.getItem('contentActiveChats');
-      let activeChats = savedChats ? JSON.parse(savedChats) : [];
+      
+      if (savedChats) {
+        try {
+          activeChats = JSON.parse(savedChats);
+        } catch (e) {
+          // If parsing fails, start with empty array
+          activeChats = [];
+        }
+      }
       
       const chatExists = activeChats.some((chat: ChatSession) => 
         chat.title === topicTitle && !chat.hidden
@@ -94,7 +106,8 @@ export const useContentChatSessions = (
       }
     } catch (error) {
       console.error('Error creating chat session:', error);
-      // Create a fallback chat as a last resort
+      // Create a fallback chat as a last resort and clear localStorage
+      localStorage.removeItem('contentActiveChats');
       const newChatId = Date.now().toString();
       const chatPath = `/content/chat/${newChatId}`;
       navigate(chatPath, { replace: true });

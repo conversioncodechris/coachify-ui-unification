@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import ContentSidebar from '../components/sidebar/ContentSidebar'; // Updated import
+import ContentSidebar from '../components/sidebar/ContentSidebar';
 import TopicsManager from '../components/content/TopicsManager';
 import ChatSessionManager from '../components/content/ChatSessionManager';
 import ContentChatInterface from '../components/ContentChatInterface';
@@ -27,6 +27,19 @@ const ContentAI = () => {
 
   const { activeChats, setActiveChats } = useContentSidebar();
 
+  // Handle browser back button
+  useEffect(() => {
+    const handlePopState = () => {
+      // If navigating away from a chat page, clear localStorage
+      if (!location.pathname.includes('/content/chat/')) {
+        localStorage.removeItem('contentActiveChats');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [location.pathname]);
+
   useEffect(() => {
     if (!chatId) {
       const savedChats = localStorage.getItem('contentActiveChats');
@@ -36,6 +49,7 @@ const ContentAI = () => {
           setActiveChats(chats);
         } catch (error) {
           console.error('Error parsing active chats:', error);
+          localStorage.removeItem('contentActiveChats');
         }
       }
     }

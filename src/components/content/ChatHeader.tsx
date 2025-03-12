@@ -26,9 +26,9 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   const navigate = useNavigate();
 
   const handleBack = () => {
-    // First clear the active chats from localStorage
+    // First clear the active chats from localStorage completely
     localStorage.removeItem('contentActiveChats');
-    // Then force navigation to /content
+    // Then force navigation to /content with replace to prevent browser history issues
     navigate('/content', { replace: true });
   };
 
