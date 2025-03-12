@@ -37,8 +37,12 @@ const ChatMessagesArea: React.FC<ChatMessagesAreaProps> = ({
         {messages.map(message => (
           <ChatMessage
             key={message.id}
-            message={message}
-            onSourceClick={toggleSourcesPanel}
+            id={message.id}
+            content={message.content}
+            sender={message.sender}
+            sources={message.sources}
+            timestamp={message.timestamp}
+            toggleSourcesPanel={toggleSourcesPanel}
             onEdit={(content) => onEditMessage(message.id, content)}
             onDelete={() => onDeleteMessage(message.id)}
           />
@@ -46,8 +50,9 @@ const ChatMessagesArea: React.FC<ChatMessagesAreaProps> = ({
         
         {showSuggestions && suggestedQuestions.length > 0 && (
           <SuggestedQuestions
+            topic={topic}
             questions={suggestedQuestions}
-            onQuestionClick={onSuggestedQuestionSelect}
+            onSelectQuestion={onSuggestedQuestionSelect}
           />
         )}
         
