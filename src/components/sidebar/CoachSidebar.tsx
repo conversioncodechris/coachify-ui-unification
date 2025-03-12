@@ -5,6 +5,20 @@ import { BookUser, GraduationCap, Home, MessageSquare, Plus, Target, Users } fro
 import { useCoachSidebar } from '../../hooks/useCoachSidebar';
 import SidebarItem from './SidebarItem';
 import ChatList from './ChatList';
+import { ChatItem } from '../../hooks/useCoachSidebar';
+
+interface SubItem {
+  label: string;
+  path: string;
+}
+
+interface NavigationItem {
+  icon: React.ReactNode;
+  label: string;
+  path: string;
+  subItems?: SubItem[] | ChatItem[];
+  onClick?: (e: React.MouseEvent) => void;
+}
 
 const CoachSidebar = () => {
   const navigate = useNavigate();
@@ -20,7 +34,7 @@ const CoachSidebar = () => {
     navigate('/coach');
   };
 
-  const navigationItems = [
+  const navigationItems: NavigationItem[] = [
     { 
       icon: <Home size={20} />, 
       label: 'Dashboard', 
@@ -78,7 +92,16 @@ const CoachSidebar = () => {
             
             {'subItems' in item && item.subItems && (
               <ChatList
-                chats={Array.isArray(item.subItems) ? item.subItems : []}
+                chats={
+                  item.label === "Chats" 
+                    ? Array.isArray(item.subItems) ? item.subItems as ChatItem[] : []
+                    : Array.isArray(item.subItems) 
+                      ? (item.subItems as SubItem[]).map(subItem => ({
+                          title: subItem.label,
+                          path: subItem.path
+                        })) 
+                      : []
+                }
                 onPinChat={handlePinChat}
                 onHideChat={handleHideChat}
                 onRenameChat={handleRenameChat}

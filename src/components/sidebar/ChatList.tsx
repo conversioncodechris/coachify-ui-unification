@@ -1,7 +1,7 @@
 
 import React from 'react';
 import ChatItem from './ChatItem';
-import { ChatItem as ChatItemType } from '../../hooks/useContentSidebar';
+import { ChatItem as ChatItemType } from '../../hooks/useCoachSidebar';
 
 interface ChatListProps {
   chats: ChatItemType[];

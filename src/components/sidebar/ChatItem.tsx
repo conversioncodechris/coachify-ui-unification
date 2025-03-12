@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { ChatItem as ChatItemType } from '../../hooks/useContentSidebar';
+import { ChatItem as ChatItemType } from '../../hooks/useCoachSidebar';
 
 interface ChatItemProps {
   chat: ChatItemType;
