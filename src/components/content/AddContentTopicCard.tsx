@@ -9,7 +9,7 @@ interface AddContentTopicCardProps {
 const AddContentTopicCard: React.FC<AddContentTopicCardProps> = ({ onClick }) => {
   return (
     <div 
-      className="insta-card cursor-pointer hover:border-insta-blue transition-colors relative group border-dashed border-2 h-[102px] bg-white" 
+      className="insta-card cursor-pointer hover:border-insta-blue transition-colors relative group border-dashed border-2 h-[102px]" 
       onClick={onClick}
     >
       <div className="flex items-center justify-center h-full">

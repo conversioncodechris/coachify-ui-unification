@@ -46,7 +46,7 @@ const ContentSidebar = () => {
         Type
       </div>
       
-      <nav className="flex flex-col space-y-1 px-3">
+      <nav className="flex flex-col space-y-1 px-2">
         {navigationItems.map((item, index) => (
           <div key={index}>
             <SidebarItem

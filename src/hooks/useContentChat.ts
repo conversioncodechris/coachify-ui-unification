@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from 'react';
 import { Message, Source } from '../components/content/ContentTypes';
-import { v4 as uuidv4 } from 'uuid';
 
 export const useContentChat = (topic: string) => {
   const suggestedQuestions = [
@@ -37,7 +36,6 @@ export const useContentChat = (topic: string) => {
 
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: uuidv4(),
       sender: 'ai',
       content: `Welcome to the ${topic} content creation! What kind of content would you like to create today?`,
       timestamp: new Date(),
@@ -67,23 +65,10 @@ export const useContentChat = (topic: string) => {
     }
   };
 
-  const handleEditMessage = (id: string, newContent: string) => {
-    setMessages(prevMessages => 
-      prevMessages.map(message => 
-        message.id === id ? { ...message, content: newContent } : message
-      )
-    );
-  };
-
-  const handleDeleteMessage = (id: string) => {
-    setMessages(prevMessages => prevMessages.filter(message => message.id !== id));
-  };
-
   const handleSendMessage = (message: string) => {
     if (!message.trim()) return;
     
     const userMessage: Message = {
-      id: uuidv4(),
       sender: 'user',
       content: message,
       timestamp: new Date()
@@ -94,7 +79,6 @@ export const useContentChat = (topic: string) => {
     
     setTimeout(() => {
       const aiResponse: Message = {
-        id: uuidv4(),
         sender: 'ai',
         content: `Here's some guidance for creating your ${topic}. This is a simulated response that would typically include tailored content advice, formatting tips, and platform-specific recommendations.`,
         timestamp: new Date(),
@@ -122,8 +106,6 @@ export const useContentChat = (topic: string) => {
     setActiveSourceIndex,
     toggleSourcesPanel,
     handleSendMessage,
-    handleSuggestedQuestion,
-    handleEditMessage,
-    handleDeleteMessage
+    handleSuggestedQuestion
   };
 };

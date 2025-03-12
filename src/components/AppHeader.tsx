@@ -11,7 +11,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ userAvatar }) => {
   const currentPath = location.pathname;
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between h-16 px-4 border-b border-border bg-background">
+    <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between h-16 px-4 border-b border-border bg-white">
       <div className="flex items-center">
         <Link to="/" className="flex items-center mr-8">
           <img 
@@ -43,7 +43,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ userAvatar }) => {
         </nav>
       </div>
       
-      <div className="flex items-center gap-3">
+      <div className="flex items-center">
         <Link to="/profile">
           <img 
             src={userAvatar || '/lovable-uploads/0dd3499c-aaf2-4314-9ed1-2dfd0277918e.png'} 

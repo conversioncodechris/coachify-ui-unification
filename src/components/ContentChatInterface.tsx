@@ -31,9 +31,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
     setActiveSourceIndex,
     toggleSourcesPanel,
     handleSendMessage,
-    handleSuggestedQuestion,
-    handleEditMessage,
-    handleDeleteMessage
+    handleSuggestedQuestion
   } = useContentChat(topic);
 
   // Check if topic exists and chat session is valid, if not, redirect to content page
@@ -69,7 +67,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
   }, [topic, navigate, location.pathname, onBackToTopics]);
 
   return (
-    <div className="flex h-full bg-white">
+    <div className="flex h-full">
       <div className={cn(
         "flex flex-col flex-1 h-full transition-all duration-300 relative",
         isSourcesPanelOpen ? "mr-72" : ""
@@ -91,8 +89,6 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
           suggestedQuestions={suggestedQuestions}
           toggleSourcesPanel={toggleSourcesPanel}
           onSuggestedQuestionSelect={handleSuggestedQuestion}
-          onEditMessage={handleEditMessage}
-          onDeleteMessage={handleDeleteMessage}
         />
 
         <div className="absolute bottom-0 left-0 right-0">

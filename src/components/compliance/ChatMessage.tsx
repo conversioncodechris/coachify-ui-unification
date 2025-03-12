@@ -22,14 +22,14 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
       <div 
         className={`max-w-[80%] rounded-lg p-4 ${
           sender === 'user' 
-            ? 'bg-gray-800 text-white' 
-            : 'bg-white border border-border text-foreground'
+            ? 'bg-insta-blue text-white' 
+            : 'bg-white border border-border'
         }`}
       >
         <div className="flex items-center mb-2">
           {sender === 'ai' && (
-            <div className="mr-2 bg-gray-100 p-1 rounded-full">
-              <MessageSquare size={16} className="text-gray-600" />
+            <div className="mr-2 bg-insta-gray p-1 rounded-full">
+              <MessageSquare size={16} className="text-insta-blue" />
             </div>
           )}
           <span className="font-medium">

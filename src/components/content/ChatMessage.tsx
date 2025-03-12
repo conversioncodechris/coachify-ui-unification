@@ -1,50 +1,22 @@
 
-import React, { useState } from 'react';
-import { MessageSquare, ThumbsUp, ThumbsDown, FileText, Edit, Trash, Check, X } from 'lucide-react';
+import React from 'react';
+import { MessageSquare, ThumbsUp, ThumbsDown, FileText } from 'lucide-react';
 import { Source } from './ContentTypes';
 
 interface ChatMessageProps {
-  id?: string;
   content: string;
   sender: 'user' | 'ai';
   sources?: Source[];
   timestamp: Date;
   toggleSourcesPanel: () => void;
-  onEdit?: (content: string) => void;
-  onDelete?: () => void;
 }
 
 const ChatMessage: React.FC<ChatMessageProps> = ({
-  id = '',
   content,
   sender,
   sources,
-  timestamp,
-  toggleSourcesPanel,
-  onEdit,
-  onDelete
+  toggleSourcesPanel
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedContent, setEditedContent] = useState(content);
-
-  const handleEdit = () => {
-    if (onEdit) {
-      onEdit(editedContent);
-      setIsEditing(false);
-    }
-  };
-
-  const handleDelete = () => {
-    if (onDelete) {
-      onDelete();
-    }
-  };
-
-  const cancelEdit = () => {
-    setEditedContent(content);
-    setIsEditing(false);
-  };
-
   return (
     <div className={`flex ${sender === 'user' ? 'justify-end' : 'justify-start'}`}>
       <div 
@@ -64,74 +36,28 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
             {sender === 'user' ? 'You' : 'Content AI'}
           </span>
         </div>
-        
-        {isEditing ? (
-          <div className="mt-2">
-            <textarea
-              value={editedContent}
-              onChange={(e) => setEditedContent(e.target.value)}
-              className="w-full p-2 border rounded bg-white text-black"
-              rows={3}
-            />
-            <div className="flex justify-end mt-2 space-x-2">
-              <button 
-                onClick={cancelEdit}
-                className="p-1 rounded text-red-500 hover:bg-gray-200"
-              >
-                <X size={16} />
-              </button>
-              <button 
-                onClick={handleEdit}
-                className="p-1 rounded text-green-500 hover:bg-gray-200"
-              >
-                <Check size={16} />
-              </button>
-            </div>
+        <p>{content}</p>
+        {sender === 'ai' && (
+          <div className="flex items-center mt-2 space-x-2 text-gray-500">
+            <button className="p-1 hover:bg-gray-100 rounded">
+              <ThumbsUp size={16} />
+            </button>
+            <button className="p-1 hover:bg-gray-100 rounded">
+              <ThumbsDown size={16} />
+            </button>
+            {sources && sources.length > 0 && (
+              <div className="ml-auto flex items-center">
+                <button 
+                  onClick={toggleSourcesPanel}
+                  className="flex items-center text-gray-600 hover:underline"
+                >
+                  <FileText size={14} className="mr-1" />
+                  <span className="text-xs">{sources.length} sources</span>
+                </button>
+              </div>
+            )}
           </div>
-        ) : (
-          <p>{content}</p>
         )}
-        
-        <div className="flex items-center mt-2 space-x-2 text-gray-500">
-          {sender === 'user' && !isEditing && (
-            <>
-              <button 
-                className="p-1 hover:bg-gray-100 rounded"
-                onClick={() => setIsEditing(true)}
-              >
-                <Edit size={16} />
-              </button>
-              <button 
-                className="p-1 hover:bg-gray-100 rounded"
-                onClick={handleDelete}
-              >
-                <Trash size={16} />
-              </button>
-            </>
-          )}
-          
-          {sender === 'ai' && (
-            <>
-              <button className="p-1 hover:bg-gray-100 rounded">
-                <ThumbsUp size={16} />
-              </button>
-              <button className="p-1 hover:bg-gray-100 rounded">
-                <ThumbsDown size={16} />
-              </button>
-              {sources && sources.length > 0 && (
-                <div className="ml-auto flex items-center">
-                  <button 
-                    onClick={toggleSourcesPanel}
-                    className="flex items-center text-gray-600 hover:underline"
-                  >
-                    <FileText size={14} className="mr-1" />
-                    <span className="text-xs">{sources.length} sources</span>
-                  </button>
-                </div>
-              )}
-            </>
-          )}
-        </div>
       </div>
     </div>
   );
