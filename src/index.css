@@ -78,7 +78,7 @@
   }
   
   .insta-sidebar-item {
-    @apply flex items-center gap-3 px-4 py-2 rounded-md text-brand-darkGray hover:bg-brand-lightGray transition-all duration-200 font-montserrat;
+    @apply flex items-center gap-3 px-3 py-2 rounded-md text-brand-darkGray hover:bg-brand-lightGray transition-all duration-200 font-montserrat;
   }
   
   .insta-sidebar-item.active {

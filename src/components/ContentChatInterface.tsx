@@ -69,7 +69,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
   }, [topic, navigate, location.pathname, onBackToTopics]);
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full bg-white">
       <div className={cn(
         "flex flex-col flex-1 h-full transition-all duration-300 relative",
         isSourcesPanelOpen ? "mr-72" : ""

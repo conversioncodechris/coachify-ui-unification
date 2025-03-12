@@ -145,7 +145,7 @@ const ChatItem: React.FC<ChatItemProps> = ({
         </div>
         
         {chat.pinned && (
-          <div className="absolute top-0 left-0 bg-insta-blue text-white p-0.5 text-xs rounded-tl-md rounded-br-md w-4 h-4 flex items-center justify-center">
+          <div className="absolute top-0 left-0 bg-black text-white p-0.5 text-xs rounded-tl-md rounded-br-md w-4 h-4 flex items-center justify-center">
             <Pin size={14} />
           </div>
         )}
