@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { MessageSquare, ChevronRight, ChevronLeft, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -25,7 +26,9 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   const navigate = useNavigate();
 
   const handleBack = () => {
-    // Force navigation to /content with replace to clear history
+    // First clear the active chats from localStorage
+    localStorage.removeItem('contentActiveChats');
+    // Then force navigation to /content
     navigate('/content', { replace: true });
   };
 

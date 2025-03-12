@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,7 +14,6 @@ export const useContentChatSessions = (
   const navigate = useNavigate();
   const [currentTopic, setCurrentTopic] = useState<string | null>(initialTopic);
 
-  // Find and set the current topic when chat ID changes
   useEffect(() => {
     if (chatId) {
       const savedChats = localStorage.getItem('contentActiveChats');
@@ -29,16 +27,18 @@ export const useContentChatSessions = (
           if (currentChat) {
             setCurrentTopic(currentChat.title);
           } else {
-            // If we can't find the chat (it might be hidden or deleted)
-            // Navigate back to the main content page
+            // Clear storage and redirect
+            localStorage.removeItem('contentActiveChats');
             navigate('/content', { replace: true });
           }
         } catch (error) {
-          console.error('Error retrieving chat session:', error);
+          // Clear storage and redirect on error
+          localStorage.removeItem('contentActiveChats');
           navigate('/content', { replace: true });
         }
       } else {
-        // No active chats, go back to content page
+        // No active chats, clear and redirect
+        localStorage.removeItem('contentActiveChats');
         navigate('/content', { replace: true });
       }
     } else {
