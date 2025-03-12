@@ -13,10 +13,8 @@ export interface Source {
 }
 
 export interface CoachPersona {
-  image: string;
   name: string;
   description: string;
-  tag: string;
-  hidden?: boolean;
-  pinned?: boolean;
+  expertise: string[];
+  image: string;
 }

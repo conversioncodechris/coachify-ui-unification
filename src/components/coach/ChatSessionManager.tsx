@@ -1,65 +1,44 @@
 
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface ChatSessionManagerProps {
   topic: string | null;
   chatId: string | null;
 }
 
-const ChatSessionManager: React.FC<ChatSessionManagerProps> = ({ topic, chatId }) => {
-  const location = useLocation();
-  const [initialized, setInitialized] = useState(false);
-  
+const ChatSessionManager: React.FC<ChatSessionManagerProps> = ({ 
+  topic, 
+  chatId 
+}) => {
+  const navigate = useNavigate();
+
   useEffect(() => {
-    if (!initialized && chatId && topic) {
-      // Initialize the session
-      setInitialized(true);
-      
-      // This is where you would add logic to load previous messages
-      // For now we just ensure the chat exists in localStorage
+    if (topic && !chatId) {
       const savedChats = localStorage.getItem('coachActiveChats');
-      if (savedChats) {
-        try {
-          const activeChats = JSON.parse(savedChats);
-          const currentChat = activeChats.find((chat: any) => 
-            chat.path === `/coach/chat/${chatId}`
-          );
-          
-          if (!currentChat) {
-            // Chat not found, add it
-            activeChats.push({
-              title: topic,
-              path: `/coach/chat/${chatId}`
-            });
-            
-            localStorage.setItem('coachActiveChats', JSON.stringify(activeChats));
-          }
-        } catch (error) {
-          console.error('Error initializing chat session:', error);
-          
-          // Reset localStorage if corrupt
-          const newSession = [{
-            title: topic,
-            path: `/coach/chat/${chatId}`
-          }];
-          
-          localStorage.setItem('coachActiveChats', JSON.stringify(newSession));
-        }
-      } else {
-        // No existing chats, create first one
-        const newSession = [{
-          title: topic,
-          path: `/coach/chat/${chatId}`
-        }];
+      let activeChats = savedChats ? JSON.parse(savedChats) : [];
+      
+      const chatExists = activeChats.some((chat: {title: string, path: string}) => 
+        chat.title === topic
+      );
+      
+      if (!chatExists) {
+        const newChatId = Date.now().toString();
+        const chatPath = `/coach/chat/${newChatId}`;
         
-        localStorage.setItem('coachActiveChats', JSON.stringify(newSession));
+        activeChats.push({
+          title: topic,
+          path: chatPath
+        });
+        
+        localStorage.setItem('coachActiveChats', JSON.stringify(activeChats));
+        
+        navigate(chatPath, { replace: true });
       }
     }
-  }, [topic, chatId, initialized, location.pathname]);
-  
-  // This component doesn't render anything, it just manages the chat session
-  return null;
+  }, [topic, chatId, navigate]);
+
+  return null; // This is a utility component with no UI
 };
 
 export default ChatSessionManager;
