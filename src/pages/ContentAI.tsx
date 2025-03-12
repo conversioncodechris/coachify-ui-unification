@@ -18,56 +18,53 @@ const ContentAI = () => {
   const chatMatch = location.pathname.match(/\/content\/chat\/(\d+)/);
   const chatId = chatMatch ? chatMatch[1] : null;
   
-  const initialTopic = chatId ? null : null;
-
   const { currentTopic, createNewChatSession } = useContentChatSessions(
-    initialTopic,
+    null,
     chatId
   );
 
   const { activeChats, setActiveChats } = useContentSidebar();
 
-  // Handle browser back button
-  useEffect(() => {
-    const handlePopState = () => {
-      // If navigating away from a chat page, clear localStorage
-      if (!location.pathname.includes('/content/chat/')) {
-        localStorage.removeItem('contentActiveChats');
-      }
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, [location.pathname]);
-
+  // Load active chats from localStorage when on the main content page
   useEffect(() => {
     if (!chatId) {
       const savedChats = localStorage.getItem('contentActiveChats');
       if (savedChats) {
         try {
           const chats = JSON.parse(savedChats);
-          setActiveChats(chats);
+          if (Array.isArray(chats)) {
+            setActiveChats(chats);
+          } else {
+            // Invalid data structure, clear localStorage
+            localStorage.removeItem('contentActiveChats');
+            setActiveChats([]);
+          }
         } catch (error) {
           console.error('Error parsing active chats:', error);
           localStorage.removeItem('contentActiveChats');
+          setActiveChats([]);
         }
+      } else {
+        setActiveChats([]);
       }
     }
   }, [chatId, setActiveChats]);
 
+  // Handle browser navigation events
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Ensure localStorage is in sync with current state before page changes
+      if (!location.pathname.includes('/content/chat/')) {
+        localStorage.removeItem('contentActiveChats');
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [location.pathname]);
+
   const handleTopicClick = (topic: string) => {
-    const savedChats = localStorage.getItem('contentActiveChats');
-    let activeChats = savedChats ? JSON.parse(savedChats) : [];
-    
-    const existingChat = activeChats.find((chat: any) => 
-      chat.title === topic && !chat.hidden
-    );
-    
-    if (existingChat) {
-      navigate(existingChat.path, { replace: true });
-    } else {
-      createNewChatSession(topic);
-    }
+    createNewChatSession(topic);
   };
 
   return (

@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Message, Source } from './content/ContentTypes';
 import ChatHeader from './content/ChatHeader';
 import ChatMessage from './content/ChatMessage';
@@ -15,6 +14,7 @@ interface ContentChatInterfaceProps {
 
 const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const suggestedQuestions = [
     `What makes a good ${topic}?`,
     `What length should my ${topic} be?`,
@@ -23,13 +23,41 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({ topic }) =>
     `What should I avoid in my ${topic}?`
   ];
   
-  // Check if topic exists, if not, redirect to content page
+  // Check if topic exists and chat session is valid, if not, redirect to content page
   useEffect(() => {
     if (!topic) {
       localStorage.removeItem('contentActiveChats');
       navigate('/content', { replace: true });
+      return;
     }
-  }, [topic, navigate]);
+    
+    // Verify the chat exists in localStorage
+    const savedChats = localStorage.getItem('contentActiveChats');
+    if (savedChats) {
+      try {
+        const activeChats = JSON.parse(savedChats);
+        const currentPath = location.pathname;
+        const matchingChat = activeChats.find((chat: any) => 
+          chat.path === currentPath && !chat.hidden && chat.title === topic
+        );
+        
+        if (!matchingChat) {
+          // Chat not found, clear storage and redirect
+          localStorage.removeItem('contentActiveChats');
+          navigate('/content', { replace: true });
+        }
+      } catch (error) {
+        // JSON parse error, clear storage and redirect
+        console.error('Error verifying chat session:', error);
+        localStorage.removeItem('contentActiveChats');
+        navigate('/content', { replace: true });
+      }
+    } else {
+      // No active chats in storage, clear and redirect
+      localStorage.removeItem('contentActiveChats');
+      navigate('/content', { replace: true });
+    }
+  }, [topic, navigate, location.pathname]);
   
   const [messages, setMessages] = useState<Message[]>([
     {

@@ -9,6 +9,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface ChatHeaderProps {
   topic: string;
@@ -26,22 +27,26 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   const navigate = useNavigate();
 
   const handleBack = () => {
-    // First clear the active chats from localStorage completely
+    // Clear localStorage completely
     localStorage.removeItem('contentActiveChats');
-    // Then force navigation to /content with replace to prevent browser history issues
+    
+    // Force navigation with replace to prevent history issues
     navigate('/content', { replace: true });
   };
 
   return (
     <div className="bg-white border-b border-border p-4 flex items-center">
-      <button 
+      <Button 
+        variant="ghost"
         onClick={handleBack}
-        className="mr-3 text-gray-600 hover:text-gray-800 flex items-center"
+        className="mr-3 text-gray-600 hover:text-gray-800 flex items-center h-9 px-2"
         type="button"
+        size="sm"
       >
         <ArrowLeft size={16} className="mr-1" />
         Back
-      </button>
+      </Button>
+      
       <div className="bg-gray-100 p-2 rounded-md">
         <MessageSquare size={20} className="text-gray-600" />
       </div>
