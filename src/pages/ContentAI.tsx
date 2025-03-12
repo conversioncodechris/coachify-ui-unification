@@ -48,12 +48,16 @@ const ContentAI = () => {
     const savedChats = localStorage.getItem('contentActiveChats');
     if (savedChats) {
       try {
-        setActiveChats(JSON.parse(savedChats));
+        const chats = JSON.parse(savedChats);
+        // Only set active chats if we're not in a chat session
+        if (!chatId) {
+          setActiveChats(chats);
+        }
       } catch (error) {
         console.error('Error parsing active chats:', error);
       }
     }
-  }, [location.pathname, setActiveChats]);
+  }, [chatId, setActiveChats]);
 
   const handleTopicClick = (topic: string) => {
     try {
