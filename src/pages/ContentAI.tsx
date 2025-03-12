@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ContentSidebar from '../components/ContentSidebar';
@@ -18,66 +17,40 @@ const ContentAI = () => {
   const chatMatch = location.pathname.match(/\/content\/chat\/(\d+)/);
   const chatId = chatMatch ? chatMatch[1] : null;
   
-  const getInitialTopic = () => {
-    if (!chatId) return null;
-    
-    try {
-      const savedChats = localStorage.getItem('contentActiveChats');
-      if (savedChats) {
-        const activeChats = JSON.parse(savedChats);
-        const currentChat = activeChats.find((chat: any) => 
-          chat.path === `/content/chat/${chatId}`
-        );
-        return currentChat?.title || null;
-      }
-    } catch (error) {
-      console.error('Error parsing active chats from localStorage:', error);
-    }
-    
-    return null;
-  };
+  const initialTopic = chatId ? null : null;
 
   const { currentTopic, createNewChatSession } = useContentChatSessions(
-    getInitialTopic(),
+    initialTopic,
     chatId
   );
 
   const { activeChats, setActiveChats } = useContentSidebar();
 
   useEffect(() => {
-    const savedChats = localStorage.getItem('contentActiveChats');
-    if (savedChats) {
-      try {
-        const chats = JSON.parse(savedChats);
-        // Only set active chats if we're not in a chat session
-        if (!chatId) {
+    if (!chatId) {
+      const savedChats = localStorage.getItem('contentActiveChats');
+      if (savedChats) {
+        try {
+          const chats = JSON.parse(savedChats);
           setActiveChats(chats);
+        } catch (error) {
+          console.error('Error parsing active chats:', error);
         }
-      } catch (error) {
-        console.error('Error parsing active chats:', error);
       }
     }
   }, [chatId, setActiveChats]);
 
   const handleTopicClick = (topic: string) => {
-    try {
-      const savedChats = localStorage.getItem('contentActiveChats');
-      let activeChats = savedChats ? JSON.parse(savedChats) : [];
-      
-      activeChats = activeChats.map((chat: any) => 
-        chat.title === topic ? { ...chat, hidden: false } : chat
-      );
-      
-      const existingChat = activeChats.find((chat: any) => chat.title === topic);
-      
-      if (existingChat) {
-        localStorage.setItem('contentActiveChats', JSON.stringify(activeChats));
-        navigate(existingChat.path);
-      } else {
-        createNewChatSession(topic);
-      }
-    } catch (error) {
-      console.error('Error handling topic click:', error);
+    const savedChats = localStorage.getItem('contentActiveChats');
+    let activeChats = savedChats ? JSON.parse(savedChats) : [];
+    
+    const existingChat = activeChats.find((chat: any) => 
+      chat.title === topic && !chat.hidden
+    );
+    
+    if (existingChat) {
+      navigate(existingChat.path, { replace: true });
+    } else {
       createNewChatSession(topic);
     }
   };

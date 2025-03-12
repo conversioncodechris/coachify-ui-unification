@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MessageSquare, ChevronRight, ChevronLeft, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -26,7 +25,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   const navigate = useNavigate();
 
   const handleBack = () => {
-    // Use navigate with replace:true to prevent adding to history stack
+    // Force navigation to /content with replace to clear history
     navigate('/content', { replace: true });
   };
 
