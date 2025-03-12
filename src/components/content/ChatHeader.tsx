@@ -26,7 +26,8 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate('/content');
+    // Use navigate with replace:true to prevent adding to history stack
+    navigate('/content', { replace: true });
   };
 
   return (

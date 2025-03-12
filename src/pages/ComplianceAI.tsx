@@ -67,7 +67,7 @@ const ComplianceAI = () => {
   };
 
   const handleBackToTopics = () => {
-    navigate('/compliance');
+    navigate('/compliance', { replace: true });
   };
 
   return (

@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { MessageSquare, ChevronRight, ChevronLeft } from 'lucide-react';
+import { MessageSquare, ChevronRight, ChevronLeft, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import {
   Tooltip,
   TooltipContent,
@@ -24,14 +25,22 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   toggleSourcesPanel,
   allSourcesLength
 }) => {
+  const navigate = useNavigate();
+  
+  const handleBack = () => {
+    // Use the provided onBackToTopics function, but ensure it uses replace: true
+    onBackToTopics();
+  };
+
   return (
     <div className="bg-white border-b border-border p-4 flex items-center">
       <button 
-        onClick={onBackToTopics}
+        onClick={handleBack}
         className="mr-3 text-gray-600 hover:text-gray-800 flex items-center"
         type="button"
       >
-        ← Back
+        <ArrowLeft size={16} className="mr-1" />
+        Back
       </button>
       <div className="bg-gray-100 p-2 rounded-md">
         <MessageSquare size={20} className="text-gray-600" />
