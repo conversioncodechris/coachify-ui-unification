@@ -1,7 +1,7 @@
 
 export const DEFAULT_COACH_TOPICS = [
   {
-    icon: '👨‍👩‍👧',
+    icon: '👨👩',
     title: 'John and Sarah, Young Family',
     description: 'First-time home buyers looking for a family-friendly suburb with good schools',
     hidden: false,
@@ -22,7 +22,7 @@ export const DEFAULT_COACH_TOPICS = [
     pinned: false
   },
   {
-    icon: '👨‍👩‍👧‍👦',
+    icon: '👨👩',
     title: 'The Martinez Family',
     description: 'Growing family needing more space and wanting to move to a better school district',
     hidden: false,
@@ -36,7 +36,7 @@ export const DEFAULT_COACH_TOPICS = [
     pinned: false
   },
   {
-    icon: '👰‍♀️🤵‍♂️',
+    icon: '👰🤵',
     title: 'Newlywed Couple',
     description: 'Just married and looking to buy their first home together in a trendy neighborhood',
     hidden: false,
@@ -50,7 +50,7 @@ export const DEFAULT_COACH_TOPICS = [
     pinned: false
   },
   {
-    icon: '👨‍👨‍👦',
+    icon: '👨👨',
     title: 'David and James',
     description: 'Same-sex couple looking for a family-friendly neighborhood to raise their child',
     hidden: false,
@@ -60,10 +60,10 @@ export const DEFAULT_COACH_TOPICS = [
 
 export const DEFAULT_EMOJI_OPTIONS = [
   '😊', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇',
-  '👨‍👩‍👧', '👨‍👩‍👧‍👦', '👨‍👩‍👦‍👦', '👨‍👩‍👧‍👧', '👩‍👩‍👦', '👨‍👨‍👦',
+  '👨👩', '👨👧', '👨👦', '👩👧', '👩👦', '👨👨', '👩👩',
   '👵', '👴', '👩‍🦳', '👨‍🦳', '👱‍♀️', '👱‍♂️',
   '👩‍💼', '👨‍💼', '👩‍🏫', '👨‍🏫', '👩‍⚕️', '👨‍⚕️',
-  '👰‍♀️', '🤵‍♂️', '👸', '🤴', '🧑‍🎓', '👨‍🎓', '👩‍🎓',
+  '👰🤵', '👸🤴', '👩‍🎓', '👨‍🎓',
   '🏠', '🏡', '🏢', '🏘️', '🏚️', '🏫', '🏙️',
   '💰', '💵', '💸', '💼', '🔑', '🏦'
 ];
