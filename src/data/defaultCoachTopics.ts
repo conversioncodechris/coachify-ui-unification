@@ -5,7 +5,8 @@ export const DEFAULT_COACH_TOPICS = [
     title: 'John and Sarah, Young Family',
     description: 'First-time home buyers looking for a family-friendly suburb with good schools',
     hidden: false,
-    pinned: false
+    pinned: false,
+    isNew: true
   },
   {
     icon: '👴',
@@ -19,7 +20,8 @@ export const DEFAULT_COACH_TOPICS = [
     title: 'Emma, Career Professional',
     description: 'Busy executive looking for a low-maintenance downtown condo near her office',
     hidden: false,
-    pinned: false
+    pinned: false,
+    isNew: true
   },
   {
     icon: '👨👩',

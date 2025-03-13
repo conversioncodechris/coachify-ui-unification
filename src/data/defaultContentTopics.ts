@@ -10,7 +10,8 @@ export const DEFAULT_CONTENT_TOPICS: ContentTopic[] = [
   {
     icon: '🏠',
     title: 'New Listing Announcement',
-    description: 'Content to promote a new property listing'
+    description: 'Content to promote a new property listing',
+    isNew: true
   },
   {
     icon: '🔑',
@@ -25,7 +26,8 @@ export const DEFAULT_CONTENT_TOPICS: ContentTopic[] = [
   {
     icon: '📊',
     title: 'Market Update',
-    description: 'Information about real estate market trends'
+    description: 'Information about real estate market trends',
+    isNew: true
   },
   {
     icon: '⭐',

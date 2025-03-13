@@ -14,6 +14,7 @@ export interface CoachTopic {
   description: string;
   hidden?: boolean;
   pinned?: boolean;
+  isNew?: boolean;
 }
 
 interface CoachTopicCardProps {
@@ -37,14 +38,21 @@ const CoachTopicCard: React.FC<CoachTopicCardProps> = ({
         <TooltipTrigger asChild>
           <div 
             className={`insta-card cursor-pointer transition-colors relative group ${
-              topic.pinned ? 'border-[#BBBCBF] border-2' : 'hover:border-insta-blue border'
+              topic.pinned ? 'border-[#BBBCBF] border-2' : topic.isNew ? 'border-2 border-insta-blue/20' : 'hover:border-insta-blue border'
+            } ${
+              topic.isNew ? 'bg-[#F6F9FF]' : ''
             }`}
             onClick={() => onTopicClick(topic.title)}
           >
             <div className="flex items-start">
               <span className="text-xl mr-2 inline-flex whitespace-nowrap">{topic.icon}</span>
               <div>
-                <div className="font-medium">{topic.title}</div>
+                <div className="font-medium flex items-center">
+                  {topic.title}
+                  {topic.isNew && (
+                    <span className="ml-2 text-xs font-medium bg-insta-blue/10 text-insta-blue px-2 py-0.5 rounded-full">New</span>
+                  )}
+                </div>
                 <div className="text-sm text-insta-lightText line-clamp-1">{topic.description}</div>
               </div>
             </div>
