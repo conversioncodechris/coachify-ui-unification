@@ -13,9 +13,23 @@ export interface ChatItem {
 export const useCoachSidebar = () => {
   const location = useLocation();
   const { toast } = useToast();
-  const [activeChats, setActiveChats] = useState<ChatItem[]>([]);
+  const [activeChats, setActiveChats] = useState<ChatItem[]>(() => {
+    const savedChats = localStorage.getItem('coachActiveChats');
+    if (savedChats) {
+      try {
+        const chats = JSON.parse(savedChats);
+        if (Array.isArray(chats)) {
+          return chats;
+        }
+      } catch (error) {
+        console.error('Failed to parse chats:', error);
+      }
+    }
+    return [];
+  });
 
   useEffect(() => {
+    // Refresh active chats when location changes
     const savedChats = localStorage.getItem('coachActiveChats');
     if (savedChats) {
       try {

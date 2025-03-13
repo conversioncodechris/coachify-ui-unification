@@ -1,6 +1,7 @@
 
-import { useState } from 'react';
-import { useToast } from './use-toast';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useToast } from "./use-toast";
 
 export interface ChatItem {
   title: string;
@@ -10,16 +11,37 @@ export interface ChatItem {
 }
 
 export const useContentSidebar = () => {
+  const location = useLocation();
   const { toast } = useToast();
   const [activeChats, setActiveChats] = useState<ChatItem[]>(() => {
     const savedChats = localStorage.getItem('contentActiveChats');
-    return savedChats ? JSON.parse(savedChats) : [];
+    if (savedChats) {
+      try {
+        const chats = JSON.parse(savedChats);
+        if (Array.isArray(chats)) {
+          return chats;
+        }
+      } catch (error) {
+        console.error('Failed to parse chats:', error);
+      }
+    }
+    return [];
   });
 
-  const saveChats = (chats: ChatItem[]) => {
-    localStorage.setItem('contentActiveChats', JSON.stringify(chats));
-    setActiveChats(chats);
-  };
+  useEffect(() => {
+    // Refresh active chats when location changes
+    const savedChats = localStorage.getItem('contentActiveChats');
+    if (savedChats) {
+      try {
+        const chats = JSON.parse(savedChats);
+        if (Array.isArray(chats)) {
+          setActiveChats(chats);
+        }
+      } catch (error) {
+        console.error('Failed to parse chats:', error);
+      }
+    }
+  }, [location.pathname]);
 
   const handlePinChat = (path: string) => {
     const updatedChats = activeChats.map(chat => 
@@ -31,7 +53,8 @@ export const useContentSidebar = () => {
       ...updatedChats.filter(chat => !chat.pinned)
     ];
     
-    saveChats(sortedChats);
+    localStorage.setItem('contentActiveChats', JSON.stringify(sortedChats));
+    setActiveChats(sortedChats);
     
     toast({
       title: updatedChats.find(c => c.path === path)?.pinned 
@@ -43,32 +66,32 @@ export const useContentSidebar = () => {
 
   const handleHideChat = (path: string) => {
     const updatedChats = activeChats.map(chat => 
-      chat.path === path ? { ...chat, hidden: !chat.hidden } : chat
+      chat.path === path ? { ...chat, hidden: true } : chat
     );
     
-    saveChats(updatedChats);
+    localStorage.setItem('contentActiveChats', JSON.stringify(updatedChats));
+    setActiveChats(updatedChats);
     
     toast({
-      title: updatedChats.find(c => c.path === path)?.hidden 
-        ? "Chat hidden" 
-        : "Chat visible",
-      description: "Your chats have been updated.",
+      title: "Chat hidden",
+      description: "Your chat has been removed from the sidebar.",
     });
   };
 
   const handleRenameChat = (path: string, newTitle: string) => {
-    if (newTitle.trim()) {
-      const updatedChats = activeChats.map(chat => 
-        chat.path === path ? { ...chat, title: newTitle.trim() } : chat
-      );
-      
-      saveChats(updatedChats);
-      
-      toast({
-        title: "Chat renamed",
-        description: "Your chat has been updated.",
-      });
-    }
+    if (!newTitle.trim()) return;
+    
+    const updatedChats = activeChats.map(chat => 
+      chat.path === path ? { ...chat, title: newTitle.trim() } : chat
+    );
+    
+    localStorage.setItem('contentActiveChats', JSON.stringify(updatedChats));
+    setActiveChats(updatedChats);
+    
+    toast({
+      title: "Chat renamed",
+      description: "Your chat has been updated.",
+    });
   };
 
   return {
