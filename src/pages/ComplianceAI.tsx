@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
@@ -35,7 +36,7 @@ const ComplianceAI = () => {
     return null;
   };
 
-  const { currentTopic, createNewChatSession } = useComplianceChatSessions(
+  const { currentTopic, createNewChatSession, createEmptyChat } = useComplianceChatSessions(
     getInitialTopic(),
     chatId
   );
@@ -70,10 +71,18 @@ const ComplianceAI = () => {
     navigate('/compliance', { replace: true });
   };
 
+  const handleNewChat = (e: React.MouseEvent) => {
+    e.preventDefault();
+    createEmptyChat();
+  };
+
   return (
     <div className="flex flex-col h-screen bg-background">
       <div className="flex flex-1 overflow-hidden pt-16">
-        <Sidebar type="compliance" />
+        <Sidebar 
+          type="compliance" 
+          onNewChat={handleNewChat}
+        />
         
         <div className="flex flex-col flex-1 overflow-hidden">
           <ChatSessionManager topic={currentTopic} chatId={chatId} />

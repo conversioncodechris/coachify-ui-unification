@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 
 interface SidebarProps {
   type: 'compliance' | 'content' | 'coach';
+  onNewChat?: (e: React.MouseEvent) => void;
 }
 
 interface ChatItem {
@@ -21,7 +22,7 @@ interface ChatItem {
   pinned?: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ type }) => {
+const Sidebar: React.FC<SidebarProps> = ({ type, onNewChat }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -127,13 +128,7 @@ const Sidebar: React.FC<SidebarProps> = ({ type }) => {
       icon: <Plus size={20} />, 
       label: 'New Chat', 
       path: '/compliance/new-chat',
-      onClick: (e: React.MouseEvent) => {
-        e.preventDefault();
-        navigate('/compliance');
-        if (currentPath.includes('/compliance/chat/')) {
-          console.log('Starting new chat - navigating to compliance page');
-        }
-      }
+      onClick: onNewChat
     },
   ];
 

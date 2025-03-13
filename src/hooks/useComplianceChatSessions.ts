@@ -1,11 +1,13 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from "@/hooks/use-toast";
 
 interface ChatSession {
   title: string;
   path: string;
   hidden?: boolean;
+  pinned?: boolean;
 }
 
 export const useComplianceChatSessions = (
@@ -13,6 +15,7 @@ export const useComplianceChatSessions = (
   chatId: string | null
 ) => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [currentTopic, setCurrentTopic] = useState<string | null>(initialTopic);
 
   useEffect(() => {
@@ -65,8 +68,35 @@ export const useComplianceChatSessions = (
     }
   };
 
+  const createEmptyChat = () => {
+    const newChatId = Date.now().toString();
+    const chatPath = `/compliance/chat/${newChatId}`;
+    const newChat = {
+      title: `New Chat ${new Date().toLocaleString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        hour: 'numeric', 
+        minute: 'numeric' 
+      })}`,
+      path: chatPath
+    };
+    
+    const savedChats = localStorage.getItem('complianceActiveChats');
+    const activeChats = savedChats ? JSON.parse(savedChats) : [];
+    activeChats.push(newChat);
+    
+    localStorage.setItem('complianceActiveChats', JSON.stringify(activeChats));
+    navigate(chatPath);
+    
+    toast({
+      title: "New chat created",
+      description: "Start typing to begin your conversation.",
+    });
+  };
+
   return {
     currentTopic,
-    createNewChatSession
+    createNewChatSession,
+    createEmptyChat
   };
 };
