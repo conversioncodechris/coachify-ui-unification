@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { EyeOff, Pin, PinOff } from 'lucide-react';
+import { EyeOff, Pin, PinOff, Sparkle } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -14,6 +14,7 @@ export interface ComplianceTopic {
   description: string;
   hidden?: boolean;
   pinned?: boolean;
+  isNew?: boolean;
 }
 
 interface TopicCardProps {
@@ -38,6 +39,14 @@ const TopicCard: React.FC<TopicCardProps> = ({
       }`}
       onClick={() => onTopicClick(topic.title)}
     >
+      {/* New ribbon badge */}
+      {topic.isNew && (
+        <div className="absolute -top-1 -right-1 bg-insta-blue text-white px-2 py-0.5 rounded-br-md rounded-tl-md shadow-sm flex items-center gap-1 text-xs font-medium z-10">
+          <Sparkle size={12} className="animate-pulse" />
+          New
+        </div>
+      )}
+      
       <div className="flex items-start">
         <span className="text-xl mr-2">{topic.icon}</span>
         <div>

@@ -8,6 +8,12 @@ export const DEFAULT_EMOJI_OPTIONS = [
 
 export const DEFAULT_TOPICS: ComplianceTopic[] = [
   {
+    icon: '⚖️',
+    title: 'NAR Settlement',
+    description: 'Buyers agent compensation',
+    isNew: true
+  },
+  {
     icon: '🏠',
     title: 'Fair Housing Laws',
     description: 'Anti-discrimination requirements'
