@@ -12,12 +12,13 @@ const ContentSidebar = () => {
     activeChats,
     handlePinChat,
     handleHideChat,
-    handleRenameChat
+    handleRenameChat,
+    createEmptyChat
   } = useContentSidebar();
 
   const handleNewChat = (e: React.MouseEvent) => {
     e.preventDefault();
-    navigate('/content');
+    createEmptyChat();
   };
 
   const navigationItems = [

@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 
 export interface ChatItem {
@@ -12,6 +12,7 @@ export interface ChatItem {
 
 export const useCoachSidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [activeChats, setActiveChats] = useState<ChatItem[]>(() => {
     const savedChats = localStorage.getItem('coachActiveChats');
@@ -94,11 +95,37 @@ export const useCoachSidebar = () => {
     });
   };
 
+  const createEmptyChat = () => {
+    const newChatId = Date.now().toString();
+    const chatPath = `/coach/chat/${newChatId}`;
+    const newChat = {
+      title: `New Chat ${new Date().toLocaleString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        hour: 'numeric', 
+        minute: 'numeric' 
+      })}`,
+      path: chatPath
+    };
+    
+    const updatedChats = [...activeChats, newChat];
+    localStorage.setItem('coachActiveChats', JSON.stringify(updatedChats));
+    setActiveChats(updatedChats);
+    
+    navigate(chatPath);
+    
+    toast({
+      title: "New chat created",
+      description: "Start typing to begin your conversation.",
+    });
+  };
+
   return {
     activeChats,
     setActiveChats,
     handlePinChat,
     handleHideChat,
-    handleRenameChat
+    handleRenameChat,
+    createEmptyChat
   };
 };

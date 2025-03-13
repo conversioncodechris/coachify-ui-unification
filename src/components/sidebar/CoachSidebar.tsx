@@ -12,12 +12,13 @@ const CoachSidebar = () => {
     activeChats,
     handlePinChat,
     handleHideChat,
-    handleRenameChat
+    handleRenameChat,
+    createEmptyChat
   } = useCoachSidebar();
 
   const handleNewChat = (e: React.MouseEvent) => {
     e.preventDefault();
-    navigate('/coach');
+    createEmptyChat();
   };
 
   const navigationItems = [
