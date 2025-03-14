@@ -2,8 +2,6 @@
 import React from 'react';
 import TopicCard, { ComplianceTopic } from './TopicCard';
 import AddTopicCard from './AddTopicCard';
-import { Settings } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 interface TopicsGridProps {
   topics: ComplianceTopic[];
@@ -21,8 +19,6 @@ const TopicsGrid: React.FC<TopicsGridProps> = ({
   onHideTopic,
   onTogglePin,
   onAddTopicClick,
-  onOpenAdminSettings,
-  isAdmin = false
 }) => {
   // Sort and filter topics
   const sortedTopics = [...topics].sort((a, b) => {
@@ -33,20 +29,6 @@ const TopicsGrid: React.FC<TopicsGridProps> = ({
 
   return (
     <div className="space-y-6">
-      {isAdmin && (
-        <div className="flex justify-end mb-4">
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={onOpenAdminSettings}
-            className="flex items-center gap-1"
-          >
-            <Settings size={16} />
-            Admin Settings
-          </Button>
-        </div>
-      )}
-      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {sortedTopics.map((topic, index) => (
           <TopicCard
