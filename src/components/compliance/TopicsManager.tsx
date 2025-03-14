@@ -5,6 +5,7 @@ import { ComplianceTopic } from './TopicCard';
 import TopicsGrid from './TopicsGrid';
 import AddTopicDialog from './AddTopicDialog';
 import ComplianceFooter from './ComplianceFooter';
+import AdminSettingsPanel from './AdminSettingsPanel';
 
 interface TopicsManagerProps {
   topics: ComplianceTopic[];
@@ -26,6 +27,10 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     description: ''
   });
   const [isAddTopicOpen, setIsAddTopicOpen] = useState(false);
+  const [isAdminSettingsOpen, setIsAdminSettingsOpen] = useState(false);
+  
+  // Mock admin status - in a real app, this would come from auth
+  const [isAdmin, setIsAdmin] = useState(true);
 
   const handleHideTopic = (index: number, event: React.MouseEvent) => {
     event.stopPropagation();
@@ -85,6 +90,14 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     });
   };
 
+  const handleOpenAdminSettings = () => {
+    setIsAdminSettingsOpen(true);
+  };
+
+  const handleCloseAdminSettings = () => {
+    setIsAdminSettingsOpen(false);
+  };
+
   return (
     <>
       <div className="flex-1 overflow-y-auto p-6 pt-4 pb-24">
@@ -97,6 +110,8 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
             onHideTopic={handleHideTopic}
             onTogglePin={handleTogglePin}
             onAddTopicClick={handleAddTopicClick}
+            onOpenAdminSettings={handleOpenAdminSettings}
+            isAdmin={isAdmin}
           />
         </div>
       </div>
@@ -110,6 +125,11 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
         setNewTopic={setNewTopic}
         onSubmit={handleAddTopicSubmit}
         emojiOptions={emojiOptions}
+      />
+      
+      <AdminSettingsPanel
+        isOpen={isAdminSettingsOpen}
+        onClose={handleCloseAdminSettings}
       />
     </>
   );
