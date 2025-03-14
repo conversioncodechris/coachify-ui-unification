@@ -14,7 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { User, Bell, Lock, Globe, Mail } from "lucide-react";
+import { User, Bell, Lock, Globe, Mail, FileText } from "lucide-react";
+import AssetManagementDialog from "@/components/settings/AssetManagementDialog";
 
 const Settings = () => {
   const [name, setName] = useState("Jane Doe");
@@ -24,6 +25,13 @@ const Settings = () => {
     pushNotifications: false,
     productUpdates: true
   });
+  const [assetDialogOpen, setAssetDialogOpen] = useState(false);
+  const [selectedAiType, setSelectedAiType] = useState<"compliance" | "coach" | "content">("compliance");
+
+  const handleOpenAssetDialog = (type: "compliance" | "coach" | "content") => {
+    setSelectedAiType(type);
+    setAssetDialogOpen(true);
+  };
 
   return (
     <div className="container mx-auto pt-24 pb-12 px-4 max-w-5xl">
@@ -244,16 +252,28 @@ const Settings = () => {
                     Create and manage content for Compliance AI, Coach AI, and Content AI.
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-                    <Button variant="outline" className="justify-start">
-                      <Mail className="mr-2 h-4 w-4" />
+                    <Button 
+                      variant="outline" 
+                      className="justify-start"
+                      onClick={() => handleOpenAssetDialog("compliance")}
+                    >
+                      <FileText className="mr-2 h-4 w-4" />
                       Compliance AI
                     </Button>
-                    <Button variant="outline" className="justify-start">
-                      <Mail className="mr-2 h-4 w-4" />
+                    <Button 
+                      variant="outline" 
+                      className="justify-start"
+                      onClick={() => handleOpenAssetDialog("coach")}
+                    >
+                      <FileText className="mr-2 h-4 w-4" />
                       Coach AI
                     </Button>
-                    <Button variant="outline" className="justify-start">
-                      <Mail className="mr-2 h-4 w-4" />
+                    <Button 
+                      variant="outline" 
+                      className="justify-start"
+                      onClick={() => handleOpenAssetDialog("content")}
+                    >
+                      <FileText className="mr-2 h-4 w-4" />
                       Content AI
                     </Button>
                   </div>
@@ -263,6 +283,13 @@ const Settings = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Asset Management Dialog */}
+      <AssetManagementDialog 
+        isOpen={assetDialogOpen}
+        onOpenChange={setAssetDialogOpen}
+        aiType={selectedAiType}
+      />
     </div>
   );
 };
