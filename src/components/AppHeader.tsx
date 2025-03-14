@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Settings, LogOut } from 'lucide-react';
 import {
   DropdownMenu,
@@ -16,6 +16,7 @@ interface AppHeaderProps {
 
 const AppHeader: React.FC<AppHeaderProps> = ({ userAvatar }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const currentPath = location.pathname;
   const [isAdmin] = useState(true); // Mock admin status - would come from auth in a real app
 
@@ -64,7 +65,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ userAvatar }) => {
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuItem className="cursor-pointer" onClick={() => window.location.href = '/settings'}>
+            <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/settings')}>
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
             </DropdownMenuItem>

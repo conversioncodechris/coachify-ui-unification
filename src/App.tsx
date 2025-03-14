@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import ComplianceAI from "./pages/ComplianceAI";
 import ContentAI from "./pages/ContentAI";
 import CoachAI from "./pages/CoachAI";
+import Settings from "./pages/Settings";
 import AppHeader from "./components/AppHeader";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
           <Route path="/compliance/*" element={<ComplianceAI />} />
           <Route path="/content/*" element={<ContentAI />} />
           <Route path="/coach/*" element={<CoachAI />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
