@@ -1,8 +1,7 @@
-
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Upload, Database, FileText, Cloud, Edit } from "lucide-react";
+import { Upload, Database, Cloud, FileText, Edit } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,7 +15,7 @@ interface AssetUploaderProps {
 }
 
 const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }) => {
-  const [uploadMethod, setUploadMethod] = useState<"upload" | "cloud" | "create" | "type">("upload");
+  const [uploadMethod, setUploadMethod] = useState<"upload" | "cloud" | "create" | "draft">("upload");
   const [files, setFiles] = useState<File[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [newAssets, setNewAssets] = useState<Partial<ContentAsset>[]>([]);
@@ -27,7 +26,6 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }
     content: ""
   });
   
-  // Set of emojis appropriate for each asset type
   const emojiOptions: Record<AssetType, string[]> = {
     prompt: ["💬", "📝", "🗣️", "💭", "📢", "🔤", "📋"],
     pdf: ["📄", "📑", "📰", "📚", "📂", "🗂️", "📕"],
@@ -46,11 +44,10 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }
       const newFiles = Array.from(e.target.files);
       setFiles(prevFiles => [...prevFiles, ...newFiles]);
       
-      // Create preliminary asset objects
       const prelimAssets = newFiles.map(file => ({
         id: uuidv4(),
         type: assetType,
-        title: file.name.split('.')[0], // Use filename as default title
+        title: file.name.split('.')[0],
         subtitle: "",
         icon: emojiPicker,
         source: "upload" as AssetSource,
@@ -90,9 +87,7 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }
   const handleSubmitAssets = () => {
     setIsUploading(true);
     
-    // Normally we would upload files to a server/storage here
     setTimeout(() => {
-      // Convert partial assets to full assets
       const completeAssets = newAssets.map(asset => ({
         ...asset,
         id: asset.id || uuidv4(),
@@ -136,7 +131,6 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }
     
     onAssetAdded([newAsset]);
     
-    // Reset the form
     setTypedContent({
       title: "",
       subtitle: "",
@@ -145,10 +139,8 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }
   };
 
   const handleConnectCloud = (provider: "google-drive" | "dropbox") => {
-    // Normally this would open a cloud provider authorization flow
     alert(`Connecting to ${provider}. This would open the authentication flow.`);
     
-    // Mock a file from cloud storage
     const mockCloudAsset: ContentAsset = {
       id: uuidv4(),
       type: assetType,
@@ -159,7 +151,7 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }
       fileName: `cloud-file-${Date.now()}.pdf`,
       dateAdded: new Date(),
       url: `https://example.com/${provider}/file`,
-      size: 1024 * 1024 * 2 // Mock 2MB file
+      size: 1024 * 1024 * 2
     };
     
     onAssetAdded([mockCloudAsset]);
@@ -178,9 +170,9 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }
               <Cloud className="h-4 w-4" />
               <span>Cloud</span>
             </TabsTrigger>
-            <TabsTrigger value="type" className="flex items-center gap-2">
+            <TabsTrigger value="draft" className="flex items-center gap-2">
               <Edit className="h-4 w-4" />
-              <span>Type</span>
+              <span>Draft</span>
             </TabsTrigger>
             <TabsTrigger value="create" className="flex items-center gap-2">
               <Database className="h-4 w-4" />
@@ -329,8 +321,7 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }
             </div>
           </TabsContent>
 
-          {/* New Type Tab for typing content */}
-          <TabsContent value="type" className="space-y-4">
+          <TabsContent value="draft" className="space-y-4">
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="type-icon">Icon</Label>
@@ -372,12 +363,12 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="type-content">Content</Label>
+                  <Label htmlFor="type-content">Prompt</Label>
                   <Textarea
                     id="type-content"
                     value={typedContent.content}
                     onChange={(e) => setTypedContent(prev => ({ ...prev, content: e.target.value }))}
-                    placeholder="Type your content here..."
+                    placeholder="Type your prompt here..."
                     className="min-h-[150px]"
                   />
                 </div>
