@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Upload, Database, FileText, Cloud } from "lucide-react";
+import { Upload, Database, FileText, Cloud, Edit } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,11 +16,16 @@ interface AssetUploaderProps {
 }
 
 const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }) => {
-  const [uploadMethod, setUploadMethod] = useState<"upload" | "cloud" | "create">("upload");
+  const [uploadMethod, setUploadMethod] = useState<"upload" | "cloud" | "create" | "type">("upload");
   const [files, setFiles] = useState<File[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [newAssets, setNewAssets] = useState<Partial<ContentAsset>[]>([]);
   const [emojiPicker, setEmojiPicker] = useState<string>("📄");
+  const [typedContent, setTypedContent] = useState({
+    title: "",
+    subtitle: "",
+    content: ""
+  });
   
   // Set of emojis appropriate for each asset type
   const emojiOptions: Record<AssetType, string[]> = {
@@ -115,6 +120,30 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }
     onAssetAdded([newAsset]);
   };
 
+  const handleSubmitTypedContent = () => {
+    if (!typedContent.title.trim()) return;
+    
+    const newAsset: ContentAsset = {
+      id: uuidv4(),
+      type: assetType,
+      title: typedContent.title,
+      subtitle: typedContent.subtitle || "Manually created content",
+      icon: emojiPicker,
+      source: "created",
+      dateAdded: new Date(),
+      url: `data:text/plain;base64,${btoa(typedContent.content || " ")}` // Store content as data URL
+    };
+    
+    onAssetAdded([newAsset]);
+    
+    // Reset the form
+    setTypedContent({
+      title: "",
+      subtitle: "",
+      content: ""
+    });
+  };
+
   const handleConnectCloud = (provider: "google-drive" | "dropbox") => {
     // Normally this would open a cloud provider authorization flow
     alert(`Connecting to ${provider}. This would open the authentication flow.`);
@@ -140,7 +169,7 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }
     <Card>
       <CardContent className="pt-6">
         <Tabs defaultValue="upload" onValueChange={(value) => setUploadMethod(value as any)}>
-          <TabsList className="grid grid-cols-3 mb-4">
+          <TabsList className="grid grid-cols-4 mb-4">
             <TabsTrigger value="upload" className="flex items-center gap-2">
               <Upload className="h-4 w-4" />
               <span>Upload</span>
@@ -148,6 +177,10 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }
             <TabsTrigger value="cloud" className="flex items-center gap-2">
               <Cloud className="h-4 w-4" />
               <span>Cloud</span>
+            </TabsTrigger>
+            <TabsTrigger value="type" className="flex items-center gap-2">
+              <Edit className="h-4 w-4" />
+              <span>Type</span>
             </TabsTrigger>
             <TabsTrigger value="create" className="flex items-center gap-2">
               <Database className="h-4 w-4" />
@@ -293,6 +326,69 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }
                   </button>
                 ))}
               </div>
+            </div>
+          </TabsContent>
+
+          {/* New Type Tab for typing content */}
+          <TabsContent value="type" className="space-y-4">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="type-icon">Icon</Label>
+                <div className="flex flex-wrap gap-2 max-h-[100px] overflow-y-auto p-2 border rounded-md">
+                  {emojiOptions[assetType].map((emoji, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      className={`p-2 text-xl rounded hover:bg-gray-100 ${emojiPicker === emoji ? 'bg-gray-200' : ''}`}
+                      onClick={() => handleSelectEmoji(emoji)}
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="grid gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="type-title">Title</Label>
+                  <Input
+                    id="type-title"
+                    value={typedContent.title}
+                    onChange={(e) => setTypedContent(prev => ({ ...prev, title: e.target.value }))}
+                    placeholder="Enter title"
+                    maxLength={40}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="type-subtitle">Description</Label>
+                  <Input
+                    id="type-subtitle"
+                    value={typedContent.subtitle}
+                    onChange={(e) => setTypedContent(prev => ({ ...prev, subtitle: e.target.value }))}
+                    placeholder="Brief description"
+                    maxLength={60}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="type-content">Content</Label>
+                  <Textarea
+                    id="type-content"
+                    value={typedContent.content}
+                    onChange={(e) => setTypedContent(prev => ({ ...prev, content: e.target.value }))}
+                    placeholder="Type your content here..."
+                    className="min-h-[150px]"
+                  />
+                </div>
+              </div>
+              
+              <Button 
+                onClick={handleSubmitTypedContent}
+                disabled={!typedContent.title.trim()}
+              >
+                Create Content
+              </Button>
             </div>
           </TabsContent>
 
