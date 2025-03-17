@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Card, 
@@ -34,6 +33,19 @@ const Settings = () => {
     content: 0
   });
 
+  const getAssetCount = (key: string): number => {
+    const typeAssets = localStorage.getItem(key);
+    if (typeAssets) {
+      try {
+        return JSON.parse(typeAssets).length;
+      } catch (error) {
+        console.error(`Error parsing ${key}:`, error);
+        return 0;
+      }
+    }
+    return 0;
+  };
+
   useEffect(() => {
     const loadAssetCounts = () => {
       const counts = {
@@ -50,19 +62,6 @@ const Settings = () => {
       setAssetCounts(counts);
     };
     
-    const getAssetCount = (key: string): number => {
-      const typeAssets = localStorage.getItem(key);
-      if (typeAssets) {
-        try {
-          return JSON.parse(typeAssets).length;
-        } catch (error) {
-          console.error(`Error parsing ${key}:`, error);
-          return 0;
-        }
-      }
-      return 0;
-    };
-    
     loadAssetCounts();
     
     const handleStorageChange = () => {
@@ -73,7 +72,6 @@ const Settings = () => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  // Updated to listen to both dialog close and storage events
   useEffect(() => {
     if (!assetDialogOpen) {
       const counts = {
@@ -89,19 +87,6 @@ const Settings = () => {
       
       setAssetCounts(counts);
     }
-    
-    const getAssetCount = (key: string): number => {
-      const typeAssets = localStorage.getItem(key);
-      if (typeAssets) {
-        try {
-          return JSON.parse(typeAssets).length;
-        } catch (error) {
-          console.error(`Error parsing ${key}:`, error);
-          return 0;
-        }
-      }
-      return 0;
-    };
   }, [assetDialogOpen]);
 
   const handleOpenAssetDialog = (type: "compliance" | "coach" | "content") => {
