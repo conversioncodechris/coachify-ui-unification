@@ -131,13 +131,7 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
     const customEvent = new Event('contentAssetsUpdated');
     window.dispatchEvent(customEvent);
     
-    // Dispatch storage event (for other tabs/windows)
-    console.log("Dispatching storage event");
-    window.dispatchEvent(new StorageEvent('storage', {
-      key: storedKey,
-      newValue: JSON.stringify(assets)
-    }));
-    
+    // Close the dialog after saving
     onOpenChange(false);
   };
 

@@ -44,6 +44,13 @@ export function useAssetManagement() {
     
     // Also store counts in localStorage for other components to access
     localStorage.setItem('assetCounts', JSON.stringify(counts));
+    
+    // If content assets have changed, trigger the contentAssetsUpdated event
+    if (counts.content > 0) {
+      console.log("Content assets changed, triggering update event");
+      const customEvent = new Event('contentAssetsUpdated');
+      window.dispatchEvent(customEvent);
+    }
   };
 
   useEffect(() => {

@@ -39,39 +39,39 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
           const assets = JSON.parse(storedAssets);
           // Filter assets to only show prompts
           const prompts = assets.filter((asset: ContentAsset) => asset.type === 'prompt');
-          console.log("Found prompts:", prompts);
+          console.log("Found prompts:", prompts.length);
           
-          // Convert prompts to topics
           if (prompts.length > 0) {
-            // Create topics from prompts
-            const topicsFromPrompts = prompts.map((prompt: ContentAsset) => ({
-              icon: prompt.icon || '📝',
-              title: prompt.title,
-              description: prompt.subtitle || 'Prompt-based topic',
-              isNew: true
-            }));
+            // Create a map of existing topics by title for efficient lookup
+            const existingTopicsByTitle = new Map(
+              topics.map(topic => [topic.title, topic])
+            );
             
-            console.log("Topics from prompts:", topicsFromPrompts);
+            // Convert prompts to topics, but only if they don't already exist
+            const newTopics: ContentTopic[] = [];
             
-            // Update topics state, filtering out duplicates by title
-            setTopics(prevTopics => {
-              const existingTitles = new Set(prevTopics.map(topic => topic.title));
-              
-              // Filter out topics that already exist
-              const newTopics = topicsFromPrompts.filter(topic => !existingTitles.has(topic.title));
-              
-              console.log("New topics to add:", newTopics);
-              
-              if (newTopics.length > 0) {
-                toast({
-                  title: "New topics added",
-                  description: `${newTopics.length} topics created from your prompts.`,
+            prompts.forEach((prompt: ContentAsset) => {
+              if (!existingTopicsByTitle.has(prompt.title)) {
+                newTopics.push({
+                  icon: prompt.icon || '📝',
+                  title: prompt.title,
+                  description: prompt.subtitle || 'Prompt-based topic',
+                  isNew: true
                 });
-                return [...prevTopics, ...newTopics];
               }
-              
-              return prevTopics;
             });
+            
+            console.log("New topics to add:", newTopics.length);
+            
+            if (newTopics.length > 0) {
+              // Update the state with new topics
+              setTopics(prevTopics => [...prevTopics, ...newTopics]);
+              
+              toast({
+                title: "New topics added",
+                description: `${newTopics.length} topics created from your prompts.`,
+              });
+            }
           }
         } catch (error) {
           console.error('Error parsing content assets:', error);
@@ -111,7 +111,7 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('contentAssetsUpdated', handleCustomEvent as EventListener);
     };
-  }, [setTopics, toast]);
+  }, [topics, setTopics, toast]);
 
   const handleHideTopic = (index: number, event: React.MouseEvent) => {
     event.stopPropagation();
