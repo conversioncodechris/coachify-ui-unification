@@ -48,7 +48,7 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
                 .map((prompt: ContentAsset) => ({
                   icon: prompt.icon || '📝',
                   title: prompt.title,
-                  description: prompt.description || 'Prompt-based topic',
+                  description: prompt.subtitle || 'Prompt-based topic', // Fix: Use subtitle instead of description
                   isNew: true
                 }));
                 
