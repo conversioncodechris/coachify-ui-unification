@@ -45,24 +45,24 @@ export function useAssetManagement() {
   useEffect(() => {
     loadAssetCounts();
     
+    // Handle storage changes (from other tabs/windows)
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'contentAssets' || e.key === 'complianceAssets' || e.key === 'coachAssets' || e.key === 'assetCounts') {
         loadAssetCounts();
       }
     };
     
-    window.addEventListener('storage', handleStorageChange);
-    
-    // Also listen for custom storage events triggered by our application
+    // Handle custom events (from the same window)
     const handleCustomEvent = () => {
       loadAssetCounts();
     };
     
-    window.addEventListener('storage', handleCustomEvent);
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('contentAssetsUpdated', handleCustomEvent as EventListener);
     
     return () => {
       window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('storage', handleCustomEvent);
+      window.removeEventListener('contentAssetsUpdated', handleCustomEvent as EventListener);
     };
   }, []);
 

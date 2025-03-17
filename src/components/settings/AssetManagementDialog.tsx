@@ -127,6 +127,9 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
       newValue: JSON.stringify(assets)
     }));
     
+    const customEvent = new Event('contentAssetsUpdated');
+    window.dispatchEvent(customEvent);
+    
     onOpenChange(false);
   };
 

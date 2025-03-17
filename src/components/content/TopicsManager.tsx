@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useToast } from "../../hooks/use-toast";
 import { ContentTopic } from './ContentTopicCard';
@@ -69,9 +70,10 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
       }
     };
 
+    // Initial load
     loadPromptsAsTopics();
     
-    // Add event listener to refresh topics when localStorage changes
+    // Add event listener for storage changes from other tabs/windows
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'contentAssets') {
         loadPromptsAsTopics();
@@ -80,10 +82,17 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     
     window.addEventListener('storage', handleStorageChange);
     
-    // Ensure we have the latest assets
-    window.dispatchEvent(new Event('storage'));
+    // Add listener for custom events within the same window
+    const handleCustomEvent = () => {
+      loadPromptsAsTopics();
+    };
     
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener('contentAssetsUpdated', handleCustomEvent as EventListener);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('contentAssetsUpdated', handleCustomEvent as EventListener);
+    };
   }, [setTopics, toast]);
 
   const handleHideTopic = (index: number, event: React.MouseEvent) => {
