@@ -85,6 +85,9 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
 
   const handleSaveChanges = () => {
     const storedKey = aiType === "content" ? "contentAssets" : `${aiType}Assets`;
+    
+    // Save assets to localStorage
+    console.log(`Saving ${assets.length} assets to ${storedKey}`);
     localStorage.setItem(storedKey, JSON.stringify(assets));
     
     const updateCounts = () => {
@@ -123,15 +126,17 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
       });
     }
     
-    // Dispatch both types of events to ensure all components update
+    // Dispatch custom event first (for same window)
+    console.log("Dispatching contentAssetsUpdated event");
+    const customEvent = new Event('contentAssetsUpdated');
+    window.dispatchEvent(customEvent);
+    
+    // Dispatch storage event (for other tabs/windows)
+    console.log("Dispatching storage event");
     window.dispatchEvent(new StorageEvent('storage', {
       key: storedKey,
       newValue: JSON.stringify(assets)
     }));
-    
-    // Create and dispatch a custom event
-    const customEvent = new Event('contentAssetsUpdated');
-    window.dispatchEvent(customEvent);
     
     onOpenChange(false);
   };

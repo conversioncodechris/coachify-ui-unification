@@ -41,28 +41,33 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
           const prompts = assets.filter((asset: ContentAsset) => asset.type === 'prompt');
           console.log("Found prompts:", prompts);
           
-          // Convert prompts to topics if they don't already exist
+          // Convert prompts to topics
           if (prompts.length > 0) {
+            // Create topics from prompts
+            const topicsFromPrompts = prompts.map((prompt: ContentAsset) => ({
+              icon: prompt.icon || '📝',
+              title: prompt.title,
+              description: prompt.subtitle || 'Prompt-based topic',
+              isNew: true
+            }));
+            
+            console.log("Topics from prompts:", topicsFromPrompts);
+            
+            // Update topics state, filtering out duplicates by title
             setTopics(prevTopics => {
               const existingTitles = new Set(prevTopics.map(topic => topic.title));
               
-              const newTopicsFromPrompts = prompts
-                .filter((prompt: ContentAsset) => !existingTitles.has(prompt.title))
-                .map((prompt: ContentAsset) => ({
-                  icon: prompt.icon || '📝',
-                  title: prompt.title,
-                  description: prompt.subtitle || 'Prompt-based topic',
-                  isNew: true
-                }));
+              // Filter out topics that already exist
+              const newTopics = topicsFromPrompts.filter(topic => !existingTitles.has(topic.title));
               
-              console.log("New topics from prompts:", newTopicsFromPrompts);
-                
-              if (newTopicsFromPrompts.length > 0) {
+              console.log("New topics to add:", newTopics);
+              
+              if (newTopics.length > 0) {
                 toast({
                   title: "New topics added",
-                  description: `${newTopicsFromPrompts.length} topics created from your prompts.`,
+                  description: `${newTopics.length} topics created from your prompts.`,
                 });
-                return [...prevTopics, ...newTopicsFromPrompts];
+                return [...prevTopics, ...newTopics];
               }
               
               return prevTopics;
@@ -97,6 +102,7 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     
     // Force initial load by dispatching a custom event
     setTimeout(() => {
+      console.log("Forcing initial prompt load...");
       const customEvent = new Event('contentAssetsUpdated');
       window.dispatchEvent(customEvent);
     }, 500);

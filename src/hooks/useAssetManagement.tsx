@@ -33,6 +33,7 @@ export function useAssetManagement() {
   };
 
   const loadAssetCounts = () => {
+    console.log("Loading asset counts...");
     const counts = {
       compliance: getAssetCount("complianceAssets"),
       coach: getAssetCount("coachAssets"), 
@@ -51,12 +52,14 @@ export function useAssetManagement() {
     // Handle storage changes (from other tabs/windows)
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'contentAssets' || e.key === 'complianceAssets' || e.key === 'coachAssets' || e.key === 'assetCounts') {
+        console.log(`Storage event detected for ${e.key}, reloading asset counts`);
         loadAssetCounts();
       }
     };
     
     // Handle custom events (from the same window)
     const handleCustomEvent = () => {
+      console.log("Custom event detected in useAssetManagement, reloading asset counts");
       loadAssetCounts();
     };
     
@@ -71,7 +74,12 @@ export function useAssetManagement() {
 
   useEffect(() => {
     if (!assetDialogOpen) {
+      console.log("Asset dialog closed, reloading asset counts");
       loadAssetCounts();
+      
+      // Force update of topics by dispatching custom event
+      const customEvent = new Event('contentAssetsUpdated');
+      window.dispatchEvent(customEvent);
     }
   }, [assetDialogOpen]);
 
