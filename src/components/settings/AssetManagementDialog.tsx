@@ -13,6 +13,8 @@ import { FileText, FileVideo, Book, Users, MessageSquare, Upload, Cloud } from "
 import AssetUploader from "./AssetUploader";
 import AssetsList from "./AssetsList";
 import { ContentAsset, AssetType } from "@/types/contentAssets";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 
 interface AssetManagementDialogProps {
   isOpen: boolean;
@@ -27,6 +29,7 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
 }) => {
   const [assets, setAssets] = useState<ContentAsset[]>([]);
   const [activeTab, setActiveTab] = useState<AssetType>("prompt");
+  const { toast } = useToast();
   
   const typeLabels: Record<AssetType, { icon: React.ReactNode; label: string }> = {
     prompt: { icon: <MessageSquare className="h-4 w-4" />, label: "Prompts" },
@@ -39,6 +42,12 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
 
   const handleAssetAdded = (newAssets: ContentAsset[]) => {
     setAssets((prev) => [...prev, ...newAssets]);
+    
+    // Show toast notification when asset is added
+    toast({
+      title: "Asset Added",
+      description: `Added to ${aiTypeTitle[aiType]} successfully.`,
+    });
   };
 
   const handleAssetDelete = (id: string) => {
@@ -49,6 +58,20 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
     compliance: "Compliance AI",
     coach: "Coach AI",
     content: "Content AI"
+  };
+
+  const handleSaveChanges = () => {
+    // Here we would typically save to a backend
+    toast({
+      title: "Changes Saved",
+      description: `${assets.length} assets updated for ${aiTypeTitle[aiType]}.`,
+    });
+    onOpenChange(false);
+  };
+
+  // Get count of assets by type
+  const getAssetCountByType = (type: AssetType) => {
+    return assets.filter(asset => asset.type === type).length;
   };
 
   return (
@@ -62,12 +85,20 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
 
         <Tabs defaultValue="prompt" onValueChange={(value) => setActiveTab(value as AssetType)}>
           <TabsList className="grid grid-cols-3 md:grid-cols-6 mb-4">
-            {Object.entries(typeLabels).map(([key, { icon, label }]) => (
-              <TabsTrigger key={key} value={key} className="flex items-center gap-2">
-                {icon}
-                <span className="hidden sm:inline">{label}</span>
-              </TabsTrigger>
-            ))}
+            {Object.entries(typeLabels).map(([key, { icon, label }]) => {
+              const count = getAssetCountByType(key as AssetType);
+              return (
+                <TabsTrigger key={key} value={key} className="flex items-center gap-2">
+                  {icon}
+                  <span className="hidden sm:inline">{label}</span>
+                  {count > 0 && (
+                    <Badge variant="secondary" className="ml-1 px-1 py-0 h-5 min-w-5 flex items-center justify-center">
+                      {count}
+                    </Badge>
+                  )}
+                </TabsTrigger>
+              );
+            })}
           </TabsList>
 
           {Object.keys(typeLabels).map((type) => (
@@ -89,7 +120,7 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Close
           </Button>
-          <Button>Save Changes</Button>
+          <Button onClick={handleSaveChanges}>Save Changes</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

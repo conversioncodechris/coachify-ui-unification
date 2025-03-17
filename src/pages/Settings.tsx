@@ -14,7 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { User, Bell, Lock, Globe, Mail, FileText, UserPlus } from "lucide-react";
+import { User, Bell, Lock, Globe, Mail, FileText, UserPlus, Database } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import AssetManagementDialog from "@/components/settings/AssetManagementDialog";
 
 const Settings = () => {
@@ -27,6 +28,11 @@ const Settings = () => {
   });
   const [assetDialogOpen, setAssetDialogOpen] = useState(false);
   const [selectedAiType, setSelectedAiType] = useState<"compliance" | "coach" | "content">("compliance");
+  const [assetCounts, setAssetCounts] = useState({
+    compliance: 3,
+    coach: 2,
+    content: 5
+  });
 
   const handleOpenAssetDialog = (type: "compliance" | "coach" | "content") => {
     setSelectedAiType(type);
@@ -260,27 +266,45 @@ const Settings = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
                     <Button 
                       variant="outline" 
-                      className="justify-start"
+                      className="justify-start relative"
                       onClick={() => handleOpenAssetDialog("compliance")}
                     >
                       <FileText className="mr-2 h-4 w-4" />
                       Compliance AI
+                      {assetCounts.compliance > 0 && (
+                        <Badge variant="secondary" className="absolute -top-2 -right-2 px-1 py-0 min-w-5 h-5 flex items-center justify-center">
+                          <Database className="h-3 w-3 mr-0.5" />
+                          {assetCounts.compliance}
+                        </Badge>
+                      )}
                     </Button>
                     <Button 
                       variant="outline" 
-                      className="justify-start"
+                      className="justify-start relative"
                       onClick={() => handleOpenAssetDialog("coach")}
                     >
                       <FileText className="mr-2 h-4 w-4" />
                       Coach AI
+                      {assetCounts.coach > 0 && (
+                        <Badge variant="secondary" className="absolute -top-2 -right-2 px-1 py-0 min-w-5 h-5 flex items-center justify-center">
+                          <Database className="h-3 w-3 mr-0.5" />
+                          {assetCounts.coach}
+                        </Badge>
+                      )}
                     </Button>
                     <Button 
                       variant="outline" 
-                      className="justify-start"
+                      className="justify-start relative"
                       onClick={() => handleOpenAssetDialog("content")}
                     >
                       <FileText className="mr-2 h-4 w-4" />
                       Content AI
+                      {assetCounts.content > 0 && (
+                        <Badge variant="secondary" className="absolute -top-2 -right-2 px-1 py-0 min-w-5 h-5 flex items-center justify-center">
+                          <Database className="h-3 w-3 mr-0.5" />
+                          {assetCounts.content}
+                        </Badge>
+                      )}
                     </Button>
                   </div>
                 </div>
