@@ -9,8 +9,10 @@ import ChatMessagesArea from './content/ChatMessagesArea';
 import ChatSourceIndicator from './content/ChatSourceIndicator';
 import { useContentChat } from '../hooks/useContentChat';
 import { ContentAsset } from '@/types/contentAssets';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, RefreshCw } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 interface ContentChatInterfaceProps {
   topic: string;
@@ -23,7 +25,9 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { toast } = useToast();
   const [promptAssets, setPromptAssets] = useState<ContentAsset[]>([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   
   const {
     messages,
@@ -39,7 +43,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
   } = useContentChat(topic);
 
   // Load prompt assets from localStorage
-  useEffect(() => {
+  const loadPromptAssets = () => {
     const storedAssets = localStorage.getItem('contentAssets');
     if (storedAssets) {
       try {
@@ -50,8 +54,31 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
       } catch (error) {
         console.error('Error parsing content assets:', error);
       }
+    } else {
+      // If no contentAssets, set empty array
+      setPromptAssets([]);
     }
+  };
+
+  // Load prompt assets initially
+  useEffect(() => {
+    loadPromptAssets();
   }, []);
+
+  const handleRefreshAssets = () => {
+    setIsRefreshing(true);
+    // Re-load prompt assets
+    loadPromptAssets();
+    
+    // Show loading spinner for a moment
+    setTimeout(() => {
+      setIsRefreshing(false);
+      toast({
+        title: "Assets Refreshed",
+        description: `${promptAssets.length} prompts available.`,
+      });
+    }, 500);
+  };
 
   // Check if topic exists and chat session is valid, if not, redirect to content page
   useEffect(() => {
@@ -101,7 +128,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
           />
           
           {/* Prompt assets banner */}
-          {promptAssets.length > 0 && (
+          {promptAssets.length > 0 ? (
             <div className="bg-blue-50 px-4 py-2 border-b flex items-center justify-between overflow-x-auto">
               <div className="flex items-center gap-2">
                 <AlertCircle className="h-4 w-4 text-blue-500" />
@@ -115,6 +142,34 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
                   ))}
                 </div>
               </div>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={handleRefreshAssets}
+                disabled={isRefreshing}
+                className="h-8 w-8 p-0"
+              >
+                <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+              </Button>
+            </div>
+          ) : (
+            <div className="bg-blue-50 px-4 py-2 border-b flex items-center justify-between overflow-x-auto">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 text-blue-500" />
+                <span className="text-sm font-medium">No prompts available.</span>
+                <span className="text-sm text-muted-foreground">
+                  Add prompts in Settings → Admin → Content AI.
+                </span>
+              </div>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={handleRefreshAssets}
+                disabled={isRefreshing}
+                className="h-8 w-8 p-0"
+              >
+                <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+              </Button>
             </div>
           )}
         </div>

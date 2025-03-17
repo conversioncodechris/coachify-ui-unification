@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Card, 
   CardContent, 
@@ -29,10 +28,67 @@ const Settings = () => {
   const [assetDialogOpen, setAssetDialogOpen] = useState(false);
   const [selectedAiType, setSelectedAiType] = useState<"compliance" | "coach" | "content">("compliance");
   const [assetCounts, setAssetCounts] = useState({
-    compliance: 3,
-    coach: 2,
-    content: 5
+    compliance: 0,
+    coach: 0,
+    content: 0
   });
+
+  useEffect(() => {
+    const loadAssetCounts = () => {
+      const counts = {
+        compliance: 0,
+        coach: 0, 
+        content: 0
+      };
+      
+      ["compliance", "coach", "content"].forEach(type => {
+        const typeAssets = localStorage.getItem(`${type}Assets`);
+        if (typeAssets) {
+          try {
+            counts[type as keyof typeof counts] = JSON.parse(typeAssets).length;
+          } catch (error) {
+            console.error(`Error parsing ${type}Assets:`, error);
+          }
+        }
+      });
+      
+      setAssetCounts(counts);
+    };
+    
+    loadAssetCounts();
+    
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key && e.key.includes('Assets')) {
+        loadAssetCounts();
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  useEffect(() => {
+    if (!assetDialogOpen) {
+      const counts = {
+        compliance: 0,
+        coach: 0,
+        content: 0
+      };
+      
+      ["compliance", "coach", "content"].forEach(type => {
+        const typeAssets = localStorage.getItem(`${type}Assets`);
+        if (typeAssets) {
+          try {
+            counts[type as keyof typeof counts] = JSON.parse(typeAssets).length;
+          } catch (error) {
+            console.error(`Error parsing ${type}Assets:`, error);
+          }
+        }
+      });
+      
+      setAssetCounts(counts);
+    }
+  }, [assetDialogOpen]);
 
   const handleOpenAssetDialog = (type: "compliance" | "coach" | "content") => {
     setSelectedAiType(type);
@@ -65,7 +121,6 @@ const Settings = () => {
           </TabsTrigger>
         </TabsList>
         
-        {/* Account Tab */}
         <TabsContent value="account">
           <Card>
             <CardHeader>
@@ -99,7 +154,6 @@ const Settings = () => {
               
               <Separator />
               
-              {/* Moved User Management section to Account tab */}
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">User Management</h3>
                 <div className="border rounded-md p-4">
@@ -134,7 +188,6 @@ const Settings = () => {
           </Card>
         </TabsContent>
         
-        {/* Notifications Tab */}
         <TabsContent value="notifications">
           <Card>
             <CardHeader>
@@ -198,7 +251,6 @@ const Settings = () => {
           </Card>
         </TabsContent>
         
-        {/* Security Tab */}
         <TabsContent value="security">
           <Card>
             <CardHeader>
@@ -245,7 +297,6 @@ const Settings = () => {
           </Card>
         </TabsContent>
         
-        {/* Admin Tab */}
         <TabsContent value="admin">
           <Card>
             <CardHeader>
@@ -255,8 +306,6 @@ const Settings = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* Removed User Management section from here */}
-              
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Content Management</h3>
                 <div className="border rounded-md p-4">
@@ -314,7 +363,6 @@ const Settings = () => {
         </TabsContent>
       </Tabs>
 
-      {/* Asset Management Dialog */}
       <AssetManagementDialog 
         isOpen={assetDialogOpen}
         onOpenChange={setAssetDialogOpen}

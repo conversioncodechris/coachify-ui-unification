@@ -81,6 +81,31 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
     const storedKey = `${aiType}Assets`;
     localStorage.setItem(storedKey, JSON.stringify(assets));
     
+    // Also update Settings asset counts
+    const updateCounts = () => {
+      const counts = {
+        compliance: 0,
+        coach: 0,
+        content: 0
+      };
+      
+      // Get counts for each AI type
+      ["compliance", "coach", "content"].forEach(type => {
+        const typeAssets = localStorage.getItem(`${type}Assets`);
+        if (typeAssets) {
+          try {
+            counts[type as keyof typeof counts] = JSON.parse(typeAssets).length;
+          } catch (error) {
+            console.error(`Error parsing ${type}Assets:`, error);
+          }
+        }
+      });
+      
+      localStorage.setItem('assetCounts', JSON.stringify(counts));
+    };
+    
+    updateCounts();
+    
     toast({
       title: "Changes Saved",
       description: `${assets.length} assets updated for ${aiTypeTitle[aiType]}.`,

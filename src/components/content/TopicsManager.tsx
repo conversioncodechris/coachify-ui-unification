@@ -7,7 +7,8 @@ import AddTopicDialog from './AddTopicDialog';
 import ContentFooter from './ContentFooter';
 import { ContentAsset } from '@/types/contentAssets';
 import { Badge } from '@/components/ui/badge';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, RefreshCw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface TopicsManagerProps {
   topics: ContentTopic[];
@@ -30,9 +31,10 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
   });
   const [isAddTopicOpen, setIsAddTopicOpen] = useState(false);
   const [promptAssets, setPromptAssets] = useState<ContentAsset[]>([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Load prompt assets from localStorage
-  useEffect(() => {
+  const loadPromptAssets = () => {
     const storedAssets = localStorage.getItem('contentAssets');
     if (storedAssets) {
       try {
@@ -43,8 +45,31 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
       } catch (error) {
         console.error('Error parsing content assets:', error);
       }
+    } else {
+      // If no contentAssets, set empty array
+      setPromptAssets([]);
     }
+  };
+
+  // Load prompt assets initially and when component mounts
+  useEffect(() => {
+    loadPromptAssets();
   }, []);
+
+  const handleRefreshAssets = () => {
+    setIsRefreshing(true);
+    // Re-load prompt assets
+    loadPromptAssets();
+    
+    // Show loading spinner for a moment
+    setTimeout(() => {
+      setIsRefreshing(false);
+      toast({
+        title: "Assets Refreshed",
+        description: `${promptAssets.length} prompts available.`,
+      });
+    }, 500);
+  };
 
   const handleHideTopic = (index: number, event: React.MouseEvent) => {
     event.stopPropagation();
@@ -109,7 +134,7 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
       <div className="flex-1 overflow-y-auto p-6 pt-4 pb-24">
         <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-border p-6">
           {/* Prompt assets banner */}
-          {promptAssets.length > 0 && (
+          {promptAssets.length > 0 ? (
             <div className="bg-blue-50 px-4 py-3 rounded-lg mb-6 border border-blue-100 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <AlertCircle className="h-5 w-5 text-blue-500" />
@@ -123,6 +148,34 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
                   ))}
                 </div>
               </div>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={handleRefreshAssets}
+                disabled={isRefreshing}
+                className="h-8 w-8 p-0"
+              >
+                <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+              </Button>
+            </div>
+          ) : (
+            <div className="bg-blue-50 px-4 py-3 rounded-lg mb-6 border border-blue-100 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="h-5 w-5 text-blue-500" />
+                <span className="font-medium">No prompts available.</span>
+                <span className="text-sm text-muted-foreground">
+                  Add prompts in Settings → Admin → Content AI.
+                </span>
+              </div>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={handleRefreshAssets}
+                disabled={isRefreshing}
+                className="h-8 w-8 p-0"
+              >
+                <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+              </Button>
             </div>
           )}
 
