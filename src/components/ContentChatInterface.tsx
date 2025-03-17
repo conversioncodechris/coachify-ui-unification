@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import ChatHeader from './content/ChatHeader';
@@ -8,6 +8,9 @@ import SourcesPanel from './content/SourcesPanel';
 import ChatMessagesArea from './content/ChatMessagesArea';
 import ChatSourceIndicator from './content/ChatSourceIndicator';
 import { useContentChat } from '../hooks/useContentChat';
+import { ContentAsset } from '@/types/contentAssets';
+import { AlertCircle } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 interface ContentChatInterfaceProps {
   topic: string;
@@ -20,6 +23,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [promptAssets, setPromptAssets] = useState<ContentAsset[]>([]);
   
   const {
     messages,
@@ -33,6 +37,21 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
     handleSendMessage,
     handleSuggestedQuestion
   } = useContentChat(topic);
+
+  // Load prompt assets from localStorage
+  useEffect(() => {
+    const storedAssets = localStorage.getItem('contentAssets');
+    if (storedAssets) {
+      try {
+        const assets = JSON.parse(storedAssets);
+        // Filter assets to only show prompts
+        const prompts = assets.filter((asset: ContentAsset) => asset.type === 'prompt');
+        setPromptAssets(prompts);
+      } catch (error) {
+        console.error('Error parsing content assets:', error);
+      }
+    }
+  }, []);
 
   // Check if topic exists and chat session is valid, if not, redirect to content page
   useEffect(() => {
@@ -80,6 +99,24 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
             allSourcesLength={allSources.length}
             onBackToTopics={onBackToTopics}
           />
+          
+          {/* Prompt assets banner */}
+          {promptAssets.length > 0 && (
+            <div className="bg-blue-50 px-4 py-2 border-b flex items-center justify-between overflow-x-auto">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 text-blue-500" />
+                <span className="text-sm font-medium">Available Prompts:</span>
+                <div className="flex gap-1 overflow-x-auto">
+                  {promptAssets.map((asset) => (
+                    <Badge key={asset.id} variant="outline" className="whitespace-nowrap flex items-center gap-1">
+                      <span>{asset.icon}</span>
+                      <span className="max-w-40 truncate">{asset.title}</span>
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <ChatMessagesArea 

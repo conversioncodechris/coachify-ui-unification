@@ -1,11 +1,12 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -30,6 +31,21 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
   const [assets, setAssets] = useState<ContentAsset[]>([]);
   const [activeTab, setActiveTab] = useState<AssetType>("prompt");
   const { toast } = useToast();
+  
+  // Load assets from localStorage when dialog opens
+  useEffect(() => {
+    if (isOpen) {
+      const storedKey = `${aiType}Assets`;
+      const storedAssets = localStorage.getItem(storedKey);
+      if (storedAssets) {
+        try {
+          setAssets(JSON.parse(storedAssets));
+        } catch (error) {
+          console.error(`Error parsing ${storedKey}:`, error);
+        }
+      }
+    }
+  }, [isOpen, aiType]);
   
   const typeLabels: Record<AssetType, { icon: React.ReactNode; label: string }> = {
     prompt: { icon: <MessageSquare className="h-4 w-4" />, label: "Prompts" },
@@ -61,7 +77,10 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
   };
 
   const handleSaveChanges = () => {
-    // Here we would typically save to a backend
+    // Save to localStorage
+    const storedKey = `${aiType}Assets`;
+    localStorage.setItem(storedKey, JSON.stringify(assets));
+    
     toast({
       title: "Changes Saved",
       description: `${assets.length} assets updated for ${aiTypeTitle[aiType]}.`,
@@ -81,6 +100,9 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
           <DialogTitle>
             {aiTypeTitle[aiType]} Content Management
           </DialogTitle>
+          <DialogDescription>
+            Add and manage assets for your AI system. These will be available in the AI interface.
+          </DialogDescription>
         </DialogHeader>
 
         <Tabs defaultValue="prompt" onValueChange={(value) => setActiveTab(value as AssetType)}>

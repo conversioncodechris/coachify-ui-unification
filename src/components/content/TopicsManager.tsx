@@ -1,10 +1,13 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useToast } from "../../hooks/use-toast";
 import { ContentTopic } from './ContentTopicCard';
 import TopicsGrid from './TopicsGrid';
 import AddTopicDialog from './AddTopicDialog';
 import ContentFooter from './ContentFooter';
+import { ContentAsset } from '@/types/contentAssets';
+import { Badge } from '@/components/ui/badge';
+import { AlertCircle } from 'lucide-react';
 
 interface TopicsManagerProps {
   topics: ContentTopic[];
@@ -26,6 +29,22 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     description: ''
   });
   const [isAddTopicOpen, setIsAddTopicOpen] = useState(false);
+  const [promptAssets, setPromptAssets] = useState<ContentAsset[]>([]);
+
+  // Load prompt assets from localStorage
+  useEffect(() => {
+    const storedAssets = localStorage.getItem('contentAssets');
+    if (storedAssets) {
+      try {
+        const assets = JSON.parse(storedAssets);
+        // Filter assets to only show prompts
+        const prompts = assets.filter((asset: ContentAsset) => asset.type === 'prompt');
+        setPromptAssets(prompts);
+      } catch (error) {
+        console.error('Error parsing content assets:', error);
+      }
+    }
+  }, []);
 
   const handleHideTopic = (index: number, event: React.MouseEvent) => {
     event.stopPropagation();
@@ -89,6 +108,24 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     <>
       <div className="flex-1 overflow-y-auto p-6 pt-4 pb-24">
         <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-border p-6">
+          {/* Prompt assets banner */}
+          {promptAssets.length > 0 && (
+            <div className="bg-blue-50 px-4 py-3 rounded-lg mb-6 border border-blue-100 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <AlertCircle className="h-5 w-5 text-blue-500" />
+                <span className="font-medium">Available Prompts:</span>
+                <div className="flex flex-wrap gap-1 max-w-xl">
+                  {promptAssets.map((asset) => (
+                    <Badge key={asset.id} variant="outline" className="bg-white whitespace-nowrap flex items-center gap-1">
+                      <span>{asset.icon}</span>
+                      <span className="max-w-32 truncate">{asset.title}</span>
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
           <h2 className="text-2xl font-semibold text-insta-text mb-6">Content Creation Topics</h2>
           
           <TopicsGrid 
