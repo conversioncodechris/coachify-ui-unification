@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   Card, 
@@ -41,32 +42,38 @@ const Settings = () => {
         content: 0
       };
       
-      ["compliance", "coach", "content"].forEach(type => {
-        const typeAssets = localStorage.getItem(`${type}Assets`);
-        if (typeAssets) {
-          try {
-            counts[type as keyof typeof counts] = JSON.parse(typeAssets).length;
-          } catch (error) {
-            console.error(`Error parsing ${type}Assets:`, error);
-          }
-        }
-      });
+      // Use consistent key for content assets
+      counts.compliance = getAssetCount("complianceAssets");
+      counts.coach = getAssetCount("coachAssets");
+      counts.content = getAssetCount("contentAssets");
       
       setAssetCounts(counts);
     };
     
+    const getAssetCount = (key: string): number => {
+      const typeAssets = localStorage.getItem(key);
+      if (typeAssets) {
+        try {
+          return JSON.parse(typeAssets).length;
+        } catch (error) {
+          console.error(`Error parsing ${key}:`, error);
+          return 0;
+        }
+      }
+      return 0;
+    };
+    
     loadAssetCounts();
     
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key && e.key.includes('Assets')) {
-        loadAssetCounts();
-      }
+    const handleStorageChange = () => {
+      loadAssetCounts();
     };
     
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
+  // Updated to listen to both dialog close and storage events
   useEffect(() => {
     if (!assetDialogOpen) {
       const counts = {
@@ -75,19 +82,26 @@ const Settings = () => {
         content: 0
       };
       
-      ["compliance", "coach", "content"].forEach(type => {
-        const typeAssets = localStorage.getItem(`${type}Assets`);
-        if (typeAssets) {
-          try {
-            counts[type as keyof typeof counts] = JSON.parse(typeAssets).length;
-          } catch (error) {
-            console.error(`Error parsing ${type}Assets:`, error);
-          }
-        }
-      });
+      // Use consistent key for content assets
+      counts.compliance = getAssetCount("complianceAssets");
+      counts.coach = getAssetCount("coachAssets");
+      counts.content = getAssetCount("contentAssets");
       
       setAssetCounts(counts);
     }
+    
+    const getAssetCount = (key: string): number => {
+      const typeAssets = localStorage.getItem(key);
+      if (typeAssets) {
+        try {
+          return JSON.parse(typeAssets).length;
+        } catch (error) {
+          console.error(`Error parsing ${key}:`, error);
+          return 0;
+        }
+      }
+      return 0;
+    };
   }, [assetDialogOpen]);
 
   const handleOpenAssetDialog = (type: "compliance" | "coach" | "content") => {

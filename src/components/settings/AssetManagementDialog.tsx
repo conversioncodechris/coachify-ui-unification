@@ -35,7 +35,7 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
   // Load assets from localStorage when dialog opens
   useEffect(() => {
     if (isOpen) {
-      const storedKey = `${aiType}Assets`;
+      const storedKey = aiType === "content" ? "contentAssets" : `${aiType}Assets`;
       const storedAssets = localStorage.getItem(storedKey);
       if (storedAssets) {
         try {
@@ -43,6 +43,8 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
         } catch (error) {
           console.error(`Error parsing ${storedKey}:`, error);
         }
+      } else {
+        setAssets([]);
       }
     }
   }, [isOpen, aiType]);
@@ -84,8 +86,8 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
   };
 
   const handleSaveChanges = () => {
-    // Save to localStorage
-    const storedKey = `${aiType}Assets`;
+    // Save to localStorage - using consistent key for content assets
+    const storedKey = aiType === "content" ? "contentAssets" : `${aiType}Assets`;
     localStorage.setItem(storedKey, JSON.stringify(assets));
     
     // Also update Settings asset counts
@@ -98,12 +100,13 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
       
       // Get counts for each AI type
       ["compliance", "coach", "content"].forEach(type => {
-        const typeAssets = localStorage.getItem(`${type}Assets`);
+        const typeKey = type === "content" ? "contentAssets" : `${type}Assets`;
+        const typeAssets = localStorage.getItem(typeKey);
         if (typeAssets) {
           try {
             counts[type as keyof typeof counts] = JSON.parse(typeAssets).length;
           } catch (error) {
-            console.error(`Error parsing ${type}Assets:`, error);
+            console.error(`Error parsing ${typeKey}:`, error);
           }
         }
       });
@@ -125,6 +128,9 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
         description: `${assets.length} assets updated for ${aiTypeTitle[aiType]}.`,
       });
     }
+    
+    // Force a window storage event to notify other components
+    window.dispatchEvent(new Event('storage'));
     
     onOpenChange(false);
   };

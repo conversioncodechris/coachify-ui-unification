@@ -31,6 +31,7 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
   // Load prompt assets from localStorage and convert to topic cards
   useEffect(() => {
     const loadPromptsAsTopics = () => {
+      // Use consistent key "contentAssets"
       const storedAssets = localStorage.getItem('contentAssets');
       if (storedAssets) {
         try {
@@ -70,6 +71,16 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     };
 
     loadPromptsAsTopics();
+    
+    // Add event listener to refresh topics when localStorage changes
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'contentAssets') {
+        loadPromptsAsTopics();
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, [setTopics, toast]);
 
   const handleHideTopic = (index: number, event: React.MouseEvent) => {
