@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useToast } from "../../hooks/use-toast";
 import { ContentTopic } from './ContentTopicCard';
@@ -31,8 +30,8 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
   // Load prompt assets from localStorage and convert to topic cards
   useEffect(() => {
     const loadPromptsAsTopics = () => {
-      // Use consistent key "contentAssets"
       const storedAssets = localStorage.getItem('contentAssets');
+      
       if (storedAssets) {
         try {
           const assets = JSON.parse(storedAssets);
@@ -42,14 +41,14 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
           // Convert prompts to topics if they don't already exist
           if (prompts.length > 0) {
             setTopics(prevTopics => {
-              const existingTitles = prevTopics.map(topic => topic.title);
+              const existingTitles = new Set(prevTopics.map(topic => topic.title));
               
               const newTopicsFromPrompts = prompts
-                .filter((prompt: ContentAsset) => !existingTitles.includes(prompt.title))
+                .filter((prompt: ContentAsset) => !existingTitles.has(prompt.title))
                 .map((prompt: ContentAsset) => ({
                   icon: prompt.icon || '📝',
                   title: prompt.title,
-                  description: prompt.subtitle || 'Prompt-based topic', // Fix: Use subtitle instead of description
+                  description: prompt.subtitle || 'Prompt-based topic',
                   isNew: true
                 }));
                 
@@ -80,6 +79,10 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     };
     
     window.addEventListener('storage', handleStorageChange);
+    
+    // Ensure we have the latest assets
+    window.dispatchEvent(new Event('storage'));
+    
     return () => window.removeEventListener('storage', handleStorageChange);
   }, [setTopics, toast]);
 

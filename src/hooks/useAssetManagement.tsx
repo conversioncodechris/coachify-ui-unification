@@ -34,15 +34,10 @@ export function useAssetManagement() {
 
   const loadAssetCounts = () => {
     const counts = {
-      compliance: 0,
-      coach: 0, 
-      content: 0
+      compliance: getAssetCount("complianceAssets"),
+      coach: getAssetCount("coachAssets"), 
+      content: getAssetCount("contentAssets")
     };
-    
-    // Use consistent key for content assets
-    counts.compliance = getAssetCount("complianceAssets");
-    counts.coach = getAssetCount("coachAssets");
-    counts.content = getAssetCount("contentAssets");
     
     setAssetCounts(counts);
   };
@@ -50,12 +45,25 @@ export function useAssetManagement() {
   useEffect(() => {
     loadAssetCounts();
     
-    const handleStorageChange = () => {
-      loadAssetCounts();
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'contentAssets' || e.key === 'complianceAssets' || e.key === 'coachAssets' || e.key === 'assetCounts') {
+        loadAssetCounts();
+      }
     };
     
     window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    
+    // Also listen for custom storage events triggered by our application
+    const handleCustomEvent = () => {
+      loadAssetCounts();
+    };
+    
+    window.addEventListener('storage', handleCustomEvent);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('storage', handleCustomEvent);
+    };
   }, []);
 
   useEffect(() => {
@@ -74,6 +82,7 @@ export function useAssetManagement() {
     assetDialogOpen,
     selectedAiType,
     setAssetDialogOpen,
-    handleOpenAssetDialog
+    handleOpenAssetDialog,
+    loadAssetCounts
   };
 }

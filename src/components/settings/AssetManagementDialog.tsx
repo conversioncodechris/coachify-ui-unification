@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   Dialog,
@@ -32,7 +31,6 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
   const [activeTab, setActiveTab] = useState<AssetType>("prompt");
   const { toast } = useToast();
   
-  // Load assets from localStorage when dialog opens
   useEffect(() => {
     if (isOpen) {
       const storedKey = aiType === "content" ? "contentAssets" : `${aiType}Assets`;
@@ -61,7 +59,6 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
   const handleAssetAdded = (newAssets: ContentAsset[]) => {
     setAssets((prev) => [...prev, ...newAssets]);
     
-    // Show toast notification when asset is added
     if (aiType === "content" && activeTab === "prompt") {
       toast({
         title: "Prompt Added",
@@ -86,11 +83,9 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
   };
 
   const handleSaveChanges = () => {
-    // Save to localStorage - using consistent key for content assets
     const storedKey = aiType === "content" ? "contentAssets" : `${aiType}Assets`;
     localStorage.setItem(storedKey, JSON.stringify(assets));
     
-    // Also update Settings asset counts
     const updateCounts = () => {
       const counts = {
         compliance: 0,
@@ -98,7 +93,6 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
         content: 0
       };
       
-      // Get counts for each AI type
       ["compliance", "coach", "content"].forEach(type => {
         const typeKey = type === "content" ? "contentAssets" : `${type}Assets`;
         const typeAssets = localStorage.getItem(typeKey);
@@ -116,7 +110,6 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
     
     updateCounts();
     
-    // Additional messaging for content prompts
     if (aiType === "content" && assets.some(asset => asset.type === "prompt")) {
       toast({
         title: "Changes Saved",
@@ -129,13 +122,14 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
       });
     }
     
-    // Force a window storage event to notify other components
-    window.dispatchEvent(new Event('storage'));
+    window.dispatchEvent(new StorageEvent('storage', {
+      key: storedKey,
+      newValue: JSON.stringify(assets)
+    }));
     
     onOpenChange(false);
   };
 
-  // Get count of assets by type
   const getAssetCountByType = (type: AssetType) => {
     return assets.filter(asset => asset.type === type).length;
   };

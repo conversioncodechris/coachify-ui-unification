@@ -127,8 +127,8 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
             onBackToTopics={onBackToTopics}
           />
           
-          {/* Prompt assets banner */}
-          {promptAssets.length > 0 ? (
+          {/* Prompt assets banner - only show if there are prompts */}
+          {promptAssets.length > 0 && (
             <div className="bg-blue-50 px-4 py-2 border-b flex items-center justify-between overflow-x-auto">
               <div className="flex items-center gap-2">
                 <AlertCircle className="h-4 w-4 text-blue-500" />
@@ -141,25 +141,6 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
                     </Badge>
                   ))}
                 </div>
-              </div>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={handleRefreshAssets}
-                disabled={isRefreshing}
-                className="h-8 w-8 p-0"
-              >
-                <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-              </Button>
-            </div>
-          ) : (
-            <div className="bg-blue-50 px-4 py-2 border-b flex items-center justify-between overflow-x-auto">
-              <div className="flex items-center gap-2">
-                <AlertCircle className="h-4 w-4 text-blue-500" />
-                <span className="text-sm font-medium">No prompts available.</span>
-                <span className="text-sm text-muted-foreground">
-                  Add prompts in Settings → Admin → Content AI.
-                </span>
               </div>
               <Button 
                 variant="ghost" 
