@@ -27,6 +27,7 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     description: ''
   });
   const [isAddTopicOpen, setIsAddTopicOpen] = useState(false);
+  const [prompts, setPrompts] = useState<ContentAsset[]>([]);
 
   // Load prompt assets from localStorage and convert to topic cards
   useEffect(() => {
@@ -36,22 +37,24 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
       
       if (storedAssets) {
         try {
+          console.log("Parsing stored assets...");
           const assets = JSON.parse(storedAssets);
-          // Filter assets to only show prompts
-          const prompts = assets.filter((asset: ContentAsset) => asset.type === 'prompt');
-          console.log("Found prompts:", prompts.length);
           
-          if (prompts.length > 0) {
-            // Create a map of existing topics by title for efficient lookup
-            const existingTopicsByTitle = new Map(
-              topics.map(topic => [topic.title, topic])
-            );
+          // Filter assets to only show prompts
+          const filteredPrompts = assets.filter((asset: ContentAsset) => asset.type === 'prompt');
+          setPrompts(filteredPrompts);
+          console.log("Found prompts:", filteredPrompts.length);
+          
+          if (filteredPrompts.length > 0) {
+            // Get existing topic titles for duplicate checking
+            const existingTopicTitles = new Set(topics.map(topic => topic.title));
             
             // Convert prompts to topics, but only if they don't already exist
             const newTopics: ContentTopic[] = [];
             
-            prompts.forEach((prompt: ContentAsset) => {
-              if (!existingTopicsByTitle.has(prompt.title)) {
+            filteredPrompts.forEach((prompt: ContentAsset) => {
+              if (!existingTopicTitles.has(prompt.title)) {
+                console.log("Converting prompt to topic:", prompt.title);
                 newTopics.push({
                   icon: prompt.icon || '📝',
                   title: prompt.title,
@@ -100,18 +103,19 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     
     window.addEventListener('contentAssetsUpdated', handleCustomEvent as EventListener);
     
-    // Force initial load by dispatching a custom event
-    setTimeout(() => {
-      console.log("Forcing initial prompt load...");
-      const customEvent = new Event('contentAssetsUpdated');
-      window.dispatchEvent(customEvent);
-    }, 500);
-    
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('contentAssetsUpdated', handleCustomEvent as EventListener);
     };
   }, [topics, setTopics, toast]);
+
+  // Re-check for new prompts whenever the component updates
+  useEffect(() => {
+    // Trigger a check for new prompts when dialogOpen state changes
+    const customEvent = new Event('contentAssetsUpdated');
+    console.log("Manually dispatching contentAssetsUpdated event");
+    window.dispatchEvent(customEvent);
+  }, []);
 
   const handleHideTopic = (index: number, event: React.MouseEvent) => {
     event.stopPropagation();

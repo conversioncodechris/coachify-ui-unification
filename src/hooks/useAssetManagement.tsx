@@ -41,16 +41,16 @@ export function useAssetManagement() {
     };
     
     setAssetCounts(counts);
+    console.log("Asset counts updated:", counts);
     
     // Also store counts in localStorage for other components to access
     localStorage.setItem('assetCounts', JSON.stringify(counts));
     
-    // If content assets have changed, trigger the contentAssetsUpdated event
-    if (counts.content > 0) {
-      console.log("Content assets changed, triggering update event");
-      const customEvent = new Event('contentAssetsUpdated');
-      window.dispatchEvent(customEvent);
-    }
+    // Always trigger content assets updated event when loading asset counts
+    // This ensures the topics are refreshed whenever assets change
+    console.log("Triggering contentAssetsUpdated event from useAssetManagement");
+    const customEvent = new Event('contentAssetsUpdated');
+    window.dispatchEvent(customEvent);
   };
 
   useEffect(() => {
@@ -85,6 +85,7 @@ export function useAssetManagement() {
       loadAssetCounts();
       
       // Force update of topics by dispatching custom event
+      console.log("Asset dialog closed, dispatching contentAssetsUpdated event");
       const customEvent = new Event('contentAssetsUpdated');
       window.dispatchEvent(customEvent);
     }

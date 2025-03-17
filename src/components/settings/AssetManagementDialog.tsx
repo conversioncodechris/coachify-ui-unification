@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { FileText, FileVideo, Book, Users, MessageSquare, Upload, Cloud } from "lucide-react";
+import { FileText, FileVideo, Book, Users, MessageSquare, Plus } from "lucide-react";
 import AssetUploader from "./AssetUploader";
 import AssetsList from "./AssetsList";
 import { ContentAsset, AssetType } from "@/types/contentAssets";
@@ -38,6 +38,7 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
       const storedAssets = localStorage.getItem(storedKey);
       if (storedAssets) {
         try {
+          console.log(`Loading ${storedKey} assets`);
           setAssets(JSON.parse(storedAssets));
         } catch (error) {
           console.error(`Error parsing ${storedKey}:`, error);
@@ -58,7 +59,11 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
   };
 
   const handleAssetAdded = (newAssets: ContentAsset[]) => {
-    setAssets((prev) => [...prev, ...newAssets]);
+    setAssets((prev) => {
+      const updated = [...prev, ...newAssets];
+      console.log(`Added ${newAssets.length} assets, new total: ${updated.length}`);
+      return updated;
+    });
     
     if (aiType === "content" && activeTab === "prompt") {
       toast({
@@ -114,7 +119,12 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
     
     updateCounts();
     
-    if (aiType === "content" && assets.some(asset => asset.type === "prompt")) {
+    if (aiType === "content") {
+      // Ensure the contentAssetsUpdated event is dispatched
+      console.log("Dispatching contentAssetsUpdated event from dialog");
+      const customEvent = new Event('contentAssetsUpdated');
+      window.dispatchEvent(customEvent);
+      
       toast({
         title: "Changes Saved",
         description: `Prompts will appear as topic cards in Content AI.`,
@@ -125,11 +135,6 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
         description: `${assets.length} assets updated for ${aiTypeTitle[aiType]}.`,
       });
     }
-    
-    // Dispatch custom event first (for same window)
-    console.log("Dispatching contentAssetsUpdated event");
-    const customEvent = new Event('contentAssetsUpdated');
-    window.dispatchEvent(customEvent);
     
     // Close the dialog after saving
     onOpenChange(false);
