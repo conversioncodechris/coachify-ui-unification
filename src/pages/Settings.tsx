@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { User, Bell, Lock, Globe, Mail, FileText } from "lucide-react";
+import { User, Bell, Lock, Globe, Mail, FileText, UserPlus } from "lucide-react";
 import AssetManagementDialog from "@/components/settings/AssetManagementDialog";
 
 const Settings = () => {
@@ -88,6 +88,22 @@ const Settings = () => {
                       onChange={(e) => setEmail(e.target.value)} 
                     />
                   </div>
+                </div>
+              </div>
+              
+              <Separator />
+              
+              {/* Moved User Management section to Account tab */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium">User Management</h3>
+                <div className="border rounded-md p-4">
+                  <p className="text-muted-foreground">
+                    You have access to manage 12 user accounts.
+                  </p>
+                  <Button className="mt-4">
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    Manage Users
+                  </Button>
                 </div>
               </div>
               
@@ -233,17 +249,7 @@ const Settings = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium">User Management</h3>
-                <div className="border rounded-md p-4">
-                  <p className="text-muted-foreground">
-                    You have access to manage 12 user accounts.
-                  </p>
-                  <Button className="mt-4">Manage Users</Button>
-                </div>
-              </div>
-              
-              <Separator />
+              {/* Removed User Management section from here */}
               
               <div className="space-y-4">
                 <h3 className="text-lg font-medium">Content Management</h3>
