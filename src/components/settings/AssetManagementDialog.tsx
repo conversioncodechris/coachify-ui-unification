@@ -60,10 +60,17 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
     setAssets((prev) => [...prev, ...newAssets]);
     
     // Show toast notification when asset is added
-    toast({
-      title: "Asset Added",
-      description: `Added to ${aiTypeTitle[aiType]} successfully.`,
-    });
+    if (aiType === "content" && activeTab === "prompt") {
+      toast({
+        title: "Prompt Added",
+        description: "This prompt will create a new topic card in Content AI.",
+      });
+    } else {
+      toast({
+        title: "Asset Added",
+        description: `Added to ${aiTypeTitle[aiType]} successfully.`,
+      });
+    }
   };
 
   const handleAssetDelete = (id: string) => {
@@ -106,10 +113,19 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
     
     updateCounts();
     
-    toast({
-      title: "Changes Saved",
-      description: `${assets.length} assets updated for ${aiTypeTitle[aiType]}.`,
-    });
+    // Additional messaging for content prompts
+    if (aiType === "content" && assets.some(asset => asset.type === "prompt")) {
+      toast({
+        title: "Changes Saved",
+        description: `Prompts will appear as topic cards in Content AI.`,
+      });
+    } else {
+      toast({
+        title: "Changes Saved",
+        description: `${assets.length} assets updated for ${aiTypeTitle[aiType]}.`,
+      });
+    }
+    
     onOpenChange(false);
   };
 
@@ -126,7 +142,10 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
             {aiTypeTitle[aiType]} Content Management
           </DialogTitle>
           <DialogDescription>
-            Add and manage assets for your AI system. These will be available in the AI interface.
+            {aiType === "content" ? 
+              "Add and manage assets for your AI system. Prompts will appear as topic cards in Content AI." :
+              "Add and manage assets for your AI system. These will be available in the AI interface."
+            }
           </DialogDescription>
         </DialogHeader>
 
@@ -150,6 +169,15 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
 
           {Object.keys(typeLabels).map((type) => (
             <TabsContent key={type} value={type} className="space-y-4">
+              {type === "prompt" && aiType === "content" && (
+                <div className="bg-blue-50 p-3 rounded-md border border-blue-100 mb-4">
+                  <p className="text-sm text-blue-800 flex items-center">
+                    <MessageSquare className="h-4 w-4 mr-2" />
+                    Prompts added here will appear as topic cards in Content AI.
+                  </p>
+                </div>
+              )}
+              
               <AssetUploader 
                 assetType={type as AssetType} 
                 onAssetAdded={handleAssetAdded} 
