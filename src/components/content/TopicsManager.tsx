@@ -31,6 +31,7 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
   // Load prompt assets from localStorage and convert to topic cards
   useEffect(() => {
     const loadPromptsAsTopics = () => {
+      console.log("Loading prompts as topics...");
       const storedAssets = localStorage.getItem('contentAssets');
       
       if (storedAssets) {
@@ -38,6 +39,7 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
           const assets = JSON.parse(storedAssets);
           // Filter assets to only show prompts
           const prompts = assets.filter((asset: ContentAsset) => asset.type === 'prompt');
+          console.log("Found prompts:", prompts);
           
           // Convert prompts to topics if they don't already exist
           if (prompts.length > 0) {
@@ -52,6 +54,8 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
                   description: prompt.subtitle || 'Prompt-based topic',
                   isNew: true
                 }));
+              
+              console.log("New topics from prompts:", newTopicsFromPrompts);
                 
               if (newTopicsFromPrompts.length > 0) {
                 toast({
@@ -76,6 +80,7 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     // Add event listener for storage changes from other tabs/windows
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'contentAssets') {
+        console.log("Storage event detected, reloading prompts...");
         loadPromptsAsTopics();
       }
     };
@@ -84,10 +89,17 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     
     // Add listener for custom events within the same window
     const handleCustomEvent = () => {
+      console.log("Custom event detected, reloading prompts...");
       loadPromptsAsTopics();
     };
     
     window.addEventListener('contentAssetsUpdated', handleCustomEvent as EventListener);
+    
+    // Force initial load by dispatching a custom event
+    setTimeout(() => {
+      const customEvent = new Event('contentAssetsUpdated');
+      window.dispatchEvent(customEvent);
+    }, 500);
     
     return () => {
       window.removeEventListener('storage', handleStorageChange);

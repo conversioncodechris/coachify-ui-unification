@@ -40,6 +40,9 @@ export function useAssetManagement() {
     };
     
     setAssetCounts(counts);
+    
+    // Also store counts in localStorage for other components to access
+    localStorage.setItem('assetCounts', JSON.stringify(counts));
   };
 
   useEffect(() => {

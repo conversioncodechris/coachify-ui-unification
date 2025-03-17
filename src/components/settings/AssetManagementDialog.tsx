@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
   Dialog,
@@ -122,11 +123,13 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
       });
     }
     
+    // Dispatch both types of events to ensure all components update
     window.dispatchEvent(new StorageEvent('storage', {
       key: storedKey,
       newValue: JSON.stringify(assets)
     }));
     
+    // Create and dispatch a custom event
     const customEvent = new Event('contentAssetsUpdated');
     window.dispatchEvent(customEvent);
     
