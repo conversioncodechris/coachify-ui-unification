@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ContentSidebar from '../components/sidebar/ContentSidebar';
@@ -49,6 +48,20 @@ const ContentAI = () => {
       }
     }
   }, [chatId, setActiveChats]);
+
+  // Listen for contentAssetsUpdated event to refresh topics
+  useEffect(() => {
+    const handleContentAssetsUpdated = () => {
+      console.log("ContentAI: contentAssetsUpdated event received");
+      // No need to do anything here, the TopicsManager component will handle this
+    };
+    
+    window.addEventListener('contentAssetsUpdated', handleContentAssetsUpdated as EventListener);
+    
+    return () => {
+      window.removeEventListener('contentAssetsUpdated', handleContentAssetsUpdated as EventListener);
+    };
+  }, []);
 
   // Handle browser navigation events
   useEffect(() => {

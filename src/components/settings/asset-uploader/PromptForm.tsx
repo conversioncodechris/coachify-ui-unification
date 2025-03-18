@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -50,6 +49,12 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt }) => {
     
     console.log("Creating new prompt asset:", newPromptAsset);
     onAddPrompt(newPromptAsset);
+    
+    setTimeout(() => {
+      console.log("Dispatching contentAssetsUpdated event after creating prompt");
+      const customEvent = new Event('contentAssetsUpdated');
+      window.dispatchEvent(customEvent);
+    }, 100);
     
     setTypedContent({
       title: "",

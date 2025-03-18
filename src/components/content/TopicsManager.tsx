@@ -37,7 +37,7 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
       
       if (storedAssets) {
         try {
-          console.log("Parsing stored assets...");
+          console.log("Parsing stored assets:", storedAssets);
           const assets = JSON.parse(storedAssets);
           
           // Filter assets to only show prompts
@@ -111,7 +111,7 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
 
   // Re-check for new prompts whenever the component updates
   useEffect(() => {
-    // Trigger a check for new prompts when dialogOpen state changes
+    // Manually trigger a check for new prompts when component mounts
     const customEvent = new Event('contentAssetsUpdated');
     console.log("Manually dispatching contentAssetsUpdated event");
     window.dispatchEvent(customEvent);

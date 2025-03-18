@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   Dialog,
@@ -62,6 +61,16 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
     setAssets((prev) => {
       const updated = [...prev, ...newAssets];
       console.log(`Added ${newAssets.length} assets, new total: ${updated.length}`);
+      
+      const storedKey = aiType === "content" ? "contentAssets" : `${aiType}Assets`;
+      localStorage.setItem(storedKey, JSON.stringify(updated));
+      
+      if (aiType === "content") {
+        console.log("Dispatching contentAssetsUpdated event after adding assets");
+        const event = new Event('contentAssetsUpdated');
+        window.dispatchEvent(event);
+      }
+      
       return updated;
     });
     
@@ -91,7 +100,6 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
   const handleSaveChanges = () => {
     const storedKey = aiType === "content" ? "contentAssets" : `${aiType}Assets`;
     
-    // Save assets to localStorage
     console.log(`Saving ${assets.length} assets to ${storedKey}`);
     localStorage.setItem(storedKey, JSON.stringify(assets));
     
@@ -120,7 +128,6 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
     updateCounts();
     
     if (aiType === "content") {
-      // Ensure the contentAssetsUpdated event is dispatched
       console.log("Dispatching contentAssetsUpdated event from dialog");
       const customEvent = new Event('contentAssetsUpdated');
       window.dispatchEvent(customEvent);
@@ -136,7 +143,6 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
       });
     }
     
-    // Close the dialog after saving
     onOpenChange(false);
   };
 
