@@ -13,4 +13,5 @@ export interface ContentAsset {
   fileName?: string;
   dateAdded: Date;
   size?: number; // in bytes
+  content?: string; // Added content property for storing text content like prompts
 }
