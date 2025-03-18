@@ -67,8 +67,8 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
             console.log("New topics to add:", newTopics.length);
             
             if (newTopics.length > 0) {
-              // Update the state with new topics
-              setTopics(prevTopics => [...prevTopics, ...newTopics]);
+              // Update the state with new topics - ADD TOPICS TO THE BEGINNING of the array
+              setTopics(prevTopics => [...newTopics, ...prevTopics]);
               
               toast({
                 title: "New topics added",
@@ -161,11 +161,13 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
       return;
     }
 
-    setTopics(prevTopics => [...prevTopics, { 
+    // Add new manually-created topic to the BEGINNING of the array
+    setTopics(prevTopics => [{ 
       ...newTopic,
       title: newTopic.title.trim(),
-      description: newTopic.description.trim()
-    }]);
+      description: newTopic.description.trim(),
+      isNew: true // Mark manually-created topics as new
+    }, ...prevTopics]);
     
     setIsAddTopicOpen(false);
     
