@@ -59,7 +59,7 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
                   icon: prompt.icon || '📝',
                   title: prompt.title,
                   description: prompt.subtitle || 'Prompt-based topic',
-                  isNew: true
+                  isNew: prompt.isNew || true // Ensure isNew is set, defaulting to true if not present
                 });
               }
             });

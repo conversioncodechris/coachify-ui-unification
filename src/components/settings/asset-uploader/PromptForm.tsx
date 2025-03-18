@@ -44,7 +44,8 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt }) => {
       icon: emojiPicker,
       source: "created",
       dateAdded: new Date(),
-      content: typedContent.content || ""
+      content: typedContent.content || "",
+      isNew: true // Explicitly mark as new
     };
     
     console.log("Creating new prompt asset:", newPromptAsset);

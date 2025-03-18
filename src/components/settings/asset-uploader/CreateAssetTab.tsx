@@ -21,7 +21,8 @@ const CreateAssetTab: React.FC<CreateAssetTabProps> = ({ assetType, onAssetAdded
       subtitle: "Click to edit",
       icon: emojiPicker,
       source: "created",
-      dateAdded: new Date()
+      dateAdded: new Date(),
+      isNew: true // Explicitly mark as new
     };
     
     onAssetAdded([newAsset]);

@@ -1,6 +1,5 @@
 
-export type AssetType = 'prompt' | 'pdf' | 'guidelines' | 'roleplay' | 'video' | 'other';
-export type AssetSource = 'upload' | 'google-drive' | 'dropbox' | 'created';
+export type AssetType = "prompt" | "pdf" | "guidelines" | "roleplay" | "video" | "other";
 
 export interface ContentAsset {
   id: string;
@@ -8,10 +7,11 @@ export interface ContentAsset {
   title: string;
   subtitle: string;
   icon: string;
-  source: AssetSource;
+  content?: string;
   url?: string;
-  fileName?: string;
+  fileExtension?: string;
+  size?: number;
+  source: string;
   dateAdded: Date;
-  size?: number; // in bytes
-  content?: string; // Added content property for storing text content like prompts
+  isNew?: boolean;
 }
