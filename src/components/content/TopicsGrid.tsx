@@ -18,12 +18,14 @@ const TopicsGrid: React.FC<TopicsGridProps> = ({
   onTogglePin,
   onAddTopicClick
 }) => {
-  // Sort and filter topics
-  const sortedTopics = [...topics].sort((a, b) => {
-    if (a.pinned && !b.pinned) return -1;
-    if (!a.pinned && b.pinned) return 1;
-    return 0;
-  }).filter(topic => !topic.hidden);
+  // Sort and filter topics - first make sure hidden topics are properly filtered out
+  const sortedTopics = [...topics]
+    .filter(topic => topic.hidden !== true) // Explicitly check for !true to handle undefined
+    .sort((a, b) => {
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      return 0;
+    });
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
