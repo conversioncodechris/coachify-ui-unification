@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { ContentAsset, AssetType } from "@/types/contentAssets";
+import { ContentAsset, AssetType, AssetSource } from "@/types/contentAssets";
 import { v4 as uuidv4 } from "uuid";
 import EmojiPicker from "./EmojiPicker";
 

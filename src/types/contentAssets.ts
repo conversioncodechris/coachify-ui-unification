@@ -1,5 +1,6 @@
 
 export type AssetType = "prompt" | "pdf" | "guidelines" | "roleplay" | "video" | "other";
+export type AssetSource = "upload" | "google-drive" | "dropbox" | "created";
 
 export interface ContentAsset {
   id: string;
@@ -10,8 +11,9 @@ export interface ContentAsset {
   content?: string;
   url?: string;
   fileExtension?: string;
+  fileName?: string; // Added fileName property
   size?: number;
-  source: string;
+  source: AssetSource; // Changed to use AssetSource type
   dateAdded: Date;
   isNew?: boolean;
 }
