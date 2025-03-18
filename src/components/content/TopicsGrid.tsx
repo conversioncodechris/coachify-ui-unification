@@ -6,8 +6,8 @@ import AddContentTopicCard from './AddContentTopicCard';
 interface TopicsGridProps {
   topics: ContentTopic[];
   onTopicClick: (title: string) => void;
-  onHideTopic: (index: number, event: React.MouseEvent) => void;
-  onTogglePin: (index: number, event: React.MouseEvent) => void;
+  onHideTopic: (topicId: string, event: React.MouseEvent) => void;
+  onTogglePin: (topicId: string, event: React.MouseEvent) => void;
   onAddTopicClick: () => void;
 }
 
@@ -27,11 +27,10 @@ const TopicsGrid: React.FC<TopicsGridProps> = ({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {sortedTopics.map((topic, index) => (
+      {sortedTopics.map((topic) => (
         <ContentTopicCard
-          key={index}
+          key={topic.id}
           topic={topic}
-          index={topics.findIndex(t => t.title === topic.title)}
           onTopicClick={onTopicClick}
           onHideTopic={onHideTopic}
           onTogglePin={onTogglePin}

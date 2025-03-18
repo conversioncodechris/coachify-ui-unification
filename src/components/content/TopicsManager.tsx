@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useToast } from "../../hooks/use-toast";
 import { ContentTopic } from './ContentTopicCard';
@@ -22,6 +21,7 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
 }) => {
   const { toast } = useToast();
   const [newTopic, setNewTopic] = useState<ContentTopic>({
+    id: `manual-${Date.now()}`,
     icon: '📝',
     title: '',
     description: ''
@@ -133,15 +133,12 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     }
   }, [processedPromptIds.size]);
 
-  const handleHideTopic = (index: number, event: React.MouseEvent) => {
+  const handleHideTopic = (topicId: string, event: React.MouseEvent) => {
     event.stopPropagation();
     setTopics(prevTopics => {
-      const updatedTopics = [...prevTopics];
-      // Make sure that the topic at this index is marked as hidden
-      if (index >= 0 && index < updatedTopics.length) {
-        updatedTopics[index] = { ...updatedTopics[index], hidden: true };
-      }
-      return updatedTopics;
+      return prevTopics.map(topic => 
+        topic.id === topicId ? { ...topic, hidden: true } : topic
+      );
     });
     
     toast({
@@ -150,23 +147,18 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     });
   };
 
-  const handleTogglePin = (index: number, event: React.MouseEvent) => {
+  const handleTogglePin = (topicId: string, event: React.MouseEvent) => {
     event.stopPropagation();
     setTopics(prevTopics => {
-      const updatedTopics = [...prevTopics];
-      // Make sure the index is valid before toggling
-      if (index >= 0 && index < updatedTopics.length) {
-        updatedTopics[index] = { 
-          ...updatedTopics[index], 
-          pinned: !updatedTopics[index].pinned 
-        };
-      }
-      return updatedTopics;
+      return prevTopics.map(topic => 
+        topic.id === topicId ? { ...topic, pinned: !topic.pinned } : topic
+      );
     });
   };
 
   const handleAddTopicClick = () => {
     setNewTopic({
+      id: `manual-${Date.now()}`,
       icon: '📝',
       title: '',
       description: ''
@@ -194,7 +186,7 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     // Add new manually-created topic to the BEGINNING of the array
     setTopics(prevTopics => [{ 
       ...newTopic,
-      id: `manual-${Date.now()}`, // Generate a unique ID for manually created topics
+      id: `manual-${Date.now()}`, // Ensure a unique ID for manually created topics
       title: newTopic.title.trim(),
       description: newTopic.description.trim(),
       isNew: true // Mark manually-created topics as new

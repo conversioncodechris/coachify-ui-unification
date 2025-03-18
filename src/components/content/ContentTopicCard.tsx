@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/tooltip";
 
 export interface ContentTopic {
-  id?: string;  // Add ID field to track unique topics
+  id: string;  // Required ID field to track unique topics
   icon: string;
   title: string;
   description: string;
@@ -20,15 +20,13 @@ export interface ContentTopic {
 
 interface ContentTopicCardProps {
   topic: ContentTopic;
-  index: number;
   onTopicClick: (title: string) => void;
-  onHideTopic: (index: number, event: React.MouseEvent) => void;
-  onTogglePin: (index: number, event: React.MouseEvent) => void;
+  onHideTopic: (topicId: string, event: React.MouseEvent) => void;
+  onTogglePin: (topicId: string, event: React.MouseEvent) => void;
 }
 
 const ContentTopicCard: React.FC<ContentTopicCardProps> = ({
   topic,
-  index,
   onTopicClick,
   onHideTopic,
   onTogglePin
@@ -68,7 +66,7 @@ const ContentTopicCard: React.FC<ContentTopicCardProps> = ({
                   <TooltipTrigger asChild>
                     <button 
                       className="text-insta-lightText hover:text-insta-text bg-white rounded-full p-1 shadow-sm"
-                      onClick={(e) => onHideTopic(index, e)}
+                      onClick={(e) => onHideTopic(topic.id, e)}
                     >
                       <EyeOff size={16} />
                     </button>
@@ -84,7 +82,7 @@ const ContentTopicCard: React.FC<ContentTopicCardProps> = ({
                   <TooltipTrigger asChild>
                     <button 
                       className={`text-insta-lightText hover:text-insta-text bg-white rounded-full p-1 shadow-sm ${topic.pinned ? 'text-insta-blue' : ''}`}
-                      onClick={(e) => onTogglePin(index, e)}
+                      onClick={(e) => onTogglePin(topic.id, e)}
                     >
                       {topic.pinned ? <PinOff size={16} /> : <Pin size={16} />}
                     </button>
