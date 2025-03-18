@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/tooltip";
 
 export interface ContentTopic {
+  id?: string;  // Add ID field to track unique topics
   icon: string;
   title: string;
   description: string;
