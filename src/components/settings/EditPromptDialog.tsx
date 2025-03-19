@@ -12,7 +12,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ContentAsset } from "@/types/contentAssets";
-import EmojiPicker from "./asset-uploader/EmojiPicker";
 import { useToast } from "@/hooks/use-toast";
 
 interface EditPromptDialogProps {
@@ -43,10 +42,6 @@ const EditPromptDialog: React.FC<EditPromptDialogProps> = ({
     }
   }, [isOpen, prompt]);
 
-  const handleSelectEmoji = (emoji: string) => {
-    setSelectedEmoji(emoji);
-  };
-
   const handleSave = () => {
     if (!title.trim()) {
       toast({
@@ -69,6 +64,9 @@ const EditPromptDialog: React.FC<EditPromptDialogProps> = ({
     onOpenChange(false);
   };
 
+  // Common emoji options
+  const emojiOptions = ["💬", "🗣️", "📝", "📚", "🧠", "💡", "🔍", "📊", "📋", "📈", "🤔", "🎯", "🏆", "✅", "⚠️", "🚨", "🔒", "🛡️", "📑", "📌"];
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
@@ -77,11 +75,21 @@ const EditPromptDialog: React.FC<EditPromptDialogProps> = ({
         </DialogHeader>
         
         <div className="space-y-4 py-4">
-          <EmojiPicker 
-            assetType="prompt" 
-            selectedEmoji={selectedEmoji} 
-            onSelectEmoji={handleSelectEmoji} 
-          />
+          <div className="space-y-2">
+            <Label htmlFor="prompt-icon">Icon</Label>
+            <div className="flex flex-wrap gap-2 p-2 border rounded-md">
+              {emojiOptions.map((emoji, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  className={`p-2 text-xl rounded hover:bg-gray-100 ${selectedEmoji === emoji ? 'bg-gray-200' : ''}`}
+                  onClick={() => setSelectedEmoji(emoji)}
+                >
+                  {emoji}
+                </button>
+              ))}
+            </div>
+          </div>
           
           <div className="space-y-2">
             <Label htmlFor="prompt-title">Topic Title</Label>

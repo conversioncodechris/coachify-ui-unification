@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ContentAsset } from "@/types/contentAssets";
 import { v4 as uuidv4 } from "uuid";
-import EmojiPicker from "./EmojiPicker";
 import { useToast } from "@/hooks/use-toast";
 
 interface PromptFormProps {
@@ -16,7 +15,7 @@ interface PromptFormProps {
 
 const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt, aiType = "content" }) => {
   const { toast } = useToast();
-  const [emojiPicker, setEmojiPicker] = useState<string>("💬");
+  const [selectedEmoji, setSelectedEmoji] = useState<string>("💬");
   const [typedContent, setTypedContent] = useState({
     title: "",
     subtitle: "",
@@ -24,9 +23,8 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt, aiType = "content"
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSelectEmoji = (emoji: string) => {
-    setEmojiPicker(emoji);
-  };
+  // Common emoji options
+  const emojiOptions = ["💬", "🗣️", "📝", "📚", "🧠", "💡", "🔍", "📊", "📋", "📈", "🤔", "🎯", "🏆", "✅", "⚠️", "🚨", "🔒", "🛡️", "📑", "📌"];
 
   const handleAddPrompt = () => {
     if (isSubmitting) return;
@@ -48,7 +46,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt, aiType = "content"
         type: 'prompt',
         title: typedContent.title.trim(),
         subtitle: typedContent.subtitle.trim() || "Prompt-based topic",
-        icon: emojiPicker,
+        icon: selectedEmoji,
         source: "created",
         dateAdded: new Date(),
         content: typedContent.content || "",
@@ -84,7 +82,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt, aiType = "content"
         subtitle: "",
         content: ""
       });
-      setEmojiPicker("💬");
+      setSelectedEmoji("💬");
       
       // Call parent handler
       onAddPrompt(newPromptAsset);
@@ -110,11 +108,21 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt, aiType = "content"
     <div className="space-y-4 border rounded-md p-4">
       <h3 className="font-medium text-center">Create New Content Topic for {aiType.charAt(0).toUpperCase() + aiType.slice(1)} AI</h3>
       <div className="space-y-4">
-        <EmojiPicker 
-          assetType="prompt" 
-          selectedEmoji={emojiPicker} 
-          onSelectEmoji={handleSelectEmoji} 
-        />
+        <div className="space-y-2">
+          <Label htmlFor="prompt-icon">Icon</Label>
+          <div className="flex flex-wrap gap-2 p-2 border rounded-md">
+            {emojiOptions.map((emoji, i) => (
+              <button
+                key={i}
+                type="button"
+                className={`p-2 text-xl rounded hover:bg-gray-100 ${selectedEmoji === emoji ? 'bg-gray-200' : ''}`}
+                onClick={() => setSelectedEmoji(emoji)}
+              >
+                {emoji}
+              </button>
+            ))}
+          </div>
+        </div>
         
         <div className="space-y-2">
           <Label htmlFor="prompt-title">Topic Title</Label>
@@ -160,7 +168,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt, aiType = "content"
             variant="outline" 
             onClick={() => {
               setTypedContent({ title: "", subtitle: "", content: "" });
-              setEmojiPicker("💬");
+              setSelectedEmoji("💬");
             }}
             disabled={isSubmitting}
           >
