@@ -1,35 +1,20 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { User, Bell, Lock, Globe, MessageSquare } from "lucide-react";
 import AccountTab from '@/components/settings/AccountTab';
 import NotificationsTab from '@/components/settings/NotificationsTab';
 import SecurityTab from '@/components/settings/SecurityTab';
-import AdminTab from '@/components/settings/AdminTab';
 import PromptsManager from '@/components/settings/PromptsManager';
 import AssetManagementDialog from "@/components/settings/AssetManagementDialog";
 import { useAssetManagement } from '@/hooks/useAssetManagement';
 
 const Settings = () => {
   const { 
-    assetCounts, 
-    assetDialogOpen, 
+    assetDialogOpen,
     selectedAiType, 
-    setAssetDialogOpen, 
-    handleOpenAssetDialog 
+    setAssetDialogOpen
   } = useAssetManagement();
-  const [currentAdminTab, setCurrentAdminTab] = useState<"general" | "prompts">("general");
-
-  // Force reload of prompts when switching to prompts tab
-  const handleTabChange = (value: string) => {
-    setCurrentAdminTab(value as "general" | "prompts");
-    
-    if (value === "prompts") {
-      // Trigger update event to ensure prompts are fresh
-      const customEvent = new Event('contentAssetsUpdated');
-      window.dispatchEvent(customEvent);
-    }
-  };
 
   return (
     <div className="container mx-auto pt-24 pb-12 px-4 max-w-5xl">
@@ -52,8 +37,8 @@ const Settings = () => {
             <span className="hidden sm:inline">Security</span>
           </TabsTrigger>
           <TabsTrigger value="admin" className="flex items-center gap-2">
-            <Globe className="h-4 w-4" />
-            <span className="hidden sm:inline">Admin</span>
+            <MessageSquare className="h-4 w-4" />
+            <span className="hidden sm:inline">Content</span>
           </TabsTrigger>
         </TabsList>
         
@@ -70,31 +55,7 @@ const Settings = () => {
         </TabsContent>
         
         <TabsContent value="admin">
-          <div className="mb-6">
-            <Tabs value={currentAdminTab} onValueChange={handleTabChange}>
-              <TabsList>
-                <TabsTrigger value="general" className="flex items-center gap-2">
-                  <Globe className="h-4 w-4" />
-                  <span>General</span>
-                </TabsTrigger>
-                <TabsTrigger value="prompts" className="flex items-center gap-2">
-                  <MessageSquare className="h-4 w-4" />
-                  <span>Prompts</span>
-                </TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="general" className="mt-6">
-                <AdminTab 
-                  assetCounts={assetCounts} 
-                  onOpenAssetDialog={handleOpenAssetDialog} 
-                />
-              </TabsContent>
-              
-              <TabsContent value="prompts" className="mt-6">
-                <PromptsManager />
-              </TabsContent>
-            </Tabs>
-          </div>
+          <PromptsManager />
         </TabsContent>
       </Tabs>
 
