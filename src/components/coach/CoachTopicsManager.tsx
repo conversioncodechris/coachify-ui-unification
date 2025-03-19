@@ -1,10 +1,11 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useToast } from "../../hooks/use-toast";
 import { CoachTopic } from './CoachTopicCard';
 import CoachTopicsGrid from './CoachTopicsGrid';
 import AddTopicDialog from '../compliance/AddTopicDialog';
 import ContentFooter from '../content/ContentFooter';
+import { ContentAsset } from '@/types/contentAssets';
 
 interface CoachTopicsManagerProps {
   topics: CoachTopic[];
@@ -26,6 +27,90 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
     description: ''
   });
   const [isAddTopicOpen, setIsAddTopicOpen] = useState(false);
+  const [prompts, setPrompts] = useState<ContentAsset[]>([]);
+  const [processedPromptIds, setProcessedPromptIds] = useState<Set<string>>(new Set());
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  useEffect(() => {
+    const loadPromptsAsTopics = () => {
+      console.log("Loading coach prompts as topics...");
+      const storedAssets = localStorage.getItem('coachAssets');
+      
+      if (storedAssets) {
+        try {
+          console.log("Parsing stored coach assets:", storedAssets);
+          const assets = JSON.parse(storedAssets);
+          
+          const filteredPrompts = assets.filter((asset: ContentAsset) => asset.type === 'prompt');
+          setPrompts(filteredPrompts);
+          console.log("Found coach prompts:", filteredPrompts.length);
+          
+          if (filteredPrompts.length > 0) {
+            const existingTopicTitles = new Set(topics.map(topic => topic.title));
+            const currentProcessedIds = new Set(processedPromptIds);
+            
+            const newTopics: CoachTopic[] = [];
+            
+            filteredPrompts.forEach((prompt: ContentAsset) => {
+              // Only add if not already processed AND not already in topics list
+              if (!currentProcessedIds.has(prompt.id) && !existingTopicTitles.has(prompt.title)) {
+                console.log("Converting coach prompt to topic:", prompt.title);
+                newTopics.push({
+                  icon: prompt.icon || '📝',
+                  title: prompt.title,
+                  description: prompt.subtitle || 'Prompt-based topic',
+                  isNew: true
+                });
+                
+                currentProcessedIds.add(prompt.id);
+              }
+            });
+            
+            console.log("New coach topics to add:", newTopics.length);
+            
+            if (newTopics.length > 0) {
+              setProcessedPromptIds(currentProcessedIds);
+              setTopics(prevTopics => [...newTopics, ...prevTopics]);
+              
+              toast({
+                title: "New topics added",
+                description: `${newTopics.length} topics created from your coach prompts.`,
+              });
+            }
+          }
+        } catch (error) {
+          console.error('Error parsing coach assets:', error);
+        }
+      }
+    };
+
+    // Only trigger the auto-load on initial render
+    if (isInitialLoad) {
+      loadPromptsAsTopics();
+      setIsInitialLoad(false);
+    }
+    
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'coachAssets') {
+        console.log("Storage event detected, reloading coach prompts...");
+        loadPromptsAsTopics();
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    const handleCustomEvent = () => {
+      console.log("Custom event detected, reloading coach prompts...");
+      loadPromptsAsTopics();
+    };
+    
+    window.addEventListener('contentAssetsUpdated', handleCustomEvent as EventListener);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('contentAssetsUpdated', handleCustomEvent as EventListener);
+    };
+  }, [topics, setTopics, toast, processedPromptIds, isInitialLoad]);
 
   const handleHideTopic = (index: number, event: React.MouseEvent) => {
     event.stopPropagation();

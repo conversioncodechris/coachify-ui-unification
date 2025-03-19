@@ -59,17 +59,19 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
 
   const handleAssetAdded = (newAssets: ContentAsset[]) => {
     setAssets((prev) => {
-      const updated = [...prev, ...newAssets];
+      const assetsWithType = newAssets.map(asset => ({
+        ...asset,
+        aiType: asset.aiType || aiType
+      }));
+      
+      const updated = [...prev, ...assetsWithType];
       console.log(`Added ${newAssets.length} assets, new total: ${updated.length}`);
       
       const storedKey = aiType === "content" ? "contentAssets" : `${aiType}Assets`;
       localStorage.setItem(storedKey, JSON.stringify(updated));
       
-      if (aiType === "content") {
-        console.log("Dispatching contentAssetsUpdated event after adding assets");
-        const event = new Event('contentAssetsUpdated');
-        window.dispatchEvent(event);
-      }
+      const customEvent = new Event('contentAssetsUpdated');
+      window.dispatchEvent(customEvent);
       
       return updated;
     });
@@ -185,18 +187,19 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
 
           {Object.keys(typeLabels).map((type) => (
             <TabsContent key={type} value={type} className="space-y-4">
-              {type === "prompt" && aiType === "content" && (
+              {type === "prompt" && (
                 <div className="bg-blue-50 p-3 rounded-md border border-blue-100 mb-4">
                   <p className="text-sm text-blue-800 flex items-center">
                     <MessageSquare className="h-4 w-4 mr-2" />
-                    Prompts added here will appear as topic cards in Content AI.
+                    Prompts added here will appear as topic cards in {aiType.charAt(0).toUpperCase() + aiType.slice(1)} AI.
                   </p>
                 </div>
               )}
               
               <AssetUploader 
                 assetType={type as AssetType} 
-                onAssetAdded={handleAssetAdded} 
+                onAssetAdded={handleAssetAdded}
+                aiType={aiType}
               />
 
               <AssetsList 

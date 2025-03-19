@@ -56,6 +56,19 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt, aiType = "content"
       };
       
       console.log(`Creating new ${aiType} prompt asset:`, newPromptAsset);
+      
+      // Directly save to localStorage for immediate effect
+      const storageKey = `${aiType}Assets`;
+      const existingAssets = localStorage.getItem(storageKey);
+      const assets = existingAssets ? JSON.parse(existingAssets) : [];
+      assets.push(newPromptAsset);
+      localStorage.setItem(storageKey, JSON.stringify(assets));
+      
+      // Dispatch event to notify about asset updates
+      const customEvent = new Event('contentAssetsUpdated');
+      window.dispatchEvent(customEvent);
+      
+      // Also pass to the parent handler
       onAddPrompt(newPromptAsset);
       
       setTypedContent({
