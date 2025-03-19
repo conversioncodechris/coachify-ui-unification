@@ -6,18 +6,25 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ContentAsset, AssetType } from "@/types/contentAssets";
 import { v4 as uuidv4 } from "uuid";
+import { useToast } from "@/hooks/use-toast";
 
 interface DraftAssetTabProps {
   assetType: AssetType;
   onAssetAdded: (assets: ContentAsset[]) => void;
+  aiType?: "compliance" | "coach" | "content";
 }
 
-const DraftAssetTab: React.FC<DraftAssetTabProps> = ({ assetType, onAssetAdded }) => {
+const DraftAssetTab: React.FC<DraftAssetTabProps> = ({ 
+  assetType, 
+  onAssetAdded,
+  aiType = "content"
+}) => {
   const [typedContent, setTypedContent] = useState({
     title: "",
     subtitle: "",
     content: ""
   });
+  const { toast } = useToast();
 
   // Default icons based on asset type
   const defaultIcon = assetType === 'pdf' ? '📄' : 
@@ -26,20 +33,33 @@ const DraftAssetTab: React.FC<DraftAssetTabProps> = ({ assetType, onAssetAdded }
                      assetType === 'video' ? '🎥' : '📄';
 
   const handleSubmitTypedContent = () => {
-    if (!typedContent.title.trim()) return;
+    if (!typedContent.title.trim()) {
+      toast({
+        title: "Missing title",
+        description: "Please provide a title for your content.",
+        variant: "destructive"
+      });
+      return;
+    }
     
     const newAsset: ContentAsset = {
       id: uuidv4(),
       type: assetType,
       title: typedContent.title,
-      subtitle: typedContent.subtitle || "Manually created content",
+      subtitle: typedContent.subtitle || `Manually created content for ${aiType.charAt(0).toUpperCase() + aiType.slice(1)} AI`,
       icon: defaultIcon,
       source: "created",
       dateAdded: new Date(),
-      url: `data:text/plain;base64,${btoa(typedContent.content || " ")}` // Store content as data URL
+      url: `data:text/plain;base64,${btoa(typedContent.content || " ")}`, // Store content as data URL
+      aiType: aiType
     };
     
     onAssetAdded([newAsset]);
+    
+    toast({
+      title: "Content created",
+      description: `Content has been added to ${aiType.charAt(0).toUpperCase() + aiType.slice(1)} AI successfully`
+    });
     
     setTypedContent({
       title: "",

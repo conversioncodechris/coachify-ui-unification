@@ -11,9 +11,14 @@ import { useToast } from "@/hooks/use-toast";
 interface FileUploadTabProps {
   assetType: AssetType;
   onAssetAdded: (assets: ContentAsset[]) => void;
+  aiType?: "compliance" | "coach" | "content";
 }
 
-const FileUploadTab: React.FC<FileUploadTabProps> = ({ assetType, onAssetAdded }) => {
+const FileUploadTab: React.FC<FileUploadTabProps> = ({ 
+  assetType, 
+  onAssetAdded, 
+  aiType = "content" 
+}) => {
   const [files, setFiles] = useState<File[]>([]);
   const [newAssets, setNewAssets] = useState<Partial<ContentAsset>[]>([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -40,6 +45,7 @@ const FileUploadTab: React.FC<FileUploadTabProps> = ({ assetType, onAssetAdded }
         fileName: file.name,
         dateAdded: new Date(),
         size: file.size,
+        aiType: aiType,
       }));
       
       setNewAssets(prev => [...prev, ...prelimAssets]);
@@ -83,7 +89,8 @@ const FileUploadTab: React.FC<FileUploadTabProps> = ({ assetType, onAssetAdded }
       const completeAssets = newAssets.map(asset => ({
         ...asset,
         id: asset.id || uuidv4(),
-        dateAdded: asset.dateAdded || new Date()
+        dateAdded: asset.dateAdded || new Date(),
+        aiType: aiType,
       })) as ContentAsset[];
       
       onAssetAdded(completeAssets);
@@ -93,7 +100,7 @@ const FileUploadTab: React.FC<FileUploadTabProps> = ({ assetType, onAssetAdded }
       
       toast({
         title: "Files uploaded successfully",
-        description: `Added ${completeAssets.length} file${completeAssets.length > 1 ? 's' : ''}.`
+        description: `Added ${completeAssets.length} file${completeAssets.length > 1 ? 's' : ''} to ${aiType.charAt(0).toUpperCase() + aiType.slice(1)} AI.`
       });
     }, 1000);
   };
