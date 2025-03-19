@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
@@ -27,12 +26,10 @@ const PromptsTab: React.FC = () => {
   const [selectedPrompt, setSelectedPrompt] = useState<ContentAsset | null>(null);
   const { toast } = useToast();
   
-  // Load prompts from localStorage on component mount
   useEffect(() => {
     const loadPrompts = () => {
       const allPrompts: ContentAsset[] = [];
       
-      // Load prompts from all three AI types
       ["content", "compliance", "coach"].forEach(aiType => {
         const storageKey = `${aiType}Assets`;
         const storedAssets = localStorage.getItem(storageKey);
@@ -53,7 +50,6 @@ const PromptsTab: React.FC = () => {
     
     loadPrompts();
     
-    // Listen for asset updates
     const handleAssetsUpdated = () => {
       loadPrompts();
     };
@@ -66,10 +62,8 @@ const PromptsTab: React.FC = () => {
   }, []);
 
   const handleAddPrompt = (newPrompt: ContentAsset) => {
-    // Add to local state
     setPrompts(prev => [...prev, newPrompt]);
     
-    // Add to storage
     const aiType = newPrompt.aiType || "content";
     const storageKey = `${aiType}Assets`;
     
@@ -87,7 +81,6 @@ const PromptsTab: React.FC = () => {
     assets.push(newPrompt);
     localStorage.setItem(storageKey, JSON.stringify(assets));
     
-    // Trigger update event
     const customEvent = new Event('contentAssetsUpdated');
     window.dispatchEvent(customEvent);
     
@@ -100,10 +93,8 @@ const PromptsTab: React.FC = () => {
   };
 
   const handleEditPrompt = (updatedPrompt: ContentAsset) => {
-    // Update in local state
     setPrompts(prev => prev.map(p => p.id === updatedPrompt.id ? updatedPrompt : p));
     
-    // Update in storage
     const aiType = updatedPrompt.aiType || "content";
     const storageKey = `${aiType}Assets`;
     
@@ -117,7 +108,6 @@ const PromptsTab: React.FC = () => {
         
         localStorage.setItem(storageKey, JSON.stringify(updatedAssets));
         
-        // Trigger update event
         const customEvent = new Event('contentAssetsUpdated');
         window.dispatchEvent(customEvent);
         
@@ -132,17 +122,14 @@ const PromptsTab: React.FC = () => {
   };
 
   const handleDeletePrompt = (id: string) => {
-    // Find the prompt to determine its AI type
     const promptToDelete = prompts.find(p => p.id === id);
     if (!promptToDelete) return;
     
     const aiType = promptToDelete.aiType || "content";
     const storageKey = `${aiType}Assets`;
     
-    // Remove from local state
     setPrompts(prev => prev.filter(p => p.id !== id));
     
-    // Remove from storage
     const storedAssets = localStorage.getItem(storageKey);
     if (storedAssets) {
       try {
@@ -151,7 +138,6 @@ const PromptsTab: React.FC = () => {
         
         localStorage.setItem(storageKey, JSON.stringify(updatedAssets));
         
-        // Trigger update event
         const customEvent = new Event('contentAssetsUpdated');
         window.dispatchEvent(customEvent);
         
@@ -200,21 +186,17 @@ const PromptsTab: React.FC = () => {
     });
   };
 
-  // Sort prompts - pinned first, then by date added (newest first)
   const sortedPrompts = [...prompts]
-    .filter(p => !p.hidden) // Filter out hidden prompts
+    .filter(p => !p.hidden)
     .sort((a, b) => {
-      // First sort by pinned status
       if (a.pinned && !b.pinned) return -1;
       if (!a.pinned && b.pinned) return 1;
       
-      // Then sort by date (newest first)
       const dateA = new Date(a.dateAdded).getTime();
       const dateB = new Date(b.dateAdded).getTime();
       return dateB - dateA;
     });
     
-  // Get hidden prompts
   const hiddenPrompts = prompts.filter(p => p.hidden);
 
   return (
@@ -279,6 +261,7 @@ const PromptsTab: React.FC = () => {
                         prompt.aiType === 'compliance' ? 'border-green-100' : 
                         'border-purple-100'
                       } ${prompt.pinned ? 'ring-2 ring-primary/20' : ''}`}
+                      onClick={() => openEditPrompt(prompt)}
                     >
                       <CardContent className="p-4">
                         <div className="flex items-start gap-3">
@@ -304,7 +287,6 @@ const PromptsTab: React.FC = () => {
                           </div>
                         </div>
                         
-                        {/* Action buttons that show on hover */}
                         <div className="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <Button 
                             variant="ghost" 
@@ -372,7 +354,6 @@ const PromptsTab: React.FC = () => {
         </CardContent>
       </Card>
       
-      {/* How-to Guide Card */}
       <Card>
         <CardHeader>
           <CardTitle>About Prompts</CardTitle>
