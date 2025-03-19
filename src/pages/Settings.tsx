@@ -1,11 +1,12 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, Bell, Lock, Globe } from "lucide-react";
+import { User, Bell, Lock, Globe, MessageSquare } from "lucide-react";
 import AccountTab from '@/components/settings/AccountTab';
 import NotificationsTab from '@/components/settings/NotificationsTab';
 import SecurityTab from '@/components/settings/SecurityTab';
 import AdminTab from '@/components/settings/AdminTab';
+import PromptsManager from '@/components/settings/PromptsManager';
 import AssetManagementDialog from "@/components/settings/AssetManagementDialog";
 import { useAssetManagement } from '@/hooks/useAssetManagement';
 
@@ -17,6 +18,7 @@ const Settings = () => {
     setAssetDialogOpen, 
     handleOpenAssetDialog 
   } = useAssetManagement();
+  const [currentAdminTab, setCurrentAdminTab] = useState<"general" | "prompts">("general");
 
   return (
     <div className="container mx-auto pt-24 pb-12 px-4 max-w-5xl">
@@ -57,10 +59,31 @@ const Settings = () => {
         </TabsContent>
         
         <TabsContent value="admin">
-          <AdminTab 
-            assetCounts={assetCounts} 
-            onOpenAssetDialog={handleOpenAssetDialog} 
-          />
+          <div className="mb-6">
+            <Tabs value={currentAdminTab} onValueChange={(value) => setCurrentAdminTab(value as "general" | "prompts")}>
+              <TabsList>
+                <TabsTrigger value="general" className="flex items-center gap-2">
+                  <Globe className="h-4 w-4" />
+                  <span>General</span>
+                </TabsTrigger>
+                <TabsTrigger value="prompts" className="flex items-center gap-2">
+                  <MessageSquare className="h-4 w-4" />
+                  <span>Prompts</span>
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="general" className="mt-6">
+                <AdminTab 
+                  assetCounts={assetCounts} 
+                  onOpenAssetDialog={handleOpenAssetDialog} 
+                />
+              </TabsContent>
+              
+              <TabsContent value="prompts" className="mt-6">
+                <PromptsManager />
+              </TabsContent>
+            </Tabs>
+          </div>
         </TabsContent>
       </Tabs>
 
