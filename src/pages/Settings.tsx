@@ -1,11 +1,12 @@
 
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, Bell, Lock, MessageSquare } from "lucide-react";
+import { User, Bell, Lock, MessageSquare, FileText } from "lucide-react";
 import AccountTab from '@/components/settings/AccountTab';
 import NotificationsTab from '@/components/settings/NotificationsTab';
 import SecurityTab from '@/components/settings/SecurityTab';
 import PromptsManager from '@/components/settings/PromptsManager';
+import PromptsTab from '@/components/settings/PromptsTab';
 import AssetManagementDialog from "@/components/settings/AssetManagementDialog";
 import { useAssetManagement } from '@/hooks/useAssetManagement';
 
@@ -24,7 +25,7 @@ const Settings = () => {
       </div>
       
       <Tabs defaultValue="account" className="w-full">
-        <TabsList className="grid w-full grid-cols-4 mb-8">
+        <TabsList className="grid w-full grid-cols-5 mb-8">
           <TabsTrigger value="account" className="flex items-center gap-2">
             <User className="h-4 w-4" />
             <span className="hidden sm:inline">Account</span>
@@ -37,9 +38,13 @@ const Settings = () => {
             <Lock className="h-4 w-4" />
             <span className="hidden sm:inline">Security</span>
           </TabsTrigger>
-          <TabsTrigger value="content" className="flex items-center gap-2">
+          <TabsTrigger value="training" className="flex items-center gap-2">
+            <FileText className="h-4 w-4" />
+            <span className="hidden sm:inline">Training</span>
+          </TabsTrigger>
+          <TabsTrigger value="prompts" className="flex items-center gap-2">
             <MessageSquare className="h-4 w-4" />
-            <span className="hidden sm:inline">Content</span>
+            <span className="hidden sm:inline">Prompts</span>
           </TabsTrigger>
         </TabsList>
         
@@ -55,8 +60,12 @@ const Settings = () => {
           <SecurityTab />
         </TabsContent>
         
-        <TabsContent value="content">
+        <TabsContent value="training">
           <PromptsManager onOpenAssetDialog={handleOpenAssetDialog} />
+        </TabsContent>
+        
+        <TabsContent value="prompts">
+          <PromptsTab />
         </TabsContent>
       </Tabs>
 

@@ -26,9 +26,9 @@ const PromptsManager: React.FC<PromptsManagerProps> = ({ onOpenAssetDialog }) =>
       {/* Content Management Section */}
       <Card>
         <CardHeader>
-          <CardTitle>Content Management</CardTitle>
+          <CardTitle>Training Content Management</CardTitle>
           <CardDescription>
-            Manage assets for Compliance AI, Coach AI, and Content AI
+            Manage training assets for Compliance AI, Coach AI, and Content AI
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -84,7 +84,7 @@ const PromptsManager: React.FC<PromptsManagerProps> = ({ onOpenAssetDialog }) =>
         <CardHeader>
           <CardTitle>Asset Management Guide</CardTitle>
           <CardDescription>
-            Learn about the different types of assets you can add to enhance your AI assistants
+            Learn about the different types of assets you can add to train your AI assistants
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -114,7 +114,7 @@ const PromptsManager: React.FC<PromptsManagerProps> = ({ onOpenAssetDialog }) =>
                 <div className="text-2xl">🎭</div>
                 <div>
                   <h3 className="font-medium mb-1">Role Play Scenarios</h3>
-                  <p className="text-sm text-muted-foreground">Create scenarios for training and practice with Coach AI</p>
+                  <p className="text-sm text-muted-foreground">Create scenarios for training Coach AI</p>
                 </div>
               </div>
             </Card>
@@ -132,7 +132,7 @@ const PromptsManager: React.FC<PromptsManagerProps> = ({ onOpenAssetDialog }) =>
           
           <div className="mt-6 p-4 border rounded-md bg-gray-50">
             <p className="text-sm text-center text-muted-foreground">
-              Click on any of the AI asset buttons above to start managing specific asset types.
+              Click on any of the AI asset buttons above to start managing specific training assets.
             </p>
           </div>
         </CardContent>
