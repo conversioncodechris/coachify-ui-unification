@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useToast } from "../../hooks/use-toast";
 import { ContentTopic } from './ContentTopicCard';
@@ -29,6 +30,7 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
   const [isAddTopicOpen, setIsAddTopicOpen] = useState(false);
   const [prompts, setPrompts] = useState<ContentAsset[]>([]);
   const [processedPromptIds, setProcessedPromptIds] = useState<Set<string>>(new Set());
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
     const loadPromptsAsTopics = () => {
@@ -45,13 +47,14 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
           console.log("Found prompts:", filteredPrompts.length);
           
           if (filteredPrompts.length > 0) {
-            const existingTopicTitles = new Set(topics.map(topic => topic.title));
+            const existingTopicIds = new Set(topics.map(topic => topic.id));
             const currentProcessedIds = new Set(processedPromptIds);
             
             const newTopics: ContentTopic[] = [];
             
             filteredPrompts.forEach((prompt: ContentAsset) => {
-              if (!currentProcessedIds.has(prompt.id)) {
+              // Only add if not already processed AND not already in topics list
+              if (!currentProcessedIds.has(prompt.id) && !existingTopicIds.has(prompt.id)) {
                 console.log("Converting prompt to topic:", prompt.title);
                 newTopics.push({
                   id: prompt.id,
@@ -83,8 +86,10 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
       }
     };
 
-    if (processedPromptIds.size === 0) {
+    // Only trigger the auto-load on initial render
+    if (isInitialLoad) {
       loadPromptsAsTopics();
+      setIsInitialLoad(false);
     }
     
     const handleStorageChange = (e: StorageEvent) => {
@@ -107,15 +112,16 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('contentAssetsUpdated', handleCustomEvent as EventListener);
     };
-  }, [topics, setTopics, toast, processedPromptIds]);
+  }, [topics, setTopics, toast, processedPromptIds, isInitialLoad]);
 
-  useEffect(() => {
+  // Remove this effect that was causing duplicate events
+  /*useEffect(() => {
     if (processedPromptIds.size === 0) {
       const customEvent = new Event('contentAssetsUpdated');
       console.log("Manually dispatching contentAssetsUpdated event");
       window.dispatchEvent(customEvent);
     }
-  }, [processedPromptIds.size]);
+  }, [processedPromptIds.size]);*/
 
   const handleHideTopic = (topicId: string, event: React.MouseEvent) => {
     event.stopPropagation();

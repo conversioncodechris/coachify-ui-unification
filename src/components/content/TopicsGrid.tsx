@@ -20,10 +20,14 @@ const TopicsGrid: React.FC<TopicsGridProps> = ({
 }) => {
   // Sort and filter topics - first make sure hidden topics are properly filtered out
   const sortedTopics = [...topics]
-    .filter(topic => topic.hidden !== true) // Explicitly check for !true to handle undefined
+    .filter(topic => topic.hidden !== true) // Filter out any hidden topics
     .sort((a, b) => {
+      // Sort pinned topics first
       if (a.pinned && !b.pinned) return -1;
       if (!a.pinned && b.pinned) return 1;
+      // Then sort by new topics
+      if (a.isNew && !b.isNew) return -1;
+      if (!a.isNew && b.isNew) return 1;
       return 0;
     });
 
