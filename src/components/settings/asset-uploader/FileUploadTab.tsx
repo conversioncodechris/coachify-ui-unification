@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Upload, FileText } from "lucide-react";
 import { ContentAsset, AssetType, AssetSource } from "@/types/contentAssets";
 import { v4 as uuidv4 } from "uuid";
-import EmojiPicker from "./EmojiPicker";
 
 interface FileUploadTabProps {
   assetType: AssetType;
@@ -16,7 +15,6 @@ interface FileUploadTabProps {
 const FileUploadTab: React.FC<FileUploadTabProps> = ({ assetType, onAssetAdded }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [newAssets, setNewAssets] = useState<Partial<ContentAsset>[]>([]);
-  const [emojiPicker, setEmojiPicker] = useState<string>("📄");
   const [isUploading, setIsUploading] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,12 +22,18 @@ const FileUploadTab: React.FC<FileUploadTabProps> = ({ assetType, onAssetAdded }
       const newFiles = Array.from(e.target.files);
       setFiles(prevFiles => [...prevFiles, ...newFiles]);
       
+      // Default icons based on asset type
+      const defaultIcon = assetType === 'pdf' ? '📄' : 
+                         assetType === 'guidelines' ? '📘' : 
+                         assetType === 'roleplay' ? '🎭' : 
+                         assetType === 'video' ? '🎥' : '📄';
+      
       const prelimAssets = newFiles.map(file => ({
         id: uuidv4(),
         type: assetType,
         title: file.name.split('.')[0],
         subtitle: "",
-        icon: emojiPicker,
+        icon: defaultIcon,
         source: "upload" as AssetSource,
         fileName: file.name,
         dateAdded: new Date(),
@@ -52,14 +56,6 @@ const FileUploadTab: React.FC<FileUploadTabProps> = ({ assetType, onAssetAdded }
     setNewAssets(prev => {
       const updated = [...prev];
       updated[index] = { ...updated[index], subtitle: value };
-      return updated;
-    });
-  };
-
-  const handleAssetIconChange = (index: number, value: string) => {
-    setNewAssets(prev => {
-      const updated = [...prev];
-      updated[index] = { ...updated[index], icon: value };
       return updated;
     });
   };
@@ -115,35 +111,25 @@ const FileUploadTab: React.FC<FileUploadTabProps> = ({ assetType, onAssetAdded }
                   <span className="text-sm font-medium">{files[index]?.name}</span>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="space-y-2">
                   <div className="space-y-2">
-                    <EmojiPicker
-                      assetType={assetType}
-                      selectedEmoji={asset.icon || "📄"}
-                      onSelectEmoji={(emoji) => handleAssetIconChange(index, emoji)}
+                    <Label htmlFor={`title-${index}`}>Title</Label>
+                    <Input
+                      id={`title-${index}`}
+                      value={asset.title || ""}
+                      onChange={(e) => handleAssetTitleChange(index, e.target.value)}
+                      maxLength={40}
                     />
                   </div>
                   
-                  <div className="space-y-2 md:col-span-3">
-                    <div className="space-y-2">
-                      <Label htmlFor={`title-${index}`}>Title</Label>
-                      <Input
-                        id={`title-${index}`}
-                        value={asset.title || ""}
-                        onChange={(e) => handleAssetTitleChange(index, e.target.value)}
-                        maxLength={40}
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor={`subtitle-${index}`}>Description</Label>
-                      <Input
-                        id={`subtitle-${index}`}
-                        value={asset.subtitle || ""}
-                        onChange={(e) => handleAssetSubtitleChange(index, e.target.value)}
-                        maxLength={60}
-                      />
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`subtitle-${index}`}>Description</Label>
+                    <Input
+                      id={`subtitle-${index}`}
+                      value={asset.subtitle || ""}
+                      onChange={(e) => handleAssetSubtitleChange(index, e.target.value)}
+                      maxLength={60}
+                    />
                   </div>
                 </div>
               </div>

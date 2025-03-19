@@ -1,11 +1,9 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { ContentAsset, AssetType, AssetSource } from "@/types/contentAssets";
 import { v4 as uuidv4 } from "uuid";
-import EmojiPicker from "./EmojiPicker";
 
 interface CloudUploadTabProps {
   assetType: AssetType;
@@ -13,8 +11,12 @@ interface CloudUploadTabProps {
 }
 
 const CloudUploadTab: React.FC<CloudUploadTabProps> = ({ assetType, onAssetAdded }) => {
-  const [emojiPicker, setEmojiPicker] = useState<string>("📄");
-
+  // Default icons based on asset type
+  const defaultIcon = assetType === 'pdf' ? '📄' : 
+                     assetType === 'guidelines' ? '📘' : 
+                     assetType === 'roleplay' ? '🎭' : 
+                     assetType === 'video' ? '🎥' : '📄';
+  
   const handleConnectCloud = (provider: "google-drive" | "dropbox") => {
     alert(`Connecting to ${provider}. This would open the authentication flow.`);
     
@@ -23,7 +25,7 @@ const CloudUploadTab: React.FC<CloudUploadTabProps> = ({ assetType, onAssetAdded
       type: assetType,
       title: `${provider} ${assetType}`,
       subtitle: `Imported from ${provider}`,
-      icon: emojiPicker,
+      icon: defaultIcon,
       source: provider === "google-drive" ? "google-drive" : "dropbox",
       fileName: `cloud-file-${Date.now()}.pdf`,
       dateAdded: new Date(),
@@ -69,15 +71,6 @@ const CloudUploadTab: React.FC<CloudUploadTabProps> = ({ assetType, onAssetAdded
           <h3 className="font-medium mb-1">Connect to Dropbox</h3>
           <p className="text-sm text-muted-foreground">Import files from your Dropbox</p>
         </Card>
-      </div>
-      
-      <div className="mt-4 space-y-2">
-        <EmojiPicker
-          assetType={assetType}
-          selectedEmoji={emojiPicker}
-          onSelectEmoji={setEmojiPicker}
-          label="Select Icon for Cloud Assets"
-        />
       </div>
     </div>
   );

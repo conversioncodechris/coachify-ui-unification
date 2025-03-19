@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ContentAsset, AssetType } from "@/types/contentAssets";
 import { v4 as uuidv4 } from "uuid";
-import EmojiPicker from "./EmojiPicker";
 
 interface DraftAssetTabProps {
   assetType: AssetType;
@@ -14,12 +13,17 @@ interface DraftAssetTabProps {
 }
 
 const DraftAssetTab: React.FC<DraftAssetTabProps> = ({ assetType, onAssetAdded }) => {
-  const [emojiPicker, setEmojiPicker] = useState<string>("📄");
   const [typedContent, setTypedContent] = useState({
     title: "",
     subtitle: "",
     content: ""
   });
+
+  // Default icons based on asset type
+  const defaultIcon = assetType === 'pdf' ? '📄' : 
+                     assetType === 'guidelines' ? '📘' : 
+                     assetType === 'roleplay' ? '🎭' : 
+                     assetType === 'video' ? '🎥' : '📄';
 
   const handleSubmitTypedContent = () => {
     if (!typedContent.title.trim()) return;
@@ -29,7 +33,7 @@ const DraftAssetTab: React.FC<DraftAssetTabProps> = ({ assetType, onAssetAdded }
       type: assetType,
       title: typedContent.title,
       subtitle: typedContent.subtitle || "Manually created content",
-      icon: emojiPicker,
+      icon: defaultIcon,
       source: "created",
       dateAdded: new Date(),
       url: `data:text/plain;base64,${btoa(typedContent.content || " ")}` // Store content as data URL
@@ -46,14 +50,6 @@ const DraftAssetTab: React.FC<DraftAssetTabProps> = ({ assetType, onAssetAdded }
 
   return (
     <div className="space-y-4">
-      <div className="space-y-2">
-        <EmojiPicker
-          assetType={assetType}
-          selectedEmoji={emojiPicker}
-          onSelectEmoji={setEmojiPicker}
-        />
-      </div>
-      
       <div className="grid gap-4">
         <div className="space-y-2">
           <Label htmlFor="type-title">Title</Label>

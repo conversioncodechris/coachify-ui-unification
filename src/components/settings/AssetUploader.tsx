@@ -3,14 +3,13 @@ import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { MessageSquare } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Upload, Database, Cloud, Edit } from "lucide-react";
+import { Upload, Cloud, Edit } from "lucide-react";
 import { ContentAsset, AssetType } from "@/types/contentAssets";
 
 // Import refactored components
 import FileUploadTab from "./asset-uploader/FileUploadTab";
 import CloudUploadTab from "./asset-uploader/CloudUploadTab";
 import DraftAssetTab from "./asset-uploader/DraftAssetTab";
-import CreateAssetTab from "./asset-uploader/CreateAssetTab";
 import PromptForm from "./asset-uploader/PromptForm";
 
 interface AssetUploaderProps {
@@ -24,7 +23,7 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({
   onAssetAdded,
   aiType = "content" 
 }) => {
-  const [uploadMethod, setUploadMethod] = useState<"upload" | "cloud" | "create" | "draft">("upload");
+  const [uploadMethod, setUploadMethod] = useState<"upload" | "cloud" | "draft">("upload");
 
   return (
     <Card>
@@ -44,7 +43,7 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({
           </>
         ) : (
           <Tabs defaultValue="upload" onValueChange={(value) => setUploadMethod(value as any)}>
-            <TabsList className="grid grid-cols-4 mb-4">
+            <TabsList className="grid grid-cols-3 mb-4">
               <TabsTrigger value="upload" className="flex items-center gap-2">
                 <Upload className="h-4 w-4" />
                 <span>Upload</span>
@@ -56,10 +55,6 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({
               <TabsTrigger value="draft" className="flex items-center gap-2">
                 <Edit className="h-4 w-4" />
                 <span>Draft</span>
-              </TabsTrigger>
-              <TabsTrigger value="create" className="flex items-center gap-2">
-                <Database className="h-4 w-4" />
-                <span>Create</span>
               </TabsTrigger>
             </TabsList>
 
@@ -73,10 +68,6 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({
 
             <TabsContent value="draft">
               <DraftAssetTab assetType={assetType} onAssetAdded={onAssetAdded} />
-            </TabsContent>
-
-            <TabsContent value="create">
-              <CreateAssetTab assetType={assetType} onAssetAdded={onAssetAdded} />
             </TabsContent>
           </Tabs>
         )}
