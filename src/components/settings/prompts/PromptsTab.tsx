@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { AddPromptDialog } from '@/components/settings/add-prompt';
-import EditPromptDialog from '@/components/settings/EditPromptDialog';
+import { EditPromptDialog } from '@/components/settings/edit-prompt';
 import { usePrompts } from './usePrompts';
 import PromptsList from './PromptsList';
 import PromptsInfo from './PromptsInfo';
