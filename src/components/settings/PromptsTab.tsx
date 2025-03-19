@@ -1,9 +1,10 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { Plus, MessageSquare, Bot, Pin, PinOff, Eye, EyeOff } from 'lucide-react';
 import { ContentAsset } from '@/types/contentAssets';
-import AddPromptDialog from './AddPromptDialog';
+import { AddPromptDialog } from './add-prompt';
 import EditPromptDialog from './EditPromptDialog';
 import { useToast } from '@/hooks/use-toast';
 import {
