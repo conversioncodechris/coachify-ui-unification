@@ -59,15 +59,15 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({
             </TabsList>
 
             <TabsContent value="upload">
-              <FileUploadTab assetType={assetType} onAssetAdded={onAssetAdded} />
+              <FileUploadTab assetType={assetType} onAssetAdded={onAssetAdded} aiType={aiType} />
             </TabsContent>
 
             <TabsContent value="cloud">
-              <CloudUploadTab assetType={assetType} onAssetAdded={onAssetAdded} />
+              <CloudUploadTab assetType={assetType} onAssetAdded={onAssetAdded} aiType={aiType} />
             </TabsContent>
 
             <TabsContent value="draft">
-              <DraftAssetTab assetType={assetType} onAssetAdded={onAssetAdded} />
+              <DraftAssetTab assetType={assetType} onAssetAdded={onAssetAdded} aiType={aiType} />
             </TabsContent>
           </Tabs>
         )}

@@ -12,9 +12,14 @@ import { useToast } from "@/hooks/use-toast";
 interface CloudUploadTabProps {
   assetType: AssetType;
   onAssetAdded: (assets: ContentAsset[]) => void;
+  aiType?: "compliance" | "coach" | "content";
 }
 
-const CloudUploadTab: React.FC<CloudUploadTabProps> = ({ assetType, onAssetAdded }) => {
+const CloudUploadTab: React.FC<CloudUploadTabProps> = ({ 
+  assetType, 
+  onAssetAdded,
+  aiType = "content" 
+}) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [url, setUrl] = useState("");
@@ -105,11 +110,12 @@ const CloudUploadTab: React.FC<CloudUploadTabProps> = ({ assetType, onAssetAdded
         id: uuidv4(),
         type: assetType,
         title: videoTitle,
-        subtitle: "YouTube video",
+        subtitle: `YouTube video for ${aiType.charAt(0).toUpperCase() + aiType.slice(1)} AI`,
         icon: defaultIcon,
         source: "google-drive" as AssetSource,
         url: link,
         dateAdded: new Date(),
+        aiType: aiType,
       } as ContentAsset;
     });
     
@@ -120,7 +126,7 @@ const CloudUploadTab: React.FC<CloudUploadTabProps> = ({ assetType, onAssetAdded
       
       toast({
         title: "YouTube links processed",
-        description: `Added ${assets.length} YouTube video${assets.length > 1 ? 's' : ''}`
+        description: `Added ${assets.length} YouTube video${assets.length > 1 ? 's' : ''} to ${aiType.charAt(0).toUpperCase() + aiType.slice(1)} AI`
       });
     }, 1000);
   };
@@ -155,6 +161,7 @@ const CloudUploadTab: React.FC<CloudUploadTabProps> = ({ assetType, onAssetAdded
         source: "google-drive",
         url,
         dateAdded: new Date(),
+        aiType: aiType,
       };
       
       onAssetAdded([asset]);
@@ -165,7 +172,7 @@ const CloudUploadTab: React.FC<CloudUploadTabProps> = ({ assetType, onAssetAdded
       
       toast({
         title: "File link processed",
-        description: "Your cloud file link has been added successfully"
+        description: `Your cloud file link has been added to ${aiType.charAt(0).toUpperCase() + aiType.slice(1)} AI successfully`
       });
     }, 1000);
   };
@@ -176,7 +183,7 @@ const CloudUploadTab: React.FC<CloudUploadTabProps> = ({ assetType, onAssetAdded
         <div className="space-y-4 bg-muted/30 p-4 rounded-lg border">
           <div className="flex items-center gap-2">
             <Youtube className="h-5 w-5 text-red-600" />
-            <h3 className="font-medium">YouTube Videos</h3>
+            <h3 className="font-medium">YouTube Videos for {aiType.charAt(0).toUpperCase() + aiType.slice(1)} AI</h3>
           </div>
           
           <div className="flex gap-2">
