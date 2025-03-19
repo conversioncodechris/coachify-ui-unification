@@ -27,6 +27,12 @@ const PromptCard: React.FC<PromptCardProps> = ({
   onToggleHide,
   onDeletePrompt
 }) => {
+  // Separate handler to prevent event propagation 
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onDeletePrompt(prompt.id);
+  };
+
   return (
     <ContextMenu>
       <ContextMenuTrigger>
@@ -93,10 +99,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
                 variant="ghost" 
                 size="icon" 
                 className="h-8 w-8 rounded-full bg-background/90 backdrop-blur-sm text-destructive hover:text-destructive hover:bg-destructive/10"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDeletePrompt(prompt.id);
-                }}
+                onClick={handleDeleteClick}
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
