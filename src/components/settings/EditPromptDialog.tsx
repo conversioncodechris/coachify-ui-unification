@@ -13,6 +13,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ContentAsset } from "@/types/contentAssets";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface EditPromptDialogProps {
   isOpen: boolean;
@@ -32,6 +39,9 @@ const EditPromptDialog: React.FC<EditPromptDialogProps> = ({
   const [title, setTitle] = useState<string>(prompt.title);
   const [subtitle, setSubtitle] = useState<string>(prompt.subtitle);
   const [content, setContent] = useState<string>(prompt.content || "");
+  const [selectedAiType, setSelectedAiType] = useState<"content" | "compliance" | "coach">(
+    prompt.aiType || "content"
+  );
 
   useEffect(() => {
     if (isOpen && prompt) {
@@ -39,6 +49,7 @@ const EditPromptDialog: React.FC<EditPromptDialogProps> = ({
       setTitle(prompt.title);
       setSubtitle(prompt.subtitle);
       setContent(prompt.content || "");
+      setSelectedAiType(prompt.aiType || "content");
     }
   }, [isOpen, prompt]);
 
@@ -57,11 +68,17 @@ const EditPromptDialog: React.FC<EditPromptDialogProps> = ({
       title: title.trim(),
       subtitle: subtitle.trim() || "Prompt-based topic",
       content: content,
-      isNew: false // Mark as not new anymore since it's been edited
+      isNew: false, // Mark as not new anymore since it's been edited
+      aiType: selectedAiType
     };
     
     onPromptUpdated(updatedPrompt);
     onOpenChange(false);
+    
+    toast({
+      title: "Prompt Updated",
+      description: `The prompt has been updated and assigned to ${selectedAiType.charAt(0).toUpperCase() + selectedAiType.slice(1)} AI.`,
+    });
   };
 
   // Common emoji options
@@ -75,6 +92,23 @@ const EditPromptDialog: React.FC<EditPromptDialogProps> = ({
         </DialogHeader>
         
         <div className="space-y-4 py-4">
+          <div className="space-y-2">
+            <Label htmlFor="ai-type">AI Category</Label>
+            <Select 
+              value={selectedAiType} 
+              onValueChange={(value) => setSelectedAiType(value as "content" | "compliance" | "coach")}
+            >
+              <SelectTrigger id="ai-type">
+                <SelectValue placeholder="Select AI Category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="content">Content AI</SelectItem>
+                <SelectItem value="compliance">Compliance AI</SelectItem>
+                <SelectItem value="coach">Coach AI</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
           <div className="space-y-2">
             <Label htmlFor="prompt-icon">Icon</Label>
             <div className="flex flex-wrap gap-2 p-2 border rounded-md">
