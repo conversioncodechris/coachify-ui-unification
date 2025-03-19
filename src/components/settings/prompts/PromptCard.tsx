@@ -32,7 +32,6 @@ const PromptCard: React.FC<PromptCardProps> = ({
     e.stopPropagation();
     console.log('Delete button clicked for prompt ID:', prompt.id);
     onDeletePrompt(prompt.id);
-    return false; // Ensure no further propagation
   };
 
   return (
@@ -134,7 +133,10 @@ const PromptCard: React.FC<PromptCardProps> = ({
         <ContextMenuSeparator />
         <ContextMenuItem 
           className="text-red-600 focus:text-red-600"
-          onClick={handleDeleteClick}
+          onClick={(e) => {
+            e.preventDefault();
+            onDeletePrompt(prompt.id);
+          }}
         >
           <Trash2 className="mr-2 h-4 w-4" />
           Delete Prompt

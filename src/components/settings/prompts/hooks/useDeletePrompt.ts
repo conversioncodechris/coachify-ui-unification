@@ -24,8 +24,12 @@ export const useDeletePrompt = (
     const aiType = promptToDelete.aiType || "content";
     const storageKey = `${aiType}Assets`;
     
-    // Update local state
-    setPrompts(prev => prev.filter(p => p.id !== id));
+    // Update local state first
+    setPrompts(prev => {
+      const updated = prev.filter(p => p.id !== id);
+      console.log(`Filtered prompts: ${updated.length} (removed ${prev.length - updated.length})`);
+      return updated;
+    });
     
     // If edit dialog is open and we're deleting the selected prompt, close it
     if (selectedPrompt && selectedPrompt.id === id) {
@@ -34,30 +38,30 @@ export const useDeletePrompt = (
     }
     
     // Update localStorage
-    const storedAssets = localStorage.getItem(storageKey);
-    if (storedAssets) {
-      try {
+    try {
+      const storedAssets = localStorage.getItem(storageKey);
+      if (storedAssets) {
         const assets = JSON.parse(storedAssets);
         const updatedAssets = assets.filter((asset: ContentAsset) => asset.id !== id);
         
+        console.log(`Updating ${storageKey}: removing asset ${id}, ${assets.length} -> ${updatedAssets.length}`);
         localStorage.setItem(storageKey, JSON.stringify(updatedAssets));
         
         // Dispatch event to notify other components
-        const customEvent = new Event('contentAssetsUpdated');
-        window.dispatchEvent(customEvent);
+        window.dispatchEvent(new CustomEvent('contentAssetsUpdated'));
         
         toast({
           title: "Prompt Deleted",
           description: "The prompt was successfully removed.",
         });
-      } catch (error) {
-        console.error(`Error deleting prompt from ${storageKey}:`, error);
-        toast({
-          title: "Error",
-          description: "Failed to delete the prompt. Please try again.",
-          variant: "destructive",
-        });
       }
+    } catch (error) {
+      console.error(`Error deleting prompt from ${storageKey}:`, error);
+      toast({
+        title: "Error",
+        description: "Failed to delete the prompt. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 

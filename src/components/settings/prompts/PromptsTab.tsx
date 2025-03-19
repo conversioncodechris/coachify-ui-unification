@@ -45,6 +45,7 @@ const PromptsTab: React.FC = () => {
   // Effect to listen for delete requests from the EditPromptDialog
   useEffect(() => {
     const handleDeleteRequest = (e: CustomEvent<{ promptId: string }>) => {
+      console.log(`Delete request received for prompt ID: ${e.detail.promptId}`);
       openDeleteConfirm(e.detail.promptId);
     };
 
@@ -61,9 +62,12 @@ const PromptsTab: React.FC = () => {
   const confirmDelete = () => {
     if (promptIdToDelete) {
       console.log('Confirming deletion of prompt ID:', promptIdToDelete);
-      handleDeletePrompt(promptIdToDelete);
+      const id = promptIdToDelete; // Store in local variable to ensure it's preserved
+      handleDeletePrompt(id);
       setPromptIdToDelete(null);
       setDeleteConfirmOpen(false);
+    } else {
+      console.error('No prompt ID to delete');
     }
   };
 
