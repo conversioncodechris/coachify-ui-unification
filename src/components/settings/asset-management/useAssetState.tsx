@@ -1,7 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import { ContentAsset, AssetType } from "@/types/contentAssets";
 import { useToast } from "@/hooks/use-toast";
+import { MessageSquare, FileText, Book, Users, FileVideo } from "lucide-react";
+import React from 'react';
 
 export function useAssetState(
   isOpen: boolean, 
@@ -135,5 +136,3 @@ export const typeLabels: Record<AssetType, { icon: React.ReactNode; label: strin
   other: { icon: <FileText className="h-4 w-4" />, label: "Other" },
   prompt: { icon: <MessageSquare className="h-4 w-4" />, label: "Prompts" },
 };
-
-import { MessageSquare, FileText, Book, Users, FileVideo } from "lucide-react";
