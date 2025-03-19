@@ -2,11 +2,23 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
-import { Plus, MessageSquare, Bot } from 'lucide-react';
+import { Plus, MessageSquare, Bot, Pin, PinOff, Eye, EyeOff } from 'lucide-react';
 import { ContentAsset } from '@/types/contentAssets';
 import AddPromptDialog from './AddPromptDialog';
 import EditPromptDialog from './EditPromptDialog';
 import { useToast } from '@/hooks/use-toast';
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+  ContextMenuSeparator,
+} from "@/components/ui/context-menu";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 const PromptsTab: React.FC = () => {
   const [prompts, setPrompts] = useState<ContentAsset[]>([]);
@@ -158,6 +170,53 @@ const PromptsTab: React.FC = () => {
     setEditPromptOpen(true);
   };
 
+  const togglePinPrompt = (prompt: ContentAsset) => {
+    const updatedPrompt = { 
+      ...prompt, 
+      pinned: !prompt.pinned 
+    };
+    handleEditPrompt(updatedPrompt);
+    
+    toast({
+      title: updatedPrompt.pinned ? "Prompt Pinned" : "Prompt Unpinned",
+      description: updatedPrompt.pinned 
+        ? "This prompt will appear at the top of the list." 
+        : "This prompt has been unpinned.",
+    });
+  };
+
+  const toggleHidePrompt = (prompt: ContentAsset) => {
+    const updatedPrompt = { 
+      ...prompt, 
+      hidden: !prompt.hidden 
+    };
+    handleEditPrompt(updatedPrompt);
+    
+    toast({
+      title: updatedPrompt.hidden ? "Prompt Hidden" : "Prompt Visible",
+      description: updatedPrompt.hidden 
+        ? "This prompt will not be shown to users." 
+        : "This prompt is now visible to users.",
+    });
+  };
+
+  // Sort prompts - pinned first, then by date added (newest first)
+  const sortedPrompts = [...prompts]
+    .filter(p => !p.hidden) // Filter out hidden prompts
+    .sort((a, b) => {
+      // First sort by pinned status
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      
+      // Then sort by date (newest first)
+      const dateA = new Date(a.dateAdded).getTime();
+      const dateB = new Date(b.dateAdded).getTime();
+      return dateB - dateA;
+    });
+    
+  // Get hidden prompts
+  const hiddenPrompts = prompts.filter(p => p.hidden);
+
   return (
     <div className="space-y-8">
       <Card>
@@ -168,14 +227,42 @@ const PromptsTab: React.FC = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="flex justify-end mb-4">
+          <div className="flex justify-between mb-4">
             <Button onClick={() => setAddPromptOpen(true)}>
               <Plus className="mr-2 h-4 w-4" />
               Add New Prompt
             </Button>
+            
+            {hiddenPrompts.length > 0 && (
+              <HoverCard>
+                <HoverCardTrigger asChild>
+                  <Button variant="outline">
+                    <EyeOff className="mr-2 h-4 w-4" />
+                    {hiddenPrompts.length} Hidden
+                  </Button>
+                </HoverCardTrigger>
+                <HoverCardContent className="w-80">
+                  <h4 className="mb-2 font-medium">Hidden Prompts</h4>
+                  <div className="space-y-2">
+                    {hiddenPrompts.map(prompt => (
+                      <div key={prompt.id} className="flex items-center justify-between">
+                        <span className="text-sm truncate">{prompt.title}</span>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          onClick={() => toggleHidePrompt(prompt)}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+            )}
           </div>
           
-          {prompts.length === 0 ? (
+          {sortedPrompts.length === 0 ? (
             <div className="text-center py-10 border rounded-lg bg-gray-50">
               <MessageSquare className="mx-auto h-10 w-10 text-gray-400" />
               <p className="mt-2 text-lg font-medium">No prompts created yet</p>
@@ -183,32 +270,102 @@ const PromptsTab: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {prompts.map((prompt) => (
-                <Card key={prompt.id} className={`cursor-pointer hover:shadow-md transition-shadow ${
-                  prompt.aiType === 'content' ? 'border-blue-100' : 
-                  prompt.aiType === 'compliance' ? 'border-green-100' : 
-                  'border-purple-100'
-                }`} onClick={() => openEditPrompt(prompt)}>
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                      <div className="text-2xl">{prompt.icon}</div>
-                      <div className="flex-1">
-                        <div className="font-medium">{prompt.title}</div>
-                        <div className="text-sm text-muted-foreground">{prompt.subtitle}</div>
-                        <div className="mt-2 flex items-center gap-1 text-xs">
-                          <Bot className="h-3 w-3" />
-                          <span className={`px-2 py-0.5 rounded-full ${
-                            prompt.aiType === 'content' ? 'bg-blue-100 text-blue-800' : 
-                            prompt.aiType === 'compliance' ? 'bg-green-100 text-green-800' : 
-                            'bg-purple-100 text-purple-800'
-                          }`}>
-                            {prompt.aiType?.charAt(0).toUpperCase() + prompt.aiType?.slice(1)} AI
-                          </span>
+              {sortedPrompts.map((prompt) => (
+                <ContextMenu key={prompt.id}>
+                  <ContextMenuTrigger>
+                    <Card 
+                      className={`cursor-pointer hover:shadow-md transition-shadow group relative ${
+                        prompt.aiType === 'content' ? 'border-blue-100' : 
+                        prompt.aiType === 'compliance' ? 'border-green-100' : 
+                        'border-purple-100'
+                      } ${prompt.pinned ? 'ring-2 ring-primary/20' : ''}`}
+                    >
+                      <CardContent className="p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="text-2xl">{prompt.icon}</div>
+                          <div className="flex-1">
+                            <div className="font-medium flex items-center">
+                              {prompt.title}
+                              {prompt.pinned && (
+                                <Pin className="ml-2 h-3 w-3 text-primary" />
+                              )}
+                            </div>
+                            <div className="text-sm text-muted-foreground">{prompt.subtitle}</div>
+                            <div className="mt-2 flex items-center gap-1 text-xs">
+                              <Bot className="h-3 w-3" />
+                              <span className={`px-2 py-0.5 rounded-full ${
+                                prompt.aiType === 'content' ? 'bg-blue-100 text-blue-800' : 
+                                prompt.aiType === 'compliance' ? 'bg-green-100 text-green-800' : 
+                                'bg-purple-100 text-purple-800'
+                              }`}>
+                                {prompt.aiType?.charAt(0).toUpperCase() + prompt.aiType?.slice(1)} AI
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                        
+                        {/* Action buttons that show on hover */}
+                        <div className="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-8 w-8 rounded-full bg-background/90 backdrop-blur-sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              togglePinPrompt(prompt);
+                            }}
+                          >
+                            {prompt.pinned ? (
+                              <PinOff className="h-4 w-4" />
+                            ) : (
+                              <Pin className="h-4 w-4" />
+                            )}
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-8 w-8 rounded-full bg-background/90 backdrop-blur-sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleHidePrompt(prompt);
+                            }}
+                          >
+                            <EyeOff className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </ContextMenuTrigger>
+                  <ContextMenuContent>
+                    <ContextMenuItem onClick={() => openEditPrompt(prompt)}>
+                      Edit Prompt
+                    </ContextMenuItem>
+                    <ContextMenuItem onClick={() => togglePinPrompt(prompt)}>
+                      {prompt.pinned ? (
+                        <>
+                          <PinOff className="mr-2 h-4 w-4" />
+                          Unpin Prompt
+                        </>
+                      ) : (
+                        <>
+                          <Pin className="mr-2 h-4 w-4" />
+                          Pin Prompt
+                        </>
+                      )}
+                    </ContextMenuItem>
+                    <ContextMenuItem onClick={() => toggleHidePrompt(prompt)}>
+                      <EyeOff className="mr-2 h-4 w-4" />
+                      Hide Prompt
+                    </ContextMenuItem>
+                    <ContextMenuSeparator />
+                    <ContextMenuItem 
+                      className="text-red-600 focus:text-red-600"
+                      onClick={() => handleDeletePrompt(prompt.id)}
+                    >
+                      Delete Prompt
+                    </ContextMenuItem>
+                  </ContextMenuContent>
+                </ContextMenu>
               ))}
             </div>
           )}
