@@ -136,4 +136,4 @@ export const typeLabels: Record<AssetType, { icon: React.ReactNode; label: strin
   prompt: { icon: <MessageSquare className="h-4 w-4" />, label: "Prompts" },
 };
 
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, FileText, Book, Users, FileVideo } from "lucide-react";
