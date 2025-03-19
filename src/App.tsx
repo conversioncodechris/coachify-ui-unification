@@ -10,6 +10,7 @@ import ComplianceAI from "./pages/ComplianceAI";
 import ContentAI from "./pages/ContentAI";
 import CoachAI from "./pages/CoachAI";
 import Settings from "./pages/Settings";
+import CustomizeAIRE from "./pages/CustomizeAIRE";
 import AppHeader from "./components/AppHeader";
 
 // Create a client with default options to prevent excessive re-fetching
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/content/*" element={<ContentAI />} />
           <Route path="/coach/*" element={<CoachAI />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/customize-aire" element={<CustomizeAIRE />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

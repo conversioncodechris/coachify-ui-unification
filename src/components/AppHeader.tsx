@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Settings, LogOut } from 'lucide-react';
+import { Settings, LogOut, Sparkles } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -65,6 +65,10 @@ const AppHeader: React.FC<AppHeaderProps> = ({ userAvatar }) => {
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/customize-aire')}>
+              <Sparkles className="mr-2 h-4 w-4" />
+              <span>Customize AIRE</span>
+            </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/settings')}>
               <Settings className="mr-2 h-4 w-4" />
               <span>Settings</span>
