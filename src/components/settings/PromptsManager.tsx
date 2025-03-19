@@ -20,37 +20,37 @@ const PromptsManager = () => {
   const { loadAssetCounts } = useAssetManagement();
 
   // Load prompts from localStorage
-  useEffect(() => {
-    const loadPrompts = () => {
-      try {
-        // Load Content prompts
-        const storedContentAssets = localStorage.getItem('contentAssets');
-        if (storedContentAssets) {
-          const allAssets = JSON.parse(storedContentAssets);
-          const promptAssets = allAssets.filter((asset: ContentAsset) => asset.type === 'prompt');
-          setContentPrompts(promptAssets);
-        }
-
-        // Load Compliance prompts
-        const storedComplianceAssets = localStorage.getItem('complianceAssets');
-        if (storedComplianceAssets) {
-          const allAssets = JSON.parse(storedComplianceAssets);
-          const promptAssets = allAssets.filter((asset: ContentAsset) => asset.type === 'prompt');
-          setCompliancePrompts(promptAssets);
-        }
-
-        // Load Coach prompts
-        const storedCoachAssets = localStorage.getItem('coachAssets');
-        if (storedCoachAssets) {
-          const allAssets = JSON.parse(storedCoachAssets);
-          const promptAssets = allAssets.filter((asset: ContentAsset) => asset.type === 'prompt');
-          setCoachPrompts(promptAssets);
-        }
-      } catch (error) {
-        console.error('Error loading prompts:', error);
+  const loadPrompts = useCallback(() => {
+    try {
+      // Load Content prompts
+      const storedContentAssets = localStorage.getItem('contentAssets');
+      if (storedContentAssets) {
+        const allAssets = JSON.parse(storedContentAssets);
+        const promptAssets = allAssets.filter((asset: ContentAsset) => asset.type === 'prompt');
+        setContentPrompts(promptAssets);
       }
-    };
 
+      // Load Compliance prompts
+      const storedComplianceAssets = localStorage.getItem('complianceAssets');
+      if (storedComplianceAssets) {
+        const allAssets = JSON.parse(storedComplianceAssets);
+        const promptAssets = allAssets.filter((asset: ContentAsset) => asset.type === 'prompt');
+        setCompliancePrompts(promptAssets);
+      }
+
+      // Load Coach prompts
+      const storedCoachAssets = localStorage.getItem('coachAssets');
+      if (storedCoachAssets) {
+        const allAssets = JSON.parse(storedCoachAssets);
+        const promptAssets = allAssets.filter((asset: ContentAsset) => asset.type === 'prompt');
+        setCoachPrompts(promptAssets);
+      }
+    } catch (error) {
+      console.error('Error loading prompts:', error);
+    }
+  }, []);
+
+  useEffect(() => {
     loadPrompts();
 
     // Listen for updates to prompts
@@ -64,7 +64,7 @@ const PromptsManager = () => {
     return () => {
       window.removeEventListener('contentAssetsUpdated', handleCustomEvent as EventListener);
     };
-  }, []);
+  }, [loadPrompts]);
 
   const handleEditPrompt = (prompt: ContentAsset) => {
     setSelectedPrompt(prompt);
@@ -167,6 +167,8 @@ const PromptsManager = () => {
   };
 
   const currentPrompts = getPromptsByTab();
+  
+  console.log(`Current prompts for ${activeTab} tab:`, currentPrompts);
 
   return (
     <Card>

@@ -42,6 +42,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt, aiType = "content"
     setIsSubmitting(true);
     
     try {
+      // Create the asset object
       const newPromptAsset: ContentAsset = {
         id: uuidv4(),
         type: 'prompt',
@@ -51,36 +52,48 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt, aiType = "content"
         source: "created",
         dateAdded: new Date(),
         content: typedContent.content || "",
-        isNew: true, // Explicitly mark as new
-        aiType: aiType // Now this property exists in the ContentAsset type
+        isNew: true,
+        aiType: aiType 
       };
       
       console.log(`Creating new ${aiType} prompt asset:`, newPromptAsset);
       
-      // Directly save to localStorage for immediate effect
+      // Save to localStorage
       const storageKey = `${aiType}Assets`;
-      const existingAssets = localStorage.getItem(storageKey);
-      const assets = existingAssets ? JSON.parse(existingAssets) : [];
-      assets.push(newPromptAsset);
-      localStorage.setItem(storageKey, JSON.stringify(assets));
+      let existingAssets = [];
       
-      // Dispatch event to notify about asset updates
+      const storedAssets = localStorage.getItem(storageKey);
+      if (storedAssets) {
+        try {
+          existingAssets = JSON.parse(storedAssets);
+        } catch (error) {
+          console.error(`Error parsing ${storageKey}:`, error);
+        }
+      }
+      
+      existingAssets.push(newPromptAsset);
+      localStorage.setItem(storageKey, JSON.stringify(existingAssets));
+      
+      // Dispatch custom event to update UI
       const customEvent = new Event('contentAssetsUpdated');
       window.dispatchEvent(customEvent);
       
-      // Also pass to the parent handler
-      onAddPrompt(newPromptAsset);
-      
+      // Reset form
       setTypedContent({
         title: "",
         subtitle: "",
         content: ""
       });
+      setEmojiPicker("💬");
+      
+      // Call parent handler
+      onAddPrompt(newPromptAsset);
       
       toast({
         title: "Prompt Created",
         description: `This prompt will appear as a topic card in the ${aiType} AI.`,
       });
+      
     } catch (error) {
       console.error("Error creating prompt:", error);
       toast({
@@ -145,7 +158,10 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt, aiType = "content"
         <div className="flex justify-end gap-2">
           <Button 
             variant="outline" 
-            onClick={() => setTypedContent({ title: "", subtitle: "", content: "" })}
+            onClick={() => {
+              setTypedContent({ title: "", subtitle: "", content: "" });
+              setEmojiPicker("💬");
+            }}
             disabled={isSubmitting}
           >
             Cancel

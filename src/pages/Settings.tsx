@@ -20,6 +20,17 @@ const Settings = () => {
   } = useAssetManagement();
   const [currentAdminTab, setCurrentAdminTab] = useState<"general" | "prompts">("general");
 
+  // Force reload of prompts when switching to prompts tab
+  const handleTabChange = (value: string) => {
+    setCurrentAdminTab(value as "general" | "prompts");
+    
+    if (value === "prompts") {
+      // Trigger update event to ensure prompts are fresh
+      const customEvent = new Event('contentAssetsUpdated');
+      window.dispatchEvent(customEvent);
+    }
+  };
+
   return (
     <div className="container mx-auto pt-24 pb-12 px-4 max-w-5xl">
       <div className="flex items-center justify-between mb-6">
@@ -60,7 +71,7 @@ const Settings = () => {
         
         <TabsContent value="admin">
           <div className="mb-6">
-            <Tabs value={currentAdminTab} onValueChange={(value) => setCurrentAdminTab(value as "general" | "prompts")}>
+            <Tabs value={currentAdminTab} onValueChange={handleTabChange}>
               <TabsList>
                 <TabsTrigger value="general" className="flex items-center gap-2">
                   <Globe className="h-4 w-4" />

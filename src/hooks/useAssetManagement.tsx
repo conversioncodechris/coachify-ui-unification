@@ -19,7 +19,7 @@ export function useAssetManagement() {
   const [assetDialogOpen, setAssetDialogOpen] = useState(false);
   const [selectedAiType, setSelectedAiType] = useState<AssetType>("compliance");
 
-  const getAssetCount = (key: string): number => {
+  const getAssetCount = useCallback((key: string): number => {
     const typeAssets = localStorage.getItem(key);
     if (typeAssets) {
       try {
@@ -30,7 +30,7 @@ export function useAssetManagement() {
       }
     }
     return 0;
-  };
+  }, []);
 
   const loadAssetCounts = useCallback(() => {
     console.log("Loading asset counts...");
@@ -45,15 +45,9 @@ export function useAssetManagement() {
     
     // Also store counts in localStorage for other components to access
     localStorage.setItem('assetCounts', JSON.stringify(counts));
-    
-    // Trigger content assets updated event when loading asset counts
-    if (window) {
-      console.log("Triggering contentAssetsUpdated event from useAssetManagement");
-      const customEvent = new Event('contentAssetsUpdated');
-      window.dispatchEvent(customEvent);
-    }
-  }, []);
+  }, [getAssetCount]);
 
+  // Handle events and storage changes
   useEffect(() => {
     // Initial load on component mount
     loadAssetCounts();
@@ -81,24 +75,18 @@ export function useAssetManagement() {
     };
   }, [loadAssetCounts]);
 
+  // Update when dialog closes
   useEffect(() => {
     if (!assetDialogOpen) {
       console.log("Asset dialog closed, reloading asset counts");
       loadAssetCounts();
-      
-      // Force update of topics by dispatching custom event
-      if (window) {
-        console.log("Asset dialog closed, dispatching contentAssetsUpdated event");
-        const customEvent = new Event('contentAssetsUpdated');
-        window.dispatchEvent(customEvent);
-      }
     }
   }, [assetDialogOpen, loadAssetCounts]);
 
-  const handleOpenAssetDialog = (type: AssetType) => {
+  const handleOpenAssetDialog = useCallback((type: AssetType) => {
     setSelectedAiType(type);
     setAssetDialogOpen(true);
-  };
+  }, []);
 
   return {
     assetCounts,
