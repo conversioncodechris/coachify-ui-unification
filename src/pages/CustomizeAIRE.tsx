@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Database, MessageSquare, Sparkles } from "lucide-react";
+import { Database, MessageSquare } from "lucide-react";
 import PromptsManager from '@/components/settings/PromptsManager';
 import PromptsTab from '@/components/settings/PromptsTab';
-import AssetManagementDialog from "@/components/settings/AssetManagementDialog";
+import AssetManagementDialog from "@/components/settings/asset-management/AssetManagementDialog";
 import { useAssetManagement } from '@/hooks/useAssetManagement';
 
 const CustomizeAIRE = () => {
