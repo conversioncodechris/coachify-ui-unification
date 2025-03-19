@@ -106,14 +106,27 @@ export const usePrompts = () => {
   };
 
   const handleDeletePrompt = (id: string) => {
+    console.log(`Executing deletePrompt for ID: ${id}`);
     const promptToDelete = prompts.find(p => p.id === id);
-    if (!promptToDelete) return;
+    
+    if (!promptToDelete) {
+      console.error(`Prompt with ID ${id} not found`);
+      return;
+    }
     
     const aiType = promptToDelete.aiType || "content";
     const storageKey = `${aiType}Assets`;
     
+    // Update local state
     setPrompts(prev => prev.filter(p => p.id !== id));
     
+    // If edit dialog is open and we're deleting the selected prompt, close it
+    if (selectedPrompt && selectedPrompt.id === id) {
+      setSelectedPrompt(null);
+      setEditPromptOpen(false);
+    }
+    
+    // Update localStorage
     const storedAssets = localStorage.getItem(storageKey);
     if (storedAssets) {
       try {
@@ -122,6 +135,7 @@ export const usePrompts = () => {
         
         localStorage.setItem(storageKey, JSON.stringify(updatedAssets));
         
+        // Dispatch event to notify other components
         const customEvent = new Event('contentAssetsUpdated');
         window.dispatchEvent(customEvent);
         
@@ -131,6 +145,11 @@ export const usePrompts = () => {
         });
       } catch (error) {
         console.error(`Error deleting prompt from ${storageKey}:`, error);
+        toast({
+          title: "Error",
+          description: "Failed to delete the prompt. Please try again.",
+          variant: "destructive",
+        });
       }
     }
   };

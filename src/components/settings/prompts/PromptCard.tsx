@@ -28,9 +28,11 @@ const PromptCard: React.FC<PromptCardProps> = ({
   onDeletePrompt
 }) => {
   const handleDeleteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     console.log('Delete button clicked for prompt ID:', prompt.id);
     onDeletePrompt(prompt.id);
+    return false; // Ensure no further propagation
   };
 
   return (
@@ -100,6 +102,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
                 size="icon" 
                 className="h-8 w-8 rounded-full bg-background/90 backdrop-blur-sm text-destructive hover:text-destructive hover:bg-destructive/10"
                 onClick={handleDeleteClick}
+                aria-label="Delete prompt"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>

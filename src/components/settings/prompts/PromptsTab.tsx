@@ -69,8 +69,8 @@ const PromptsTab: React.FC = () => {
       console.log('Confirming deletion of prompt ID:', promptIdToDelete);
       handleDeletePrompt(promptIdToDelete);
       setPromptIdToDelete(null);
+      setDeleteConfirmOpen(false);
     }
-    setDeleteConfirmOpen(false);
   };
 
   return (
@@ -120,7 +120,13 @@ const PromptsTab: React.FC = () => {
       )}
 
       {/* Delete Confirmation Dialog */}
-      <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+      <AlertDialog 
+        open={deleteConfirmOpen} 
+        onOpenChange={(open) => {
+          if (!open) setPromptIdToDelete(null);
+          setDeleteConfirmOpen(open);
+        }}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center">
