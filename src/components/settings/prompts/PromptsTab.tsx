@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
@@ -8,6 +8,17 @@ import { EditPromptDialog } from '@/components/settings/edit-prompt';
 import { usePrompts } from './usePrompts';
 import PromptsList from './PromptsList';
 import PromptsInfo from './PromptsInfo';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Trash2 } from 'lucide-react';
 
 const PromptsTab: React.FC = () => {
   const {
@@ -25,6 +36,25 @@ const PromptsTab: React.FC = () => {
     togglePinPrompt,
     toggleHidePrompt
   } = usePrompts();
+
+  // State for delete confirmation dialog
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [promptIdToDelete, setPromptIdToDelete] = useState<string | null>(null);
+
+  // Open delete confirmation dialog
+  const openDeleteConfirm = (id: string) => {
+    setPromptIdToDelete(id);
+    setDeleteConfirmOpen(true);
+  };
+
+  // Handle confirmed deletion
+  const confirmDelete = () => {
+    if (promptIdToDelete) {
+      handleDeletePrompt(promptIdToDelete);
+      setPromptIdToDelete(null);
+    }
+    setDeleteConfirmOpen(false);
+  };
 
   return (
     <div className="space-y-8">
@@ -49,7 +79,7 @@ const PromptsTab: React.FC = () => {
             onEditPrompt={openEditPrompt}
             onTogglePin={togglePinPrompt}
             onToggleHide={toggleHidePrompt}
-            onDeletePrompt={handleDeletePrompt}
+            onDeletePrompt={openDeleteConfirm}
           />
         </CardContent>
       </Card>
@@ -71,6 +101,30 @@ const PromptsTab: React.FC = () => {
           onPromptUpdated={handleEditPrompt}
         />
       )}
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center">
+              <Trash2 className="mr-2 h-5 w-5 text-destructive" />
+              Confirm Deletion
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this prompt? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={confirmDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

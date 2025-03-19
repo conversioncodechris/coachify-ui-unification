@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
-import { Bot, Pin, PinOff, Eye, EyeOff } from 'lucide-react';
+import { Bot, Pin, PinOff, Eye, EyeOff, Trash2 } from 'lucide-react';
 import { ContentAsset } from '@/types/contentAssets';
 import {
   ContextMenu,
@@ -119,6 +119,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
           className="text-red-600 focus:text-red-600"
           onClick={() => onDeletePrompt(prompt.id)}
         >
+          <Trash2 className="mr-2 h-4 w-4" />
           Delete Prompt
         </ContextMenuItem>
       </ContextMenuContent>
