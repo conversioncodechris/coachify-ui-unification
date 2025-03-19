@@ -13,6 +13,13 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { ContentAsset } from '@/types/contentAssets';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface AddPromptDialogProps {
   isOpen: boolean;
@@ -24,13 +31,14 @@ interface AddPromptDialogProps {
 const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
   isOpen,
   onOpenChange,
-  aiType,
+  aiType: defaultAiType,
   onPromptAdded
 }) => {
   const [selectedEmoji, setSelectedEmoji] = useState("💬");
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [content, setContent] = useState("");
+  const [selectedAiType, setSelectedAiType] = useState<"content" | "compliance" | "coach">(defaultAiType);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const emojiOptions = [
@@ -47,6 +55,7 @@ const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
     setTitle("");
     setSubtitle("");
     setContent("");
+    setSelectedAiType(defaultAiType);
     setIsSubmitting(false);
   };
 
@@ -76,7 +85,7 @@ const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
         dateAdded: new Date(),
         content: content || "",
         isNew: true,
-        aiType: aiType
+        aiType: selectedAiType
       };
       
       // Pass to parent handler
@@ -94,10 +103,27 @@ const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Add New Prompt for {aiType.charAt(0).toUpperCase() + aiType.slice(1)} AI</DialogTitle>
+          <DialogTitle>Add New Prompt</DialogTitle>
         </DialogHeader>
         
         <div className="grid gap-4 py-4">
+          <div className="grid gap-2">
+            <Label htmlFor="aiType">AI Type</Label>
+            <Select 
+              value={selectedAiType} 
+              onValueChange={(value) => setSelectedAiType(value as "content" | "compliance" | "coach")}
+            >
+              <SelectTrigger id="aiType">
+                <SelectValue placeholder="Select AI Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="content">Content AI</SelectItem>
+                <SelectItem value="compliance">Compliance AI</SelectItem>
+                <SelectItem value="coach">Coach AI</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
           <div className="grid gap-2">
             <Label htmlFor="icon">Icon</Label>
             <div className="flex flex-wrap gap-2 max-h-[100px] overflow-y-auto p-2 border rounded-md">
