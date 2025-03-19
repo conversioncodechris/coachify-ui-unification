@@ -1,13 +1,13 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ContentAsset } from '@/types/contentAssets';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Bot, MessageSquare, Users } from 'lucide-react';
+import { Bot, MessageSquare, Users, Plus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import EditPromptDialog from './EditPromptDialog';
 import { useAssetManagement } from '@/hooks/useAssetManagement';
+import AddPromptDialog from './AddPromptDialog';
 
 const PromptsManager = () => {
   const [contentPrompts, setContentPrompts] = useState<ContentAsset[]>([]);
@@ -15,6 +15,7 @@ const PromptsManager = () => {
   const [coachPrompts, setCoachPrompts] = useState<ContentAsset[]>([]);
   const [selectedPrompt, setSelectedPrompt] = useState<ContentAsset | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"content" | "compliance" | "coach">("content");
   const { toast } = useToast();
   const { loadAssetCounts } = useAssetManagement();
@@ -153,6 +154,53 @@ const PromptsManager = () => {
     }
   };
 
+  const handleAddPrompt = (newPrompt: ContentAsset) => {
+    const currentTab = activeTab;
+    const storageKey = `${currentTab}Assets`;
+    
+    try {
+      // Get existing assets
+      const storedAssets = localStorage.getItem(storageKey);
+      let allAssets = [];
+      
+      if (storedAssets) {
+        allAssets = JSON.parse(storedAssets);
+      }
+      
+      // Add new prompt
+      allAssets.push(newPrompt);
+      localStorage.setItem(storageKey, JSON.stringify(allAssets));
+      
+      // Update the state based on the current tab
+      if (currentTab === 'content') {
+        setContentPrompts(prev => [...prev, newPrompt]);
+      } else if (currentTab === 'compliance') {
+        setCompliancePrompts(prev => [...prev, newPrompt]);
+      } else if (currentTab === 'coach') {
+        setCoachPrompts(prev => [...prev, newPrompt]);
+      }
+      
+      // Trigger asset update event
+      const customEvent = new Event('contentAssetsUpdated');
+      window.dispatchEvent(customEvent);
+      loadAssetCounts();
+      
+      toast({
+        title: "Prompt Added",
+        description: "The prompt has been added successfully.",
+      });
+      
+      setAddDialogOpen(false);
+    } catch (error) {
+      console.error('Error adding prompt:', error);
+      toast({
+        title: "Error",
+        description: "There was an error adding the prompt.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const getPromptsByTab = () => {
     switch(activeTab) {
       case "content":
@@ -172,11 +220,20 @@ const PromptsManager = () => {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Manage Prompts</CardTitle>
-        <CardDescription>
-          View, edit, and delete prompts for your AI assistants
-        </CardDescription>
+      <CardHeader className="flex flex-row items-center justify-between">
+        <div>
+          <CardTitle>Manage Prompts</CardTitle>
+          <CardDescription>
+            View, edit, and delete prompts for your AI assistants
+          </CardDescription>
+        </div>
+        <Button 
+          onClick={() => setAddDialogOpen(true)} 
+          className="flex items-center gap-2"
+        >
+          <Plus className="h-4 w-4" />
+          Add Prompt
+        </Button>
       </CardHeader>
       <CardContent>
         <Tabs 
@@ -202,7 +259,7 @@ const PromptsManager = () => {
             <TabsContent key={tab} value={tab}>
               {currentPrompts.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
-                  No prompts found. Add prompts through the Content Management section.
+                  No prompts found. Click the "Add Prompt" button to create a new prompt.
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -252,6 +309,13 @@ const PromptsManager = () => {
             onPromptUpdated={handlePromptUpdated}
           />
         )}
+
+        <AddPromptDialog
+          isOpen={addDialogOpen}
+          onOpenChange={setAddDialogOpen}
+          aiType={activeTab}
+          onPromptAdded={handleAddPrompt}
+        />
       </CardContent>
     </Card>
   );
