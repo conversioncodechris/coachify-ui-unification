@@ -1,9 +1,9 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MessageSquare } from "lucide-react";
 import { ContentAsset } from "@/types/contentAssets";
 import { v4 as uuidv4 } from "uuid";
 import EmojiPicker from "./EmojiPicker";
@@ -50,12 +50,6 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt }) => {
     console.log("Creating new prompt asset:", newPromptAsset);
     onAddPrompt(newPromptAsset);
     
-    setTimeout(() => {
-      console.log("Dispatching contentAssetsUpdated event after creating prompt");
-      const customEvent = new Event('contentAssetsUpdated');
-      window.dispatchEvent(customEvent);
-    }, 100);
-    
     setTypedContent({
       title: "",
       subtitle: "",
@@ -64,7 +58,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt }) => {
     
     toast({
       title: "Prompt Created",
-      description: "This prompt will appear as a topic card in Content AI.",
+      description: "This prompt will appear as a topic card in the corresponding AI.",
     });
   };
 
