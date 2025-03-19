@@ -1,0 +1,2 @@
+
+export { PromptsTab } from './prompts';

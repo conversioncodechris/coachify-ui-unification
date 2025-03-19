@@ -3,7 +3,7 @@ import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Database, MessageSquare } from "lucide-react";
 import PromptsManager from '@/components/settings/PromptsManager';
-import PromptsTab from '@/components/settings/PromptsTab';
+import { PromptsTab } from '@/components/settings';
 import AssetManagementDialog from "@/components/settings/asset-management/AssetManagementDialog";
 import { useAssetManagement } from '@/hooks/useAssetManagement';
 
