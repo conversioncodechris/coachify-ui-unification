@@ -52,7 +52,7 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt, aiType = "content"
         dateAdded: new Date(),
         content: typedContent.content || "",
         isNew: true, // Explicitly mark as new
-        aiType: aiType // Add the AI type to associate it with the correct AI
+        aiType: aiType // Now this property exists in the ContentAsset type
       };
       
       console.log(`Creating new ${aiType} prompt asset:`, newPromptAsset);

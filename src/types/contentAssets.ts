@@ -16,4 +16,5 @@ export interface ContentAsset {
   source: AssetSource; // Changed to use AssetSource type
   dateAdded: Date;
   isNew?: boolean;
+  aiType?: "compliance" | "coach" | "content"; // Added aiType property for prompts
 }
