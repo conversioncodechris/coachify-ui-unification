@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, Bell, Lock, Globe, MessageSquare } from "lucide-react";
+import { User, Bell, Lock, MessageSquare } from "lucide-react";
 import AccountTab from '@/components/settings/AccountTab';
 import NotificationsTab from '@/components/settings/NotificationsTab';
 import SecurityTab from '@/components/settings/SecurityTab';
@@ -13,7 +13,8 @@ const Settings = () => {
   const { 
     assetDialogOpen,
     selectedAiType, 
-    setAssetDialogOpen
+    setAssetDialogOpen,
+    handleOpenAssetDialog
   } = useAssetManagement();
 
   return (
@@ -36,7 +37,7 @@ const Settings = () => {
             <Lock className="h-4 w-4" />
             <span className="hidden sm:inline">Security</span>
           </TabsTrigger>
-          <TabsTrigger value="admin" className="flex items-center gap-2">
+          <TabsTrigger value="content" className="flex items-center gap-2">
             <MessageSquare className="h-4 w-4" />
             <span className="hidden sm:inline">Content</span>
           </TabsTrigger>
@@ -54,8 +55,8 @@ const Settings = () => {
           <SecurityTab />
         </TabsContent>
         
-        <TabsContent value="admin">
-          <PromptsManager />
+        <TabsContent value="content">
+          <PromptsManager onOpenAssetDialog={handleOpenAssetDialog} />
         </TabsContent>
       </Tabs>
 

@@ -10,8 +10,13 @@ import EditPromptDialog from './EditPromptDialog';
 import { useAssetManagement } from '@/hooks/useAssetManagement';
 import AddPromptDialog from './AddPromptDialog';
 import { Badge } from "@/components/ui/badge";
+import { AssetType } from '@/hooks/useAssetManagement';
 
-const PromptsManager = () => {
+interface PromptsManagerProps {
+  onOpenAssetDialog?: (type: AssetType) => void;
+}
+
+const PromptsManager: React.FC<PromptsManagerProps> = ({ onOpenAssetDialog }) => {
   const [contentPrompts, setContentPrompts] = useState<ContentAsset[]>([]);
   const [compliancePrompts, setCompliancePrompts] = useState<ContentAsset[]>([]);
   const [coachPrompts, setCoachPrompts] = useState<ContentAsset[]>([]);
@@ -20,7 +25,7 @@ const PromptsManager = () => {
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"content" | "compliance" | "coach">("content");
   const { toast } = useToast();
-  const { loadAssetCounts, assetCounts, handleOpenAssetDialog } = useAssetManagement();
+  const { loadAssetCounts, assetCounts } = useAssetManagement();
 
   // Load prompts from localStorage
   const loadPrompts = useCallback(() => {
@@ -220,6 +225,13 @@ const PromptsManager = () => {
   
   console.log(`Current prompts for ${activeTab} tab:`, currentPrompts);
 
+  // Handle asset management dialog opening
+  const handleAssetManagement = (type: AssetType) => {
+    if (onOpenAssetDialog) {
+      onOpenAssetDialog(type);
+    }
+  };
+
   return (
     <div className="space-y-8">
       {/* Content Management Section */}
@@ -235,7 +247,7 @@ const PromptsManager = () => {
             <Button 
               variant="outline" 
               className="justify-start relative"
-              onClick={() => handleOpenAssetDialog("compliance")}
+              onClick={() => handleAssetManagement("compliance")}
             >
               <FileText className="mr-2 h-4 w-4" />
               Compliance AI Assets
@@ -249,7 +261,7 @@ const PromptsManager = () => {
             <Button 
               variant="outline" 
               className="justify-start relative"
-              onClick={() => handleOpenAssetDialog("coach")}
+              onClick={() => handleAssetManagement("coach")}
             >
               <FileText className="mr-2 h-4 w-4" />
               Coach AI Assets
@@ -263,7 +275,7 @@ const PromptsManager = () => {
             <Button 
               variant="outline" 
               className="justify-start relative"
-              onClick={() => handleOpenAssetDialog("content")}
+              onClick={() => handleAssetManagement("content")}
             >
               <FileText className="mr-2 h-4 w-4" />
               Content AI Assets
