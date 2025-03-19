@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { ContentAsset } from "@/types/contentAssets";
 import { useEditPromptForm } from './useEditPromptForm';
 import PromptFormFields from '../add-prompt/PromptFormFields';
+import { Trash2 } from 'lucide-react';
 
 interface EditPromptDialogProps {
   isOpen: boolean;
@@ -39,7 +40,8 @@ const EditPromptDialog: React.FC<EditPromptDialogProps> = ({
     emojiOptions,
     handleSelectEmoji,
     handleClose,
-    handleSave
+    handleSave,
+    handleDelete
   } = useEditPromptForm({ 
     prompt, 
     onPromptUpdated, 
@@ -67,20 +69,32 @@ const EditPromptDialog: React.FC<EditPromptDialogProps> = ({
           onAiTypeChange={setSelectedAiType}
         />
         
-        <DialogFooter>
+        <DialogFooter className="flex items-center justify-between sm:justify-between flex-row">
           <Button 
-            variant="outline" 
-            onClick={handleClose}
-            disabled={isSubmitting}
+            variant="destructive" 
+            size="sm"
+            onClick={handleDelete}
+            className="flex items-center gap-1"
           >
-            Cancel
+            <Trash2 className="h-4 w-4" />
+            Delete
           </Button>
-          <Button 
-            onClick={handleSave}
-            disabled={isSubmitting || !title.trim()}
-          >
-            {isSubmitting ? "Saving..." : "Save Changes"}
-          </Button>
+          
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              onClick={handleClose}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={handleSave}
+              disabled={isSubmitting || !title.trim()}
+            >
+              {isSubmitting ? "Saving..." : "Save Changes"}
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

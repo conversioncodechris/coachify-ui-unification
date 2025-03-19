@@ -9,81 +9,75 @@ interface UseEditPromptFormProps {
   onClose: () => void;
 }
 
-export const useEditPromptForm = ({
-  prompt,
-  onPromptUpdated,
-  onClose
-}: UseEditPromptFormProps) => {
+export const useEditPromptForm = ({ prompt, onPromptUpdated, onClose }: UseEditPromptFormProps) => {
+  // State
+  const [selectedEmoji, setSelectedEmoji] = useState<string>(prompt.icon || '🔍');
+  const [title, setTitle] = useState<string>(prompt.title || '');
+  const [subtitle, setSubtitle] = useState<string>(prompt.subtitle || '');
+  const [content, setContent] = useState<string>(prompt.content || '');
+  const [selectedAiType, setSelectedAiType] = useState<string>(prompt.aiType || 'content');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { toast } = useToast();
-  const [selectedEmoji, setSelectedEmoji] = useState<string>(prompt.icon);
-  const [title, setTitle] = useState<string>(prompt.title);
-  const [subtitle, setSubtitle] = useState<string>(prompt.subtitle);
-  const [content, setContent] = useState<string>(prompt.content || "");
-  const [selectedAiType, setSelectedAiType] = useState<"content" | "compliance" | "coach">(
-    prompt.aiType || "content"
-  );
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Emoji options
+  const emojiOptions = [
+    "📝", "🔍", "💡", "📊", "📈", "🗂️", "📚", "🔔",
+    "✅", "❓", "🚀", "🎯", "💻", "📱", "🌐", "💼",
+    "⚙️", "📄", "📋", "📎", "🔑", "🛠️", "📧", "💬",
+    "👥", "🏆", "🔒", "⏱️", "📅", "💰", "🔄", "⭐"
+  ];
 
   useEffect(() => {
     // Reset form when prompt changes
-    setSelectedEmoji(prompt.icon);
-    setTitle(prompt.title);
-    setSubtitle(prompt.subtitle);
-    setContent(prompt.content || "");
-    setSelectedAiType(prompt.aiType || "content");
+    setSelectedEmoji(prompt.icon || '🔍');
+    setTitle(prompt.title || '');
+    setSubtitle(prompt.subtitle || '');
+    setContent(prompt.content || '');
+    setSelectedAiType(prompt.aiType || 'content');
   }, [prompt]);
-
-  // Common emoji options
-  const emojiOptions = [
-    "💬", "🗣️", "📝", "📚", "🧠", "💡", "🔍", "📊", "📋", "📈", 
-    "🤔", "🎯", "🏆", "✅", "⚠️", "🚨", "🔒", "🛡️", "📑", "📌"
-  ];
 
   const handleSelectEmoji = (emoji: string) => {
     setSelectedEmoji(emoji);
   };
 
   const handleSave = () => {
-    if (isSubmitting) return;
-    
     if (!title.trim()) {
       toast({
-        title: "Missing title",
-        description: "Please provide a title for your prompt.",
+        title: "Title Required",
+        description: "Please enter a title for your prompt",
+        variant: "destructive",
       });
       return;
     }
 
     setIsSubmitting(true);
+
+    // Create updated prompt
+    const updatedPrompt: ContentAsset = {
+      ...prompt,
+      icon: selectedEmoji,
+      title: title.trim(),
+      subtitle: subtitle.trim(),
+      content: content.trim(),
+      aiType: selectedAiType as 'content' | 'compliance' | 'coach',
+      lastModified: new Date().toISOString(),
+    };
+
+    // Update the prompt
+    onPromptUpdated(updatedPrompt);
+    setIsSubmitting(false);
+    onClose();
+  };
+
+  const handleDelete = () => {
+    // We'll use the existing delete confirmation dialog by triggering a custom event
+    onClose();
     
-    try {
-      const updatedPrompt: ContentAsset = {
-        ...prompt,
-        icon: selectedEmoji,
-        title: title.trim(),
-        subtitle: subtitle.trim() || "Prompt-based topic",
-        content: content,
-        isNew: false, // Mark as not new anymore since it's been edited
-        aiType: selectedAiType
-      };
-      
-      onPromptUpdated(updatedPrompt);
-      onClose();
-      
-      toast({
-        title: "Prompt Updated",
-        description: `The prompt has been updated and assigned to ${selectedAiType.charAt(0).toUpperCase() + selectedAiType.slice(1)} AI.`,
-      });
-    } catch (error) {
-      console.error("Error updating prompt:", error);
-      toast({
-        title: "Error",
-        description: "Failed to update prompt. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+    // Create and dispatch a custom event with the prompt ID
+    const deleteEvent = new CustomEvent('promptDeleteRequested', { 
+      detail: { promptId: prompt.id } 
+    });
+    window.dispatchEvent(deleteEvent);
   };
 
   const handleClose = () => {
@@ -104,6 +98,7 @@ export const useEditPromptForm = ({
     emojiOptions,
     handleSelectEmoji,
     handleClose,
-    handleSave
+    handleSave,
+    handleDelete
   };
 };

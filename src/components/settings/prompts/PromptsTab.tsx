@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
@@ -40,6 +40,21 @@ const PromptsTab: React.FC = () => {
   // State for delete confirmation dialog
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [promptIdToDelete, setPromptIdToDelete] = useState<string | null>(null);
+
+  // Effect to listen for delete requests from the EditPromptDialog
+  useEffect(() => {
+    const handleDeleteRequest = (e: CustomEvent<{ promptId: string }>) => {
+      openDeleteConfirm(e.detail.promptId);
+    };
+
+    // Add event listener for custom delete event
+    window.addEventListener('promptDeleteRequested', handleDeleteRequest as EventListener);
+    
+    // Cleanup function
+    return () => {
+      window.removeEventListener('promptDeleteRequested', handleDeleteRequest as EventListener);
+    };
+  }, []);
 
   // Open delete confirmation dialog
   const openDeleteConfirm = (id: string) => {
