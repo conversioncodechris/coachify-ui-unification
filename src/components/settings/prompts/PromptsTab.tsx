@@ -71,6 +71,11 @@ const PromptsTab: React.FC = () => {
     setDeleteConfirmOpen(false);
   };
 
+  // This is the actual handler we'll pass to the PromptCard
+  const handlePromptDeleteRequest = (id: string) => {
+    openDeleteConfirm(id);
+  };
+
   return (
     <div className="space-y-8">
       <Card>
@@ -94,7 +99,7 @@ const PromptsTab: React.FC = () => {
             onEditPrompt={openEditPrompt}
             onTogglePin={togglePinPrompt}
             onToggleHide={toggleHidePrompt}
-            onDeletePrompt={openDeleteConfirm}
+            onDeletePrompt={handlePromptDeleteRequest}
           />
         </CardContent>
       </Card>

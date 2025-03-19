@@ -131,7 +131,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
         <ContextMenuSeparator />
         <ContextMenuItem 
           className="text-red-600 focus:text-red-600"
-          onClick={() => onDeletePrompt(prompt.id)}
+          onClick={handleDeleteClick}
         >
           <Trash2 className="mr-2 h-4 w-4" />
           Delete Prompt
