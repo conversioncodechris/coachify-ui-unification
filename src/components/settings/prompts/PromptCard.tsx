@@ -27,9 +27,9 @@ const PromptCard: React.FC<PromptCardProps> = ({
   onToggleHide,
   onDeletePrompt
 }) => {
-  // Separate handler to prevent event propagation 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    console.log('Delete button clicked for prompt ID:', prompt.id);
     onDeletePrompt(prompt.id);
   };
 

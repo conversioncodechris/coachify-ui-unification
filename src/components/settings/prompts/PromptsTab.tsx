@@ -58,6 +58,7 @@ const PromptsTab: React.FC = () => {
 
   // Open delete confirmation dialog
   const openDeleteConfirm = (id: string) => {
+    console.log('Opening delete confirmation for prompt ID:', id);
     setPromptIdToDelete(id);
     setDeleteConfirmOpen(true);
   };
@@ -65,15 +66,11 @@ const PromptsTab: React.FC = () => {
   // Handle confirmed deletion
   const confirmDelete = () => {
     if (promptIdToDelete) {
+      console.log('Confirming deletion of prompt ID:', promptIdToDelete);
       handleDeletePrompt(promptIdToDelete);
       setPromptIdToDelete(null);
     }
     setDeleteConfirmOpen(false);
-  };
-
-  // This is the actual handler we'll pass to the PromptCard
-  const handlePromptDeleteRequest = (id: string) => {
-    openDeleteConfirm(id);
   };
 
   return (
@@ -99,7 +96,7 @@ const PromptsTab: React.FC = () => {
             onEditPrompt={openEditPrompt}
             onTogglePin={togglePinPrompt}
             onToggleHide={toggleHidePrompt}
-            onDeletePrompt={handlePromptDeleteRequest}
+            onDeletePrompt={openDeleteConfirm}
           />
         </CardContent>
       </Card>
