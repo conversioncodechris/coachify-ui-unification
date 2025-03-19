@@ -28,7 +28,7 @@ const PromptsManager: React.FC<PromptsManagerProps> = ({ onOpenAssetDialog }) =>
         <CardHeader>
           <CardTitle>Training Content Management</CardTitle>
           <CardDescription>
-            Manage training assets for Compliance AI, Coach AI, and Content AI
+            Manage training assets for AI assistants (PDFs, guidelines, videos, etc.)
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -39,7 +39,7 @@ const PromptsManager: React.FC<PromptsManagerProps> = ({ onOpenAssetDialog }) =>
               onClick={() => handleAssetManagement("compliance")}
             >
               <FileText className="mr-2 h-4 w-4" />
-              Compliance AI Assets
+              Compliance AI Training
               {assetCounts.compliance > 0 && (
                 <Badge variant="secondary" className="absolute -top-2 -right-2 px-1 py-0 min-w-5 h-5 flex items-center justify-center">
                   <Database className="h-3 w-3 mr-0.5" />
@@ -53,7 +53,7 @@ const PromptsManager: React.FC<PromptsManagerProps> = ({ onOpenAssetDialog }) =>
               onClick={() => handleAssetManagement("coach")}
             >
               <FileText className="mr-2 h-4 w-4" />
-              Coach AI Assets
+              Coach AI Training
               {assetCounts.coach > 0 && (
                 <Badge variant="secondary" className="absolute -top-2 -right-2 px-1 py-0 min-w-5 h-5 flex items-center justify-center">
                   <Database className="h-3 w-3 mr-0.5" />
@@ -67,7 +67,7 @@ const PromptsManager: React.FC<PromptsManagerProps> = ({ onOpenAssetDialog }) =>
               onClick={() => handleAssetManagement("content")}
             >
               <FileText className="mr-2 h-4 w-4" />
-              Content AI Assets
+              Content AI Training
               {assetCounts.content > 0 && (
                 <Badge variant="secondary" className="absolute -top-2 -right-2 px-1 py-0 min-w-5 h-5 flex items-center justify-center">
                   <Database className="h-3 w-3 mr-0.5" />
@@ -132,7 +132,7 @@ const PromptsManager: React.FC<PromptsManagerProps> = ({ onOpenAssetDialog }) =>
           
           <div className="mt-6 p-4 border rounded-md bg-gray-50">
             <p className="text-sm text-center text-muted-foreground">
-              Click on any of the AI asset buttons above to start managing specific training assets.
+              Training content is used to improve AI responses. For user-facing prompts, use the Prompts tab.
             </p>
           </div>
         </CardContent>

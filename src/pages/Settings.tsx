@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { User, Bell, Lock, MessageSquare, FileText } from "lucide-react";
+import { User, Bell, Lock, Database, MessageSquare } from "lucide-react";
 import AccountTab from '@/components/settings/AccountTab';
 import NotificationsTab from '@/components/settings/NotificationsTab';
 import SecurityTab from '@/components/settings/SecurityTab';
@@ -39,7 +39,7 @@ const Settings = () => {
             <span className="hidden sm:inline">Security</span>
           </TabsTrigger>
           <TabsTrigger value="training" className="flex items-center gap-2">
-            <FileText className="h-4 w-4" />
+            <Database className="h-4 w-4" />
             <span className="hidden sm:inline">Training</span>
           </TabsTrigger>
           <TabsTrigger value="prompts" className="flex items-center gap-2">

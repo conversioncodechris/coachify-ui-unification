@@ -28,7 +28,7 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
   aiType,
 }) => {
   const [assets, setAssets] = useState<ContentAsset[]>([]);
-  const [activeTab, setActiveTab] = useState<AssetType>("prompt");
+  const [activeTab, setActiveTab] = useState<AssetType>("pdf");
   const { toast } = useToast();
   
   useEffect(() => {
@@ -49,12 +49,12 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
   }, [isOpen, aiType]);
   
   const typeLabels: Record<AssetType, { icon: React.ReactNode; label: string }> = {
-    prompt: { icon: <MessageSquare className="h-4 w-4" />, label: "Prompts" },
     pdf: { icon: <FileText className="h-4 w-4" />, label: "PDFs" },
-    guidelines: { icon: <Book className="h-4 w-4" />, label: "Brand Guidelines" },
+    guidelines: { icon: <Book className="h-4 w-4" />, label: "Guidelines" },
     roleplay: { icon: <Users className="h-4 w-4" />, label: "Role Play" },
-    video: { icon: <FileVideo className="h-4 w-4" />, label: "Training Videos" },
-    other: { icon: <FileText className="h-4 w-4" />, label: "Other Assets" },
+    video: { icon: <FileVideo className="h-4 w-4" />, label: "Videos" },
+    other: { icon: <FileText className="h-4 w-4" />, label: "Other" },
+    prompt: { icon: <MessageSquare className="h-4 w-4" />, label: "Prompts" },
   };
 
   const handleAssetAdded = (newAssets: ContentAsset[]) => {
@@ -76,14 +76,14 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
       return updated;
     });
     
-    if (aiType === "content" && activeTab === "prompt") {
+    if (activeTab === "prompt") {
       toast({
-        title: "Prompt Added",
-        description: "This prompt will create a new topic card in Content AI.",
+        title: "Note: Prompts Management",
+        description: "For user-facing prompts, please use the Prompts tab in Settings.",
       });
     } else {
       toast({
-        title: "Asset Added",
+        title: "Training Asset Added",
         description: `Added to ${aiTypeTitle[aiType]} successfully.`,
       });
     }
@@ -129,21 +129,13 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
     
     updateCounts();
     
-    if (aiType === "content") {
-      console.log("Dispatching contentAssetsUpdated event from dialog");
-      const customEvent = new Event('contentAssetsUpdated');
-      window.dispatchEvent(customEvent);
-      
-      toast({
-        title: "Changes Saved",
-        description: `Prompts will appear as topic cards in Content AI.`,
-      });
-    } else {
-      toast({
-        title: "Changes Saved",
-        description: `${assets.length} assets updated for ${aiTypeTitle[aiType]}.`,
-      });
-    }
+    const customEvent = new Event('contentAssetsUpdated');
+    window.dispatchEvent(customEvent);
+    
+    toast({
+      title: "Changes Saved",
+      description: `Training assets updated for ${aiTypeTitle[aiType]}.`,
+    });
     
     onOpenChange(false);
   };
@@ -152,24 +144,30 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
     return assets.filter(asset => asset.type === type).length;
   };
 
+  const assetTypes = Object.keys(typeLabels).filter(type => 
+    type !== 'prompt'
+  ) as AssetType[];
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>
-            {aiTypeTitle[aiType]} Content Management
+            {aiTypeTitle[aiType]} Training Content
           </DialogTitle>
           <DialogDescription>
-            {aiType === "content" ? 
-              "Add and manage assets for your AI system. Prompts will appear as topic cards in Content AI." :
-              "Add and manage assets for your AI system. These will be available in the AI interface."
-            }
+            Add and manage training assets for your AI system. 
+            These documents will help the AI provide more accurate responses.
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs defaultValue="prompt" onValueChange={(value) => setActiveTab(value as AssetType)}>
-          <TabsList className="grid grid-cols-3 md:grid-cols-6 mb-4">
-            {Object.entries(typeLabels).map(([key, { icon, label }]) => {
+        <Tabs 
+          defaultValue="pdf" 
+          onValueChange={(value) => setActiveTab(value as AssetType)}
+        >
+          <TabsList className="grid grid-cols-3 md:grid-cols-5 mb-4">
+            {assetTypes.map((key) => {
+              const { icon, label } = typeLabels[key as AssetType];
               const count = getAssetCountByType(key as AssetType);
               return (
                 <TabsTrigger key={key} value={key} className="flex items-center gap-2">
@@ -185,17 +183,8 @@ const AssetManagementDialog: React.FC<AssetManagementDialogProps> = ({
             })}
           </TabsList>
 
-          {Object.keys(typeLabels).map((type) => (
-            <TabsContent key={type} value={type} className="space-y-4">
-              {type === "prompt" && (
-                <div className="bg-blue-50 p-3 rounded-md border border-blue-100 mb-4">
-                  <p className="text-sm text-blue-800 flex items-center">
-                    <MessageSquare className="h-4 w-4 mr-2" />
-                    Prompts added here will appear as topic cards in {aiType.charAt(0).toUpperCase() + aiType.slice(1)} AI.
-                  </p>
-                </div>
-              )}
-              
+          {assetTypes.map((type) => (
+            <TabsContent key={type} value={type} className="space-y-4">              
               <AssetUploader 
                 assetType={type as AssetType} 
                 onAssetAdded={handleAssetAdded}

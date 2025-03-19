@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useToast } from "../../hooks/use-toast";
 import { CoachTopic } from './CoachTopicCard';
@@ -27,13 +26,11 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
     description: ''
   });
   const [isAddTopicOpen, setIsAddTopicOpen] = useState(false);
-  const [prompts, setPrompts] = useState<ContentAsset[]>([]);
-  const [processedPromptIds, setProcessedPromptIds] = useState<Set<string>>(new Set());
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
-    const loadPromptsAsTopics = () => {
-      console.log("Loading coach prompts as topics...");
+    const loadRoleplayScenarios = () => {
+      console.log("Loading coach roleplay scenarios...");
       const storedAssets = localStorage.getItem('coachAssets');
       
       if (storedAssets) {
@@ -41,40 +38,38 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
           console.log("Parsing stored coach assets:", storedAssets);
           const assets = JSON.parse(storedAssets);
           
-          const filteredPrompts = assets.filter((asset: ContentAsset) => asset.type === 'prompt');
-          setPrompts(filteredPrompts);
-          console.log("Found coach prompts:", filteredPrompts.length);
+          const roleplayScenarios = assets.filter((asset: ContentAsset) => 
+            asset.type === 'roleplay' && !asset.hidden
+          );
           
-          if (filteredPrompts.length > 0) {
+          console.log("Found roleplay scenarios:", roleplayScenarios.length);
+          
+          if (roleplayScenarios.length > 0) {
             const existingTopicTitles = new Set(topics.map(topic => topic.title));
-            const currentProcessedIds = new Set(processedPromptIds);
             
             const newTopics: CoachTopic[] = [];
             
-            filteredPrompts.forEach((prompt: ContentAsset) => {
-              // Only add if not already processed AND not already in topics list
-              if (!currentProcessedIds.has(prompt.id) && !existingTopicTitles.has(prompt.title)) {
-                console.log("Converting coach prompt to topic:", prompt.title);
+            roleplayScenarios.forEach((scenario: ContentAsset) => {
+              if (!existingTopicTitles.has(scenario.title)) {
+                console.log("Converting roleplay scenario to topic:", scenario.title);
                 newTopics.push({
-                  icon: prompt.icon || '📝',
-                  title: prompt.title,
-                  description: prompt.subtitle || 'Prompt-based topic',
-                  isNew: true
+                  icon: scenario.icon || '🎭',
+                  title: scenario.title,
+                  description: scenario.subtitle || 'Roleplay scenario',
+                  isNew: true,
+                  pinned: scenario.pinned
                 });
-                
-                currentProcessedIds.add(prompt.id);
               }
             });
             
-            console.log("New coach topics to add:", newTopics.length);
+            console.log("New roleplay topics to add:", newTopics.length);
             
             if (newTopics.length > 0) {
-              setProcessedPromptIds(currentProcessedIds);
               setTopics(prevTopics => [...newTopics, ...prevTopics]);
               
               toast({
-                title: "New topics added",
-                description: `${newTopics.length} topics created from your coach prompts.`,
+                title: "Scenarios added",
+                description: `${newTopics.length} roleplay scenarios loaded.`,
               });
             }
           }
@@ -84,24 +79,23 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
       }
     };
 
-    // Only trigger the auto-load on initial render
     if (isInitialLoad) {
-      loadPromptsAsTopics();
+      loadRoleplayScenarios();
       setIsInitialLoad(false);
     }
     
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'coachAssets') {
-        console.log("Storage event detected, reloading coach prompts...");
-        loadPromptsAsTopics();
+        console.log("Storage event detected, reloading coach scenarios...");
+        loadRoleplayScenarios();
       }
     };
     
     window.addEventListener('storage', handleStorageChange);
     
     const handleCustomEvent = () => {
-      console.log("Custom event detected, reloading coach prompts...");
-      loadPromptsAsTopics();
+      console.log("Custom event detected, reloading coach scenarios...");
+      loadRoleplayScenarios();
     };
     
     window.addEventListener('contentAssetsUpdated', handleCustomEvent as EventListener);
@@ -110,7 +104,7 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('contentAssetsUpdated', handleCustomEvent as EventListener);
     };
-  }, [topics, setTopics, toast, processedPromptIds, isInitialLoad]);
+  }, [topics, setTopics, toast, isInitialLoad]);
 
   const handleHideTopic = (index: number, event: React.MouseEvent) => {
     event.stopPropagation();
