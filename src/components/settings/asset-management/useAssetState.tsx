@@ -1,9 +1,9 @@
 
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { ContentAsset, AssetType } from "@/types/contentAssets";
 import { useToast } from "@/hooks/use-toast";
 import { MessageSquare, FileText, Book, Users, FileVideo } from "lucide-react";
-import React from 'react';
 
 export function useAssetState(
   isOpen: boolean, 
