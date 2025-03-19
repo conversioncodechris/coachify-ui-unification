@@ -11,10 +11,12 @@ export interface ContentAsset {
   content?: string;
   url?: string;
   fileExtension?: string;
-  fileName?: string; // Added fileName property
+  fileName?: string; 
   size?: number;
-  source: AssetSource; // Changed to use AssetSource type
+  source: AssetSource; 
   dateAdded: Date;
   isNew?: boolean;
-  aiType?: "compliance" | "coach" | "content"; // Added aiType property for prompts
+  aiType?: "compliance" | "coach" | "content";
+  pinned?: boolean; // Added pinned property
+  hidden?: boolean; // Added hidden property
 }
