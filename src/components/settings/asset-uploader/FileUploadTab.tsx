@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Upload, FileText } from "lucide-react";
 import { ContentAsset, AssetType, AssetSource } from "@/types/contentAssets";
 import { v4 as uuidv4 } from "uuid";
+import { useToast } from "@/hooks/use-toast";
 
 interface FileUploadTabProps {
   assetType: AssetType;
@@ -16,6 +17,7 @@ const FileUploadTab: React.FC<FileUploadTabProps> = ({ assetType, onAssetAdded }
   const [files, setFiles] = useState<File[]>([]);
   const [newAssets, setNewAssets] = useState<Partial<ContentAsset>[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const { toast } = useToast();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -40,7 +42,7 @@ const FileUploadTab: React.FC<FileUploadTabProps> = ({ assetType, onAssetAdded }
         size: file.size,
       }));
       
-      setNewAssets(prelimAssets);
+      setNewAssets(prev => [...prev, ...prelimAssets]);
     }
   };
 
@@ -60,7 +62,21 @@ const FileUploadTab: React.FC<FileUploadTabProps> = ({ assetType, onAssetAdded }
     });
   };
 
+  const handleRemoveFile = (index: number) => {
+    setFiles(prev => prev.filter((_, i) => i !== index));
+    setNewAssets(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmitAssets = () => {
+    if (files.length === 0) {
+      toast({
+        title: "No files selected",
+        description: "Please select at least one file to upload.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     setIsUploading(true);
     
     setTimeout(() => {
@@ -74,6 +90,11 @@ const FileUploadTab: React.FC<FileUploadTabProps> = ({ assetType, onAssetAdded }
       setFiles([]);
       setNewAssets([]);
       setIsUploading(false);
+      
+      toast({
+        title: "Files uploaded successfully",
+        description: `Added ${completeAssets.length} file${completeAssets.length > 1 ? 's' : ''}.`
+      });
     }, 1000);
   };
 
@@ -90,25 +111,51 @@ const FileUploadTab: React.FC<FileUploadTabProps> = ({ assetType, onAssetAdded }
           className="hidden"
           multiple
           onChange={handleFileChange}
+          accept={assetType === 'pdf' ? '.pdf' : 
+                  assetType === 'video' ? '.mp4,.webm,.mov,.avi' : 
+                  undefined}
         />
         <Button
           variant="outline"
           onClick={() => document.getElementById("file-upload")?.click()}
         >
-          Select Files
+          Select Multiple Files
         </Button>
       </div>
 
       {newAssets.length > 0 && (
         <div className="space-y-4 mt-4">
-          <h3 className="font-medium">Files Ready for Upload</h3>
+          <div className="flex justify-between items-center">
+            <h3 className="font-medium">Files Ready for Upload ({newAssets.length})</h3>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => {
+                setFiles([]);
+                setNewAssets([]);
+              }}
+            >
+              Clear All
+            </Button>
+          </div>
           
-          <div className="space-y-4">
+          <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2">
             {newAssets.map((asset, index) => (
               <div key={index} className="border rounded-md p-4 space-y-3">
-                <div className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-muted-foreground" />
-                  <span className="text-sm font-medium">{files[index]?.name}</span>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-5 w-5 text-muted-foreground" />
+                    <span className="text-sm font-medium truncate max-w-[200px]">{files[index]?.name}</span>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50"
+                    onClick={() => handleRemoveFile(index)}
+                  >
+                    <span className="sr-only">Remove</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                  </Button>
                 </div>
                 
                 <div className="space-y-2">
@@ -141,7 +188,7 @@ const FileUploadTab: React.FC<FileUploadTabProps> = ({ assetType, onAssetAdded }
               onClick={handleSubmitAssets}
               disabled={isUploading}
             >
-              {isUploading ? "Uploading..." : "Upload All Files"}
+              {isUploading ? "Uploading..." : `Upload All Files (${newAssets.length})`}
             </Button>
           </div>
         </div>
