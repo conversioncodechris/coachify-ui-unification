@@ -15,7 +15,9 @@ export const useEditPromptForm = ({ prompt, onPromptUpdated, onClose }: UseEditP
   const [title, setTitle] = useState<string>(prompt.title || '');
   const [subtitle, setSubtitle] = useState<string>(prompt.subtitle || '');
   const [content, setContent] = useState<string>(prompt.content || '');
-  const [selectedAiType, setSelectedAiType] = useState<string>(prompt.aiType || 'content');
+  const [selectedAiType, setSelectedAiType] = useState<"compliance" | "coach" | "content">(
+    (prompt.aiType as "compliance" | "coach" | "content") || 'content'
+  );
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const { toast } = useToast();
 
@@ -33,7 +35,7 @@ export const useEditPromptForm = ({ prompt, onPromptUpdated, onClose }: UseEditP
     setTitle(prompt.title || '');
     setSubtitle(prompt.subtitle || '');
     setContent(prompt.content || '');
-    setSelectedAiType(prompt.aiType || 'content');
+    setSelectedAiType((prompt.aiType as "compliance" | "coach" | "content") || 'content');
   }, [prompt]);
 
   const handleSelectEmoji = (emoji: string) => {
@@ -59,8 +61,8 @@ export const useEditPromptForm = ({ prompt, onPromptUpdated, onClose }: UseEditP
       title: title.trim(),
       subtitle: subtitle.trim(),
       content: content.trim(),
-      aiType: selectedAiType as 'content' | 'compliance' | 'coach',
-      lastModified: new Date().toISOString(),
+      aiType: selectedAiType,
+      dateAdded: prompt.dateAdded // Use the existing dateAdded instead of lastModified
     };
 
     // Update the prompt
