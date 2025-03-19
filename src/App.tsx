@@ -12,7 +12,16 @@ import CoachAI from "./pages/CoachAI";
 import Settings from "./pages/Settings";
 import AppHeader from "./components/AppHeader";
 
-const queryClient = new QueryClient();
+// Create a client with default options to prevent excessive re-fetching
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60000, // 1 minute
+      retry: 1,         // Only retry once
+      refetchOnWindowFocus: false, // Don't refetch when window regains focus
+    },
+  },
+});
 
 // User avatar URL
 const userAvatarUrl = "/lovable-uploads/4cee2dca-3183-4356-a206-c5d44201ce91.png";
@@ -20,8 +29,9 @@ const userAvatarUrl = "/lovable-uploads/4cee2dca-3183-4356-a206-c5d44201ce91.png
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
+      {/* Use either Toaster or Sonner, not both */}
       <Toaster />
-      <Sonner />
+      {/* <Sonner /> */}
       <BrowserRouter>
         <AppHeader userAvatar={userAvatarUrl} />
         <Routes>

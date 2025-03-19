@@ -16,9 +16,14 @@ import PromptForm from "./asset-uploader/PromptForm";
 interface AssetUploaderProps {
   assetType: AssetType;
   onAssetAdded: (assets: ContentAsset[]) => void;
+  aiType?: "compliance" | "coach" | "content";
 }
 
-const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }) => {
+const AssetUploader: React.FC<AssetUploaderProps> = ({ 
+  assetType, 
+  onAssetAdded,
+  aiType = "content" 
+}) => {
   const [uploadMethod, setUploadMethod] = useState<"upload" | "cloud" | "create" | "draft">("upload");
 
   return (
@@ -29,10 +34,13 @@ const AssetUploader: React.FC<AssetUploaderProps> = ({ assetType, onAssetAdded }
             <div className="mb-4 bg-blue-50 p-3 rounded-md border border-blue-100">
               <p className="text-sm text-blue-800 flex items-center">
                 <MessageSquare className="h-4 w-4 mr-2" />
-                Prompts added here will appear as topic cards in Content AI.
+                Prompts added here will appear as topic cards in {aiType.charAt(0).toUpperCase() + aiType.slice(1)} AI.
               </p>
             </div>
-            <PromptForm onAddPrompt={(asset) => onAssetAdded([asset])} />
+            <PromptForm 
+              onAddPrompt={(asset) => onAssetAdded([asset])} 
+              aiType={aiType}
+            />
           </>
         ) : (
           <Tabs defaultValue="upload" onValueChange={(value) => setUploadMethod(value as any)}>

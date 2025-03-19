@@ -11,9 +11,10 @@ import { useToast } from "@/hooks/use-toast";
 
 interface PromptFormProps {
   onAddPrompt: (asset: ContentAsset) => void;
+  aiType?: "content" | "compliance" | "coach";
 }
 
-const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt }) => {
+const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt, aiType = "content" }) => {
   const { toast } = useToast();
   const [emojiPicker, setEmojiPicker] = useState<string>("💬");
   const [typedContent, setTypedContent] = useState({
@@ -21,12 +22,15 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt }) => {
     subtitle: "",
     content: ""
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSelectEmoji = (emoji: string) => {
     setEmojiPicker(emoji);
   };
 
   const handleAddPrompt = () => {
+    if (isSubmitting) return;
+    
     if (!typedContent.title.trim()) {
       toast({
         title: "Missing title",
@@ -35,36 +39,50 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt }) => {
       return;
     }
 
-    const newPromptAsset: ContentAsset = {
-      id: uuidv4(),
-      type: 'prompt',
-      title: typedContent.title.trim(),
-      subtitle: typedContent.subtitle.trim() || "Prompt-based topic",
-      icon: emojiPicker,
-      source: "created",
-      dateAdded: new Date(),
-      content: typedContent.content || "",
-      isNew: true // Explicitly mark as new
-    };
+    setIsSubmitting(true);
     
-    console.log("Creating new prompt asset:", newPromptAsset);
-    onAddPrompt(newPromptAsset);
-    
-    setTypedContent({
-      title: "",
-      subtitle: "",
-      content: ""
-    });
-    
-    toast({
-      title: "Prompt Created",
-      description: "This prompt will appear as a topic card in the corresponding AI.",
-    });
+    try {
+      const newPromptAsset: ContentAsset = {
+        id: uuidv4(),
+        type: 'prompt',
+        title: typedContent.title.trim(),
+        subtitle: typedContent.subtitle.trim() || "Prompt-based topic",
+        icon: emojiPicker,
+        source: "created",
+        dateAdded: new Date(),
+        content: typedContent.content || "",
+        isNew: true, // Explicitly mark as new
+        aiType: aiType // Add the AI type to associate it with the correct AI
+      };
+      
+      console.log(`Creating new ${aiType} prompt asset:`, newPromptAsset);
+      onAddPrompt(newPromptAsset);
+      
+      setTypedContent({
+        title: "",
+        subtitle: "",
+        content: ""
+      });
+      
+      toast({
+        title: "Prompt Created",
+        description: `This prompt will appear as a topic card in the ${aiType} AI.`,
+      });
+    } catch (error) {
+      console.error("Error creating prompt:", error);
+      toast({
+        title: "Error",
+        description: "Failed to create prompt. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="space-y-4 border rounded-md p-4">
-      <h3 className="font-medium text-center">Create New Content Topic</h3>
+      <h3 className="font-medium text-center">Create New Content Topic for {aiType.charAt(0).toUpperCase() + aiType.slice(1)} AI</h3>
       <div className="space-y-4">
         <EmojiPicker 
           assetType="prompt" 
@@ -115,11 +133,15 @@ const PromptForm: React.FC<PromptFormProps> = ({ onAddPrompt }) => {
           <Button 
             variant="outline" 
             onClick={() => setTypedContent({ title: "", subtitle: "", content: "" })}
+            disabled={isSubmitting}
           >
             Cancel
           </Button>
-          <Button onClick={handleAddPrompt}>
-            Add Topic
+          <Button 
+            onClick={handleAddPrompt}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Adding..." : "Add Topic"}
           </Button>
         </div>
       </div>

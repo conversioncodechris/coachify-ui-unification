@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export type AssetType = "compliance" | "coach" | "content";
 
@@ -32,7 +32,7 @@ export function useAssetManagement() {
     return 0;
   };
 
-  const loadAssetCounts = () => {
+  const loadAssetCounts = useCallback(() => {
     console.log("Loading asset counts...");
     const counts = {
       compliance: getAssetCount("complianceAssets"),
@@ -46,14 +46,16 @@ export function useAssetManagement() {
     // Also store counts in localStorage for other components to access
     localStorage.setItem('assetCounts', JSON.stringify(counts));
     
-    // Always trigger content assets updated event when loading asset counts
-    // This ensures the topics are refreshed whenever assets change
-    console.log("Triggering contentAssetsUpdated event from useAssetManagement");
-    const customEvent = new Event('contentAssetsUpdated');
-    window.dispatchEvent(customEvent);
-  };
+    // Trigger content assets updated event when loading asset counts
+    if (window) {
+      console.log("Triggering contentAssetsUpdated event from useAssetManagement");
+      const customEvent = new Event('contentAssetsUpdated');
+      window.dispatchEvent(customEvent);
+    }
+  }, []);
 
   useEffect(() => {
+    // Initial load on component mount
     loadAssetCounts();
     
     // Handle storage changes (from other tabs/windows)
@@ -77,7 +79,7 @@ export function useAssetManagement() {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('contentAssetsUpdated', handleCustomEvent as EventListener);
     };
-  }, []);
+  }, [loadAssetCounts]);
 
   useEffect(() => {
     if (!assetDialogOpen) {
@@ -85,11 +87,13 @@ export function useAssetManagement() {
       loadAssetCounts();
       
       // Force update of topics by dispatching custom event
-      console.log("Asset dialog closed, dispatching contentAssetsUpdated event");
-      const customEvent = new Event('contentAssetsUpdated');
-      window.dispatchEvent(customEvent);
+      if (window) {
+        console.log("Asset dialog closed, dispatching contentAssetsUpdated event");
+        const customEvent = new Event('contentAssetsUpdated');
+        window.dispatchEvent(customEvent);
+      }
     }
-  }, [assetDialogOpen]);
+  }, [assetDialogOpen, loadAssetCounts]);
 
   const handleOpenAssetDialog = (type: AssetType) => {
     setSelectedAiType(type);
