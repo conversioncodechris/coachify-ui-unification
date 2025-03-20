@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { EnhancedPrompt } from "@/utils/promptEnhancer";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,8 +18,6 @@ const PromptEnhancementSuggestion: React.FC<PromptEnhancementSuggestionProps> = 
   onAccept,
   onReject
 }) => {
-  const [showDiff, setShowDiff] = useState(false);
-  
   if (!enhancedPrompt) return null;
 
   const categoryLabels: Record<string, string> = {

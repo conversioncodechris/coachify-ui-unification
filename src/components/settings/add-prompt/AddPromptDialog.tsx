@@ -53,7 +53,12 @@ const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
   });
 
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={(open) => {
+      if (!open) {
+        handleClose();
+      }
+      onOpenChange(open);
+    }}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Add New Prompt</DialogTitle>

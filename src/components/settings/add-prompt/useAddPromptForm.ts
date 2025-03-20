@@ -33,6 +33,11 @@ export const useAddPromptForm = ({
     "🤔", "🎯", "🏆", "✅", "⚠️", "🚨", "🔒", "🛡️", "📑", "📌"
   ];
 
+  // Reset the form when the dialog opens (this addresses the pre-filling issue)
+  useEffect(() => {
+    resetForm();
+  }, [defaultAiType]);
+
   // Generate enhanced prompt suggestion when content changes
   useEffect(() => {
     if (content.trim().length > 15) {
