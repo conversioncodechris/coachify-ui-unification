@@ -69,21 +69,38 @@ export const useEditPromptForm = ({ prompt, onPromptUpdated, onClose }: UseEditP
 
     setIsSubmitting(true);
 
-    // Create updated prompt
-    const updatedPrompt: ContentAsset = {
-      ...prompt,
-      icon: selectedEmoji,
-      title: title.trim(),
-      subtitle: subtitle.trim(),
-      content: content.trim(),
-      aiType: selectedAiType,
-      dateAdded: prompt.dateAdded // Use the existing dateAdded instead of lastModified
-    };
+    try {
+      // Create updated prompt
+      const updatedPrompt: ContentAsset = {
+        ...prompt,
+        icon: selectedEmoji,
+        title: title.trim(),
+        subtitle: subtitle.trim(),
+        content: content.trim(),
+        aiType: selectedAiType,
+        dateAdded: prompt.dateAdded // Use the existing dateAdded instead of lastModified
+      };
 
-    // Update the prompt
-    onPromptUpdated(updatedPrompt);
-    setIsSubmitting(false);
-    onClose();
+      // Update the prompt
+      onPromptUpdated(updatedPrompt);
+      setIsSubmitting(false);
+      
+      toast({
+        title: "Prompt Updated",
+        description: "Your prompt has been successfully updated",
+      });
+      
+      onClose();
+    } catch (error) {
+      console.error("Error updating prompt:", error);
+      setIsSubmitting(false);
+      
+      toast({
+        title: "Update Failed",
+        description: "There was an error updating your prompt",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleDelete = () => {
@@ -104,10 +121,20 @@ export const useEditPromptForm = ({ prompt, onPromptUpdated, onClose }: UseEditP
   const acceptEnhancedPrompt = (enhancedText: string) => {
     setContent(enhancedText);
     setShowEnhancement(false);
+    
+    toast({
+      title: "Enhancement Applied",
+      description: "The AI-enhanced prompt has been applied",
+    });
   };
 
   const rejectEnhancedPrompt = () => {
     setShowEnhancement(false);
+    
+    toast({
+      title: "Enhancement Rejected",
+      description: "Keeping your original prompt",
+    });
   };
 
   return {

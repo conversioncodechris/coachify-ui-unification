@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { ContentAsset } from '@/types/contentAssets';
 import { enhancePrompt, EnhancedPrompt } from '@/utils/promptEnhancer';
+import { useToast } from '@/hooks/use-toast';
 
 interface UseAddPromptFormProps {
   defaultAiType: "content" | "compliance" | "coach";
@@ -23,6 +24,7 @@ export const useAddPromptForm = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [enhancedPromptSuggestion, setEnhancedPromptSuggestion] = useState<EnhancedPrompt | null>(null);
   const [showEnhancement, setShowEnhancement] = useState(false);
+  const { toast } = useToast();
 
   const emojiOptions = [
     "💬", "🗣️", "📝", "📚", "🧠", "💡", "🔍", "📊", "📋", "📈",
@@ -65,7 +67,12 @@ export const useAddPromptForm = ({
     if (isSubmitting) return;
     
     if (!title.trim()) {
-      return; // Validation error - title is required
+      toast({
+        title: "Error",
+        description: "Title is required",
+        variant: "destructive"
+      });
+      return;
     }
     
     setIsSubmitting(true);
@@ -93,16 +100,33 @@ export const useAddPromptForm = ({
     } catch (error) {
       console.error("Error creating prompt:", error);
       setIsSubmitting(false);
+      toast({
+        title: "Error",
+        description: "Failed to create prompt",
+        variant: "destructive"
+      });
     }
   };
 
   const acceptEnhancedPrompt = (enhancedText: string) => {
     setContent(enhancedText);
     setShowEnhancement(false);
+    
+    // Show toast to confirm enhancement accepted
+    toast({
+      title: "Enhancement Applied",
+      description: "The AI-enhanced prompt has been applied",
+    });
   };
 
   const rejectEnhancedPrompt = () => {
     setShowEnhancement(false);
+    
+    // Show toast to confirm rejection
+    toast({
+      title: "Enhancement Rejected",
+      description: "Keeping your original prompt",
+    });
   };
 
   return {

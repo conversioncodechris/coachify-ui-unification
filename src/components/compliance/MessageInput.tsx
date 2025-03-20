@@ -1,6 +1,9 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Send, FileText } from 'lucide-react';
+import { enhancePrompt, EnhancedPrompt } from '@/utils/promptEnhancer';
+import { useToast } from '@/hooks/use-toast';
+import ChatEnhancementSuggestion from '../content/ChatEnhancementSuggestion';
 
 interface MessageInputProps {
   topic: string;
@@ -18,11 +21,28 @@ const MessageInput: React.FC<MessageInputProps> = ({
   isSourcesPanelOpen
 }) => {
   const [inputMessage, setInputMessage] = useState('');
+  const [enhancedPromptSuggestion, setEnhancedPromptSuggestion] = useState<EnhancedPrompt | null>(null);
+  const [showEnhancement, setShowEnhancement] = useState(false);
+  const { toast } = useToast();
+
+  // Generate enhanced prompt suggestion when input message changes
+  useEffect(() => {
+    // Only suggest enhancement if message is substantial (over 15 chars)
+    if (inputMessage.trim().length > 15) {
+      const enhancedPrompt = enhancePrompt(inputMessage);
+      setEnhancedPromptSuggestion(enhancedPrompt);
+      setShowEnhancement(true);
+    } else {
+      setEnhancedPromptSuggestion(null);
+      setShowEnhancement(false);
+    }
+  }, [inputMessage]);
 
   const handleSendMessage = () => {
     if (!inputMessage.trim()) return;
     onSendMessage(inputMessage);
     setInputMessage('');
+    setShowEnhancement(false);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -32,9 +52,30 @@ const MessageInput: React.FC<MessageInputProps> = ({
     }
   };
 
+  const acceptEnhancedPrompt = (enhancedText: string) => {
+    setInputMessage(enhancedText);
+    setShowEnhancement(false);
+    
+    toast({
+      title: "Prompt Enhanced",
+      description: "We've applied an AI-optimized version of your prompt",
+    });
+  };
+
+  const rejectEnhancedPrompt = () => {
+    setShowEnhancement(false);
+  };
+
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 p-4 border-t border-border bg-white">
       <div className="max-w-3xl mx-auto relative">
+        {showEnhancement && enhancedPromptSuggestion && (
+          <ChatEnhancementSuggestion
+            enhancedPrompt={enhancedPromptSuggestion}
+            onAccept={acceptEnhancedPrompt}
+            onReject={rejectEnhancedPrompt}
+          />
+        )}
         <textarea
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}

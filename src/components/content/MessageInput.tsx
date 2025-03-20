@@ -1,6 +1,9 @@
 
-import React, { useState } from 'react';
-import { Send, FileText } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Send, FileText, Sparkles } from 'lucide-react';
+import { enhancePrompt, EnhancedPrompt } from '@/utils/promptEnhancer';
+import ChatEnhancementSuggestion from './ChatEnhancementSuggestion';
+import { useToast } from '@/hooks/use-toast';
 
 interface MessageInputProps {
   topic: string;
@@ -18,11 +21,28 @@ const MessageInput: React.FC<MessageInputProps> = ({
   isSourcesPanelOpen
 }) => {
   const [inputMessage, setInputMessage] = useState('');
+  const [enhancedPromptSuggestion, setEnhancedPromptSuggestion] = useState<EnhancedPrompt | null>(null);
+  const [showEnhancement, setShowEnhancement] = useState(false);
+  const { toast } = useToast();
+
+  // Generate enhanced prompt suggestion when input message changes
+  useEffect(() => {
+    // Only suggest enhancement if message is substantial (over 15 chars)
+    if (inputMessage.trim().length > 15) {
+      const enhancedPrompt = enhancePrompt(inputMessage);
+      setEnhancedPromptSuggestion(enhancedPrompt);
+      setShowEnhancement(true);
+    } else {
+      setEnhancedPromptSuggestion(null);
+      setShowEnhancement(false);
+    }
+  }, [inputMessage]);
 
   const handleSendMessage = () => {
     if (!inputMessage.trim()) return;
     onSendMessage(inputMessage);
     setInputMessage('');
+    setShowEnhancement(false);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -32,9 +52,30 @@ const MessageInput: React.FC<MessageInputProps> = ({
     }
   };
 
+  const acceptEnhancedPrompt = (enhancedText: string) => {
+    setInputMessage(enhancedText);
+    setShowEnhancement(false);
+    
+    toast({
+      title: "Prompt Enhanced",
+      description: "We've applied an AI-optimized version of your prompt",
+    });
+  };
+
+  const rejectEnhancedPrompt = () => {
+    setShowEnhancement(false);
+  };
+
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 p-4 border-t border-border bg-white">
       <div className="max-w-3xl mx-auto relative">
+        {showEnhancement && enhancedPromptSuggestion && (
+          <ChatEnhancementSuggestion
+            enhancedPrompt={enhancedPromptSuggestion}
+            onAccept={acceptEnhancedPrompt}
+            onReject={rejectEnhancedPrompt}
+          />
+        )}
         <textarea
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
@@ -44,18 +85,18 @@ const MessageInput: React.FC<MessageInputProps> = ({
           rows={2}
         />
         <button 
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 p-2 hover:bg-gray-100 rounded-full"
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-insta-blue p-2 hover:bg-insta-lightBlue rounded-full"
           onClick={handleSendMessage}
         >
           <Send size={20} />
         </button>
       </div>
-      <div className="max-w-3xl mx-auto mt-2 text-xs text-gray-500 flex items-center">
+      <div className="max-w-3xl mx-auto mt-2 text-xs text-insta-lightText flex items-center">
         <FileText size={14} className="mr-1" />
         Sources used by our AI will display in the right-hand column after each response.
         {allSourcesLength > 0 && (
           <button 
-            className="ml-2 text-gray-600 hover:underline"
+            className="ml-2 text-insta-blue hover:underline"
             onClick={toggleSourcesPanel}
           >
             {isSourcesPanelOpen ? "Hide" : "View"} sources

@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ContentAsset } from '@/types/contentAssets';
@@ -56,6 +57,9 @@ const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Add New Prompt</DialogTitle>
+          <DialogDescription>
+            Create a new prompt for use in AI conversations
+          </DialogDescription>
         </DialogHeader>
         
         <PromptFormFields
