@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
@@ -36,6 +35,7 @@ const PromptsTab: React.FC = () => {
     handleAddPrompt,
     handleEditPrompt,
     handleDeletePrompt,
+    isDeleting,
     openEditPrompt,
     openDeleteConfirm,
     togglePinPrompt,
@@ -70,16 +70,18 @@ const PromptsTab: React.FC = () => {
       // Store ID in local variable to ensure it's available even if state changes
       const idToDelete = promptIdToDelete;
       
-      // Clear state first so we avoid any race conditions
-      setPromptIdToDelete(null);
+      // Close the dialog first
       setDeleteConfirmOpen(false);
       
-      // Execute the deletion after state is updated
+      // Execute the deletion with a slight delay to ensure UI updates properly
       setTimeout(() => {
         handleDeletePrompt(idToDelete);
-      }, 0);
+        // Clear the ID after deletion is complete
+        setPromptIdToDelete(null);
+      }, 50);
     } else {
       console.error('No prompt ID to delete');
+      setDeleteConfirmOpen(false);
     }
   };
 
@@ -133,7 +135,9 @@ const PromptsTab: React.FC = () => {
       <AlertDialog 
         open={deleteConfirmOpen} 
         onOpenChange={(open) => {
-          if (!open) setPromptIdToDelete(null);
+          if (!open && !isDeleting) {
+            setPromptIdToDelete(null);
+          }
           setDeleteConfirmOpen(open);
         }}
       >
@@ -148,12 +152,13 @@ const PromptsTab: React.FC = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
             <AlertDialogAction 
               onClick={confirmDelete}
+              disabled={isDeleting}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Delete
+              {isDeleting ? "Deleting..." : "Delete"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

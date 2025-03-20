@@ -11,13 +11,19 @@ export const useDeletePrompt = (
   setEditPromptOpen: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   const { toast } = useToast();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDeletePrompt = (id: string) => {
+    if (isDeleting) return; // Prevent multiple deletion attempts
+    
     console.log(`Executing deletePrompt for ID: ${id}`);
+    setIsDeleting(true);
+    
     const promptToDelete = prompts.find(p => p.id === id);
     
     if (!promptToDelete) {
       console.error(`Prompt with ID ${id} not found`);
+      setIsDeleting(false);
       return;
     }
     
@@ -31,14 +37,25 @@ export const useDeletePrompt = (
       
       if (!storedAssetsJson) {
         console.error(`No assets found in localStorage for ${storageKey}`);
+        setIsDeleting(false);
         return;
       }
       
       // Parse the stored assets
       const storedAssets = JSON.parse(storedAssetsJson);
       
-      // Filter out the asset to delete
-      const updatedAssets = storedAssets.filter((asset: ContentAsset) => asset.id !== id);
+      // Log the assets before filtering for debugging
+      console.log(`Assets before filtering (${storageKey}):`, storedAssets.length);
+      
+      // Filter out the asset to delete - make sure we're actually filtering
+      const updatedAssets = storedAssets.filter((asset: any) => {
+        // Debug the actual ID comparison
+        const assetId = asset.id;
+        const shouldKeep = assetId !== id;
+        console.log(`Asset ID: ${assetId}, Delete ID: ${id}, Keep asset: ${shouldKeep}`);
+        return shouldKeep;
+      });
+      
       console.log(`Filtered localStorage assets: from ${storedAssets.length} to ${updatedAssets.length}`);
       
       // Save updated assets back to localStorage
@@ -73,10 +90,13 @@ export const useDeletePrompt = (
         description: "Failed to delete the prompt. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   return {
-    handleDeletePrompt
+    handleDeletePrompt,
+    isDeleting
   };
 };

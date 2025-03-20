@@ -28,7 +28,7 @@ export const usePrompts = () => {
   // CRUD operations
   const { handleAddPrompt } = useAddPrompt(prompts, setPrompts);
   const { handleEditPrompt, togglePinPrompt, toggleHidePrompt } = useEditPrompt(prompts, setPrompts);
-  const { handleDeletePrompt } = useDeletePrompt(
+  const { handleDeletePrompt, isDeleting } = useDeletePrompt(
     prompts, 
     setPrompts, 
     selectedPrompt, 
@@ -51,6 +51,7 @@ export const usePrompts = () => {
     handleAddPrompt,
     handleEditPrompt,
     handleDeletePrompt,
+    isDeleting,
     openEditPrompt,
     openDeleteConfirm,
     togglePinPrompt,
