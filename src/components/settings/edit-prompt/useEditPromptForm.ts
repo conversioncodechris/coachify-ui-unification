@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { ContentAsset } from '@/types/contentAssets';
 import { useToast } from '@/hooks/use-toast';
+import { enhancePrompt, EnhancedPrompt } from '@/utils/promptEnhancer';
 
 interface UseEditPromptFormProps {
   prompt: ContentAsset;
@@ -19,6 +20,8 @@ export const useEditPromptForm = ({ prompt, onPromptUpdated, onClose }: UseEditP
     (prompt.aiType as "compliance" | "coach" | "content") || 'content'
   );
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [enhancedPromptSuggestion, setEnhancedPromptSuggestion] = useState<EnhancedPrompt | null>(null);
+  const [showEnhancement, setShowEnhancement] = useState(false);
   const { toast } = useToast();
 
   // Emoji options
@@ -37,6 +40,18 @@ export const useEditPromptForm = ({ prompt, onPromptUpdated, onClose }: UseEditP
     setContent(prompt.content || '');
     setSelectedAiType((prompt.aiType as "compliance" | "coach" | "content") || 'content');
   }, [prompt]);
+
+  // Generate enhanced prompt suggestion when content changes
+  useEffect(() => {
+    if (content && content.trim().length > 15 && content !== prompt.content) {
+      const enhancedPrompt = enhancePrompt(content);
+      setEnhancedPromptSuggestion(enhancedPrompt);
+      setShowEnhancement(true);
+    } else {
+      setEnhancedPromptSuggestion(null);
+      setShowEnhancement(false);
+    }
+  }, [content, prompt.content]);
 
   const handleSelectEmoji = (emoji: string) => {
     setSelectedEmoji(emoji);
@@ -86,6 +101,15 @@ export const useEditPromptForm = ({ prompt, onPromptUpdated, onClose }: UseEditP
     onClose();
   };
 
+  const acceptEnhancedPrompt = (enhancedText: string) => {
+    setContent(enhancedText);
+    setShowEnhancement(false);
+  };
+
+  const rejectEnhancedPrompt = () => {
+    setShowEnhancement(false);
+  };
+
   return {
     selectedEmoji,
     title,
@@ -101,6 +125,10 @@ export const useEditPromptForm = ({ prompt, onPromptUpdated, onClose }: UseEditP
     handleSelectEmoji,
     handleClose,
     handleSave,
-    handleDelete
+    handleDelete,
+    enhancedPromptSuggestion,
+    showEnhancement,
+    acceptEnhancedPrompt,
+    rejectEnhancedPrompt
   };
 };

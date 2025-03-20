@@ -12,6 +12,7 @@ import { ContentAsset } from "@/types/contentAssets";
 import { useEditPromptForm } from './useEditPromptForm';
 import PromptFormFields from '../add-prompt/PromptFormFields';
 import { Trash2 } from 'lucide-react';
+import PromptEnhancementSuggestion from '../add-prompt/PromptEnhancementSuggestion';
 
 interface EditPromptDialogProps {
   isOpen: boolean;
@@ -41,7 +42,11 @@ const EditPromptDialog: React.FC<EditPromptDialogProps> = ({
     handleSelectEmoji,
     handleClose,
     handleSave,
-    handleDelete
+    handleDelete,
+    enhancedPromptSuggestion,
+    showEnhancement,
+    acceptEnhancedPrompt,
+    rejectEnhancedPrompt
   } = useEditPromptForm({ 
     prompt, 
     onPromptUpdated, 
@@ -68,6 +73,14 @@ const EditPromptDialog: React.FC<EditPromptDialogProps> = ({
           onContentChange={setContent}
           onAiTypeChange={setSelectedAiType}
         />
+        
+        {showEnhancement && enhancedPromptSuggestion && (
+          <PromptEnhancementSuggestion
+            enhancedPrompt={enhancedPromptSuggestion}
+            onAccept={acceptEnhancedPrompt}
+            onReject={rejectEnhancedPrompt}
+          />
+        )}
         
         <DialogFooter className="flex items-center justify-between sm:justify-between flex-row">
           <Button 

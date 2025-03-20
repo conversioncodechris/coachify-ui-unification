@@ -1,7 +1,8 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { ContentAsset } from '@/types/contentAssets';
+import { enhancePrompt, EnhancedPrompt } from '@/utils/promptEnhancer';
 
 interface UseAddPromptFormProps {
   defaultAiType: "content" | "compliance" | "coach";
@@ -20,11 +21,25 @@ export const useAddPromptForm = ({
   const [content, setContent] = useState("");
   const [selectedAiType, setSelectedAiType] = useState<"content" | "compliance" | "coach">(defaultAiType);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [enhancedPromptSuggestion, setEnhancedPromptSuggestion] = useState<EnhancedPrompt | null>(null);
+  const [showEnhancement, setShowEnhancement] = useState(false);
 
   const emojiOptions = [
     "💬", "🗣️", "📝", "📚", "🧠", "💡", "🔍", "📊", "📋", "📈",
     "🤔", "🎯", "🏆", "✅", "⚠️", "🚨", "🔒", "🛡️", "📑", "📌"
   ];
+
+  // Generate enhanced prompt suggestion when content changes
+  useEffect(() => {
+    if (content.trim().length > 15) {
+      const enhancedPrompt = enhancePrompt(content);
+      setEnhancedPromptSuggestion(enhancedPrompt);
+      setShowEnhancement(true);
+    } else {
+      setEnhancedPromptSuggestion(null);
+      setShowEnhancement(false);
+    }
+  }, [content]);
 
   const handleSelectEmoji = (emoji: string) => {
     setSelectedEmoji(emoji);
@@ -37,6 +52,8 @@ export const useAddPromptForm = ({
     setContent("");
     setSelectedAiType(defaultAiType);
     setIsSubmitting(false);
+    setEnhancedPromptSuggestion(null);
+    setShowEnhancement(false);
   };
 
   const handleClose = () => {
@@ -79,6 +96,15 @@ export const useAddPromptForm = ({
     }
   };
 
+  const acceptEnhancedPrompt = (enhancedText: string) => {
+    setContent(enhancedText);
+    setShowEnhancement(false);
+  };
+
+  const rejectEnhancedPrompt = () => {
+    setShowEnhancement(false);
+  };
+
   return {
     selectedEmoji,
     title,
@@ -93,6 +119,10 @@ export const useAddPromptForm = ({
     emojiOptions,
     handleSelectEmoji,
     handleClose,
-    handleSubmit
+    handleSubmit,
+    enhancedPromptSuggestion,
+    showEnhancement,
+    acceptEnhancedPrompt,
+    rejectEnhancedPrompt
   };
 };

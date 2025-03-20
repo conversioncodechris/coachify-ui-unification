@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { ContentAsset } from '@/types/contentAssets';
 import { useAddPromptForm } from './useAddPromptForm';
 import PromptFormFields from './PromptFormFields';
+import PromptEnhancementSuggestion from './PromptEnhancementSuggestion';
 
 interface AddPromptDialogProps {
   isOpen: boolean;
@@ -39,7 +40,11 @@ const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
     emojiOptions,
     handleSelectEmoji,
     handleClose,
-    handleSubmit
+    handleSubmit,
+    enhancedPromptSuggestion,
+    showEnhancement,
+    acceptEnhancedPrompt,
+    rejectEnhancedPrompt
   } = useAddPromptForm({ 
     defaultAiType, 
     onPromptAdded, 
@@ -66,6 +71,14 @@ const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
           onContentChange={setContent}
           onAiTypeChange={setSelectedAiType}
         />
+        
+        {showEnhancement && enhancedPromptSuggestion && (
+          <PromptEnhancementSuggestion
+            enhancedPrompt={enhancedPromptSuggestion}
+            onAccept={acceptEnhancedPrompt}
+            onReject={rejectEnhancedPrompt}
+          />
+        )}
         
         <DialogFooter>
           <Button 
