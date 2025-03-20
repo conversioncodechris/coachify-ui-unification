@@ -16,6 +16,9 @@ export const useAddPromptForm = ({
   onPromptAdded, 
   onClose 
 }: UseAddPromptFormProps) => {
+  const { toast } = useToast();
+  
+  // Form state
   const [selectedEmoji, setSelectedEmoji] = useState("💬");
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
@@ -24,7 +27,6 @@ export const useAddPromptForm = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [enhancedPromptSuggestion, setEnhancedPromptSuggestion] = useState<EnhancedPrompt | null>(null);
   const [showEnhancement, setShowEnhancement] = useState(false);
-  const { toast } = useToast();
 
   const emojiOptions = [
     "💬", "🗣️", "📝", "📚", "🧠", "💡", "🔍", "📊", "📋", "📈",
@@ -97,6 +99,7 @@ export const useAddPromptForm = ({
       
       // Reset form
       resetForm();
+      onClose();
     } catch (error) {
       console.error("Error creating prompt:", error);
       setIsSubmitting(false);
