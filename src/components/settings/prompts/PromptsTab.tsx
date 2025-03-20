@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
@@ -73,12 +74,11 @@ const PromptsTab: React.FC = () => {
       // Close the dialog first
       setDeleteConfirmOpen(false);
       
-      // Execute the deletion with a slight delay to ensure UI updates properly
-      setTimeout(() => {
-        handleDeletePrompt(idToDelete);
-        // Clear the ID after deletion is complete
-        setPromptIdToDelete(null);
-      }, 50);
+      // Execute the deletion immediately
+      handleDeletePrompt(idToDelete);
+      
+      // Clear the ID after deletion is complete
+      setPromptIdToDelete(null);
     } else {
       console.error('No prompt ID to delete');
       setDeleteConfirmOpen(false);
