@@ -77,9 +77,7 @@ const EditPromptDialog: React.FC<EditPromptDialogProps> = ({
         {showEnhancement && enhancedPromptSuggestion && (
           <PromptEnhancementSuggestion
             enhancedPrompt={enhancedPromptSuggestion}
-            onAccept={(enhancedText) => {
-              acceptEnhancedPrompt(enhancedText);
-            }}
+            onAccept={acceptEnhancedPrompt}
             onReject={rejectEnhancedPrompt}
           />
         )}

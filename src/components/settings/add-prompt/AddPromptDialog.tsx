@@ -79,9 +79,7 @@ const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
         {showEnhancement && enhancedPromptSuggestion && (
           <PromptEnhancementSuggestion
             enhancedPrompt={enhancedPromptSuggestion}
-            onAccept={(enhancedText) => {
-              acceptEnhancedPrompt(enhancedText);
-            }}
+            onAccept={acceptEnhancedPrompt}
             onReject={rejectEnhancedPrompt}
           />
         )}

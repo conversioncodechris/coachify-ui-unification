@@ -40,6 +40,12 @@ const PromptEnhancementSuggestion: React.FC<PromptEnhancementSuggestionProps> = 
     'general': 'bg-gray-100 text-gray-800'
   };
 
+  const handleAccept = () => {
+    if (enhancedPrompt && enhancedPrompt.enhanced) {
+      onAccept(enhancedPrompt.enhanced);
+    }
+  };
+
   return (
     <Card className="mt-6 border-2 border-yellow-200 bg-yellow-50">
       <CardHeader className="pb-2">
@@ -71,7 +77,7 @@ const PromptEnhancementSuggestion: React.FC<PromptEnhancementSuggestionProps> = 
         <Button 
           size="sm" 
           className="bg-yellow-600 hover:bg-yellow-700"
-          onClick={() => onAccept(enhancedPrompt.enhanced)}
+          onClick={handleAccept}
         >
           <Check className="h-4 w-4 mr-2" />
           Use Enhanced Version
