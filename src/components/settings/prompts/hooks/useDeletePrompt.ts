@@ -21,40 +21,51 @@ export const useDeletePrompt = (
       return;
     }
     
+    // Determine the correct storage key based on prompt's aiType
     const aiType = promptToDelete.aiType || "content";
     const storageKey = `${aiType}Assets`;
     
-    // Update local state first
-    setPrompts(prev => {
-      const updated = prev.filter(p => p.id !== id);
-      console.log(`Filtered prompts: ${updated.length} (removed ${prev.length - updated.length})`);
-      return updated;
-    });
-    
-    // If edit dialog is open and we're deleting the selected prompt, close it
-    if (selectedPrompt && selectedPrompt.id === id) {
-      setSelectedPrompt(null);
-      setEditPromptOpen(false);
-    }
-    
-    // Update localStorage
     try {
-      const storedAssets = localStorage.getItem(storageKey);
-      if (storedAssets) {
-        const assets = JSON.parse(storedAssets);
-        const updatedAssets = assets.filter((asset: ContentAsset) => asset.id !== id);
-        
-        console.log(`Updating ${storageKey}: removing asset ${id}, ${assets.length} -> ${updatedAssets.length}`);
-        localStorage.setItem(storageKey, JSON.stringify(updatedAssets));
-        
-        // Dispatch event to notify other components
-        window.dispatchEvent(new CustomEvent('contentAssetsUpdated'));
-        
-        toast({
-          title: "Prompt Deleted",
-          description: "The prompt was successfully removed.",
-        });
+      // Get current assets from localStorage
+      const storedAssetsJson = localStorage.getItem(storageKey);
+      
+      if (!storedAssetsJson) {
+        console.error(`No assets found in localStorage for ${storageKey}`);
+        return;
       }
+      
+      // Parse the stored assets
+      const storedAssets = JSON.parse(storedAssetsJson);
+      
+      // Filter out the asset to delete
+      const updatedAssets = storedAssets.filter((asset: ContentAsset) => asset.id !== id);
+      console.log(`Filtered localStorage assets: from ${storedAssets.length} to ${updatedAssets.length}`);
+      
+      // Save updated assets back to localStorage
+      localStorage.setItem(storageKey, JSON.stringify(updatedAssets));
+      
+      // Update the state after successful localStorage update
+      setPrompts(prevPrompts => {
+        const updatedPrompts = prevPrompts.filter(p => p.id !== id);
+        console.log(`Updated prompts state: from ${prevPrompts.length} to ${updatedPrompts.length}`);
+        return updatedPrompts;
+      });
+      
+      // If we're deleting the currently selected prompt, clear selection and close dialog
+      if (selectedPrompt && selectedPrompt.id === id) {
+        setSelectedPrompt(null);
+        setEditPromptOpen(false);
+      }
+      
+      // Notify other components that content assets have been updated
+      window.dispatchEvent(new CustomEvent('contentAssetsUpdated'));
+      
+      // Show success toast
+      toast({
+        title: "Prompt Deleted",
+        description: "The prompt was successfully removed.",
+      });
+      
     } catch (error) {
       console.error(`Error deleting prompt from ${storageKey}:`, error);
       toast({

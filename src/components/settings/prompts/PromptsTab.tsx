@@ -46,7 +46,12 @@ const PromptsTab: React.FC = () => {
   useEffect(() => {
     const handleDeleteRequest = (e: CustomEvent<{ promptId: string }>) => {
       console.log(`Delete request received for prompt ID: ${e.detail.promptId}`);
-      openDeleteConfirm(e.detail.promptId);
+      // Ensure we have a valid ID before proceeding
+      if (e.detail.promptId) {
+        openDeleteConfirm(e.detail.promptId);
+      } else {
+        console.error('Received delete request with no promptId');
+      }
     };
 
     // Add event listener for custom delete event
@@ -62,10 +67,17 @@ const PromptsTab: React.FC = () => {
   const confirmDelete = () => {
     if (promptIdToDelete) {
       console.log('Confirming deletion of prompt ID:', promptIdToDelete);
-      const id = promptIdToDelete; // Store in local variable to ensure it's preserved
-      handleDeletePrompt(id);
+      // Store ID in local variable to ensure it's available even if state changes
+      const idToDelete = promptIdToDelete;
+      
+      // Clear state first so we avoid any race conditions
       setPromptIdToDelete(null);
       setDeleteConfirmOpen(false);
+      
+      // Execute the deletion after state is updated
+      setTimeout(() => {
+        handleDeletePrompt(idToDelete);
+      }, 0);
     } else {
       console.error('No prompt ID to delete');
     }

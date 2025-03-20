@@ -27,11 +27,17 @@ const PromptCard: React.FC<PromptCardProps> = ({
   onToggleHide,
   onDeletePrompt
 }) => {
+  // Separate handler for delete button click to prevent event propagation
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     console.log('Delete button clicked for prompt ID:', prompt.id);
-    onDeletePrompt(prompt.id);
+    // Call the delete handler with the prompt ID
+    if (prompt.id) {
+      onDeletePrompt(prompt.id);
+    } else {
+      console.error('Cannot delete prompt with undefined ID');
+    }
   };
 
   return (
@@ -135,7 +141,9 @@ const PromptCard: React.FC<PromptCardProps> = ({
           className="text-red-600 focus:text-red-600"
           onClick={(e) => {
             e.preventDefault();
-            onDeletePrompt(prompt.id);
+            if (prompt.id) {
+              onDeletePrompt(prompt.id);
+            }
           }}
         >
           <Trash2 className="mr-2 h-4 w-4" />
