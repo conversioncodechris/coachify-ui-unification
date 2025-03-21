@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -13,6 +13,7 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { useToast } from '@/hooks/use-toast';
+import { FilePdf, Link } from 'lucide-react';
 
 export interface NewTopicData {
   icon: string;
@@ -21,6 +22,11 @@ export interface NewTopicData {
   content?: string;
   primaryCategory?: string;
   importance?: 'critical' | 'high' | 'medium' | 'low';
+  attachments?: {
+    type: 'pdf' | 'link';
+    url: string;
+    title?: string;
+  }[];
 }
 
 interface AddTopicDialogProps {
@@ -41,7 +47,10 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
   emojiOptions
 }) => {
   const { toast } = useToast();
-  const [content, setContent] = React.useState("");
+  const [content, setContent] = useState("");
+  const [attachmentUrl, setAttachmentUrl] = useState("");
+  const [attachmentTitle, setAttachmentTitle] = useState("");
+  const [attachmentType, setAttachmentType] = useState<'pdf' | 'link'>('link');
 
   const handleSelectEmoji = (emoji: string) => {
     setNewTopic(prev => ({ ...prev, icon: emoji }));
@@ -67,6 +76,66 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
     'Other'
   ];
 
+  const handleAddAttachment = () => {
+    if (!attachmentUrl.trim()) {
+      toast({
+        title: "Invalid attachment",
+        description: "Please provide a valid URL",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Validate URL format
+    try {
+      new URL(attachmentUrl);
+    } catch (_) {
+      toast({
+        title: "Invalid URL format",
+        description: "Please enter a valid URL including http:// or https://",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // PDF validation: check if URL ends with .pdf for PDF type
+    if (attachmentType === 'pdf' && !attachmentUrl.toLowerCase().endsWith('.pdf')) {
+      toast({
+        title: "Invalid PDF URL",
+        description: "PDF URLs should end with .pdf",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const title = attachmentTitle.trim() || 
+      (attachmentType === 'pdf' ? 'PDF Document' : 'Reference Link');
+
+    setNewTopic(prev => ({
+      ...prev,
+      attachments: [...(prev.attachments || []), {
+        type: attachmentType,
+        url: attachmentUrl,
+        title
+      }]
+    }));
+
+    // Reset attachment fields
+    setAttachmentUrl("");
+    setAttachmentTitle("");
+    toast({
+      title: `${attachmentType === 'pdf' ? 'PDF' : 'Link'} added`,
+      description: `Added "${title}" to the topic`
+    });
+  };
+
+  const handleRemoveAttachment = (index: number) => {
+    setNewTopic(prev => ({
+      ...prev,
+      attachments: prev.attachments?.filter((_, i) => i !== index)
+    }));
+  };
+
   const handleSubmitWithContent = () => {
     if (!newTopic.title.trim() || !newTopic.description.trim()) {
       toast({
@@ -87,7 +156,7 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
         <DialogHeader>
           <DialogTitle>Add New Compliance Topic</DialogTitle>
           <DialogDescription>
-            Create a new compliance topic for real estate professionals
+            Create a new compliance topic with supporting materials
           </DialogDescription>
         </DialogHeader>
         
@@ -171,8 +240,91 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="Include relevant laws, regulations, compliance requirements, best practices, and examples"
-              className="min-h-[250px]"
+              className="min-h-[200px]"
             />
+
+            <div className="mt-4">
+              <h3 className="text-sm font-medium mb-2">Supporting Materials</h3>
+              
+              {/* Attachment input section */}
+              <div className="grid gap-3 p-3 border rounded-md bg-gray-50">
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant={attachmentType === 'pdf' ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setAttachmentType('pdf')}
+                    className="flex-1"
+                  >
+                    <FilePdf className="mr-2 h-4 w-4" />
+                    PDF
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={attachmentType === 'link' ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setAttachmentType('link')}
+                    className="flex-1"
+                  >
+                    <Link className="mr-2 h-4 w-4" />
+                    Website Link
+                  </Button>
+                </div>
+                
+                <div className="grid gap-2">
+                  <Input 
+                    placeholder={`Enter ${attachmentType === 'pdf' ? 'PDF URL' : 'website URL'}`}
+                    value={attachmentUrl}
+                    onChange={(e) => setAttachmentUrl(e.target.value)}
+                  />
+                  <Input 
+                    placeholder="Title (optional)"
+                    value={attachmentTitle}
+                    onChange={(e) => setAttachmentTitle(e.target.value)}
+                  />
+                  <Button 
+                    type="button" 
+                    variant="secondary" 
+                    size="sm"
+                    onClick={handleAddAttachment}
+                  >
+                    Add {attachmentType === 'pdf' ? 'PDF' : 'Link'}
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Attached items list */}
+              {newTopic.attachments && newTopic.attachments.length > 0 && (
+                <div className="mt-3">
+                  <h4 className="text-sm font-medium mb-2">Attached Items:</h4>
+                  <div className="space-y-2">
+                    {newTopic.attachments.map((attachment, index) => (
+                      <div key={index} className="flex items-center justify-between p-2 bg-white border rounded-md">
+                        <div className="flex items-center">
+                          {attachment.type === 'pdf' ? (
+                            <FilePdf className="mr-2 h-4 w-4 text-red-500" />
+                          ) : (
+                            <Link className="mr-2 h-4 w-4 text-blue-500" />
+                          )}
+                          <span className="text-sm truncate max-w-[200px]">
+                            {attachment.title || attachment.url}
+                          </span>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleRemoveAttachment(index)}
+                          className="h-8 w-8 p-0 text-red-500"
+                        >
+                          &times;
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
         
