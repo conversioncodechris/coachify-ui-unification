@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useToast } from "../../hooks/use-toast";
-import { CoachTopic } from './CoachTopicCard';
+import { CoachTopic } from './CoachTypes'; // Updated import path
 import CoachTopicsGrid from './CoachTopicsGrid';
 import AddTopicDialog from '../compliance/AddTopicDialog';
 import ContentFooter from '../content/ContentFooter';
@@ -25,7 +25,7 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
     icon: '😊',
     title: '',
     description: '',
-    content: ''
+    content: '' // This is now valid because we've added content to the CoachTopic interface
   });
   const [isAddTopicOpen, setIsAddTopicOpen] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -131,7 +131,7 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
       icon: '😊',
       title: '',
       description: '',
-      content: ''
+      content: '' // This is now valid
     });
     setIsAddTopicOpen(true);
   };
@@ -162,7 +162,7 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
       icon: newTopic.icon,
       source: "created",
       dateAdded: new Date(),
-      content: newTopic.content || "",
+      content: newTopic.content || "", // This is now valid
       isNew: true,
       aiType: "coach"
     };
