@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -13,7 +12,7 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { useToast } from '@/hooks/use-toast';
-import { FilePdf, Link } from 'lucide-react';
+import { FileText, Link } from 'lucide-react';
 
 export interface NewTopicData {
   icon: string;
@@ -86,7 +85,6 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
       return;
     }
 
-    // Validate URL format
     try {
       new URL(attachmentUrl);
     } catch (_) {
@@ -98,7 +96,6 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
       return;
     }
 
-    // PDF validation: check if URL ends with .pdf for PDF type
     if (attachmentType === 'pdf' && !attachmentUrl.toLowerCase().endsWith('.pdf')) {
       toast({
         title: "Invalid PDF URL",
@@ -120,7 +117,6 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
       }]
     }));
 
-    // Reset attachment fields
     setAttachmentUrl("");
     setAttachmentTitle("");
     toast({
@@ -145,9 +141,8 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
       return;
     }
     
-    // Update the newTopic with content before submitting
     setNewTopic(prev => ({ ...prev, content }));
-    setTimeout(onSubmit, 0); // Use setTimeout to ensure state is updated before submission
+    setTimeout(onSubmit, 0);
   };
 
   return (
@@ -246,7 +241,6 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
             <div className="mt-4">
               <h3 className="text-sm font-medium mb-2">Supporting Materials</h3>
               
-              {/* Attachment input section */}
               <div className="grid gap-3 p-3 border rounded-md bg-gray-50">
                 <div className="flex gap-2">
                   <Button
@@ -256,7 +250,7 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
                     onClick={() => setAttachmentType('pdf')}
                     className="flex-1"
                   >
-                    <FilePdf className="mr-2 h-4 w-4" />
+                    <FileText className="mr-2 h-4 w-4" />
                     PDF
                   </Button>
                   <Button
@@ -293,7 +287,6 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
                 </div>
               </div>
               
-              {/* Attached items list */}
               {newTopic.attachments && newTopic.attachments.length > 0 && (
                 <div className="mt-3">
                   <h4 className="text-sm font-medium mb-2">Attached Items:</h4>
@@ -302,7 +295,7 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
                       <div key={index} className="flex items-center justify-between p-2 bg-white border rounded-md">
                         <div className="flex items-center">
                           {attachment.type === 'pdf' ? (
-                            <FilePdf className="mr-2 h-4 w-4 text-red-500" />
+                            <FileText className="mr-2 h-4 w-4 text-red-500" />
                           ) : (
                             <Link className="mr-2 h-4 w-4 text-blue-500" />
                           )}
