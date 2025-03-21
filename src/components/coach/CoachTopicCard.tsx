@@ -29,7 +29,7 @@ const CoachTopicCard: React.FC<CoachTopicCardProps> = ({
       <Tooltip>
         <TooltipTrigger asChild>
           <div 
-            className={`bg-white rounded-lg shadow-sm p-4 cursor-pointer transition-colors relative group ${
+            className={`insta-card cursor-pointer transition-colors relative group ${
               topic.pinned ? 'border-[#BBBCBF] border-2' : 'hover:border-insta-blue border'
             }`}
             onClick={() => onTopicClick(topic.title)}
@@ -42,13 +42,13 @@ const CoachTopicCard: React.FC<CoachTopicCardProps> = ({
               </div>
             )}
             
-            <div className="flex items-start gap-2">
-              <span className="text-xl mr-1 inline-flex whitespace-nowrap">{topic.icon}</span>
-              <div className="flex-1">
-                <div className="font-medium flex items-center text-lg">
+            <div className="flex items-start">
+              <span className="text-xl mr-2 inline-flex whitespace-nowrap">{topic.icon}</span>
+              <div>
+                <div className="font-medium flex items-center">
                   {topic.title}
                 </div>
-                <div className="text-sm text-insta-lightText line-clamp-2 mt-1">{topic.description}</div>
+                <div className="text-sm text-insta-lightText line-clamp-1">{topic.description}</div>
               </div>
             </div>
             
