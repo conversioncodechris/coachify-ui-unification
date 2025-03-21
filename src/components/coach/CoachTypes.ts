@@ -18,3 +18,13 @@ export interface CoachPersona {
   expertise: string[];
   image: string;
 }
+
+export interface CoachTopic {
+  icon: string;
+  title: string;
+  description: string;
+  content?: string;
+  hidden?: boolean;
+  pinned?: boolean;
+  isNew?: boolean;
+}

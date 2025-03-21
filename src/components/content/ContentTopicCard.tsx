@@ -13,6 +13,7 @@ export interface ContentTopic {
   icon: string;
   title: string;
   description: string;
+  content?: string; // Added content property
   hidden?: boolean;
   pinned?: boolean;
   isNew?: boolean;
