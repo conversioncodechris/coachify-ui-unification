@@ -5,6 +5,8 @@ import { ComplianceTopic } from './TopicCard';
 import TopicsGrid from './TopicsGrid';
 import AddTopicDialog from './AddTopicDialog';
 import ComplianceFooter from './ComplianceFooter';
+import { Plus } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 
 interface TopicsManagerProps {
   topics: ComplianceTopic[];
@@ -89,7 +91,13 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     <>
       <div className="flex-1 overflow-y-auto p-6 pt-4 pb-24">
         <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-border p-6">
-          <h2 className="text-2xl font-semibold text-insta-text mb-6">Real Estate Compliance Topics</h2>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-semibold text-insta-text">Real Estate Compliance Topics</h2>
+            <Button onClick={handleAddTopicClick} className="flex items-center gap-2">
+              <Plus className="h-4 w-4" />
+              Add New Topic
+            </Button>
+          </div>
           
           <TopicsGrid 
             topics={topics}

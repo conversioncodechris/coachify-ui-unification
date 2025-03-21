@@ -1,7 +1,7 @@
 
 import React from 'react';
-import CoachTopicCard, { CoachTopic } from './CoachTopicCard';
-import AddTopicCard from '../compliance/AddTopicCard';
+import CoachTopicCard from './CoachTopicCard';
+import { CoachTopic } from './CoachTypes';
 
 interface CoachTopicsGridProps {
   topics: CoachTopic[];
@@ -18,27 +18,30 @@ const CoachTopicsGrid: React.FC<CoachTopicsGridProps> = ({
   onTogglePin,
   onAddTopicClick
 }) => {
-  // Sort and filter topics
-  const sortedTopics = [...topics].sort((a, b) => {
-    if (a.pinned && !b.pinned) return -1;
-    if (!a.pinned && b.pinned) return 1;
-    return 0;
-  }).filter(topic => !topic.hidden);
+  // Filter out hidden topics and sort by pinned status
+  const visibleTopics = topics
+    .filter(topic => !topic.hidden)
+    .sort((a, b) => {
+      // Sort pinned topics first
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      // Sort new topics next
+      if (a.isNew && !b.isNew) return -1;
+      if (!a.isNew && b.isNew) return 1;
+      return 0;
+    });
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {sortedTopics.map((topic, index) => (
+      {visibleTopics.map((topic, index) => (
         <CoachTopicCard
           key={index}
           topic={topic}
-          index={topics.findIndex(t => t.title === topic.title)}
-          onTopicClick={onTopicClick}
-          onHideTopic={onHideTopic}
-          onTogglePin={onTogglePin}
+          onClick={() => onTopicClick(topic.title)}
+          onHide={(e) => onHideTopic(index, e)}
+          onTogglePin={(e) => onTogglePin(index, e)}
         />
       ))}
-      
-      <AddTopicCard onClick={onAddTopicClick} />
     </div>
   );
 };

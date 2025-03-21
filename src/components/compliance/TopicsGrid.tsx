@@ -1,7 +1,6 @@
 
 import React from 'react';
 import TopicCard, { ComplianceTopic } from './TopicCard';
-import AddTopicCard from './AddTopicCard';
 
 interface TopicsGridProps {
   topics: ComplianceTopic[];
@@ -9,8 +8,6 @@ interface TopicsGridProps {
   onHideTopic: (index: number, event: React.MouseEvent) => void;
   onTogglePin: (index: number, event: React.MouseEvent) => void;
   onAddTopicClick: () => void;
-  onOpenAdminSettings?: () => void;
-  isAdmin?: boolean;
 }
 
 const TopicsGrid: React.FC<TopicsGridProps> = ({
@@ -18,31 +15,29 @@ const TopicsGrid: React.FC<TopicsGridProps> = ({
   onTopicClick,
   onHideTopic,
   onTogglePin,
-  onAddTopicClick,
+  onAddTopicClick
 }) => {
-  // Sort and filter topics
-  const sortedTopics = [...topics].sort((a, b) => {
-    if (a.pinned && !b.pinned) return -1;
-    if (!a.pinned && b.pinned) return 1;
-    return 0;
-  }).filter(topic => !topic.hidden);
+  // Filter out hidden topics and sort by pinned status
+  const visibleTopics = topics
+    .filter(topic => !topic.hidden)
+    .sort((a, b) => {
+      // Sort pinned topics first
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      return 0;
+    });
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {sortedTopics.map((topic, index) => (
-          <TopicCard
-            key={index}
-            topic={topic}
-            index={topics.findIndex(t => t.title === topic.title)}
-            onTopicClick={onTopicClick}
-            onHideTopic={onHideTopic}
-            onTogglePin={onTogglePin}
-          />
-        ))}
-        
-        <AddTopicCard onClick={onAddTopicClick} />
-      </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {visibleTopics.map((topic, index) => (
+        <TopicCard
+          key={index}
+          topic={topic}
+          onClick={() => onTopicClick(topic.title)}
+          onHide={(e) => onHideTopic(index, e)}
+          onTogglePin={(e) => onTogglePin(index, e)}
+        />
+      ))}
     </div>
   );
 };
