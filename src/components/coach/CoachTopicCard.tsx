@@ -7,15 +7,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
-export interface CoachTopic {
-  icon: string;
-  title: string;
-  description: string;
-  hidden?: boolean;
-  pinned?: boolean;
-  isNew?: boolean;
-}
+import { CoachTopic } from './CoachTypes';
 
 interface CoachTopicCardProps {
   topic: CoachTopic;

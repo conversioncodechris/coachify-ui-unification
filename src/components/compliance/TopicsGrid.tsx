@@ -33,9 +33,10 @@ const TopicsGrid: React.FC<TopicsGridProps> = ({
         <TopicCard
           key={index}
           topic={topic}
-          onClick={() => onTopicClick(topic.title)}
-          onHide={(e) => onHideTopic(index, e)}
-          onTogglePin={(e) => onTogglePin(index, e)}
+          index={index}
+          onTopicClick={onTopicClick}
+          onHideTopic={onHideTopic}
+          onTogglePin={onTogglePin}
         />
       ))}
     </div>
