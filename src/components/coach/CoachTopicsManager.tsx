@@ -90,8 +90,8 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
 
   return (
     <>
-      <div className="flex-1 overflow-y-auto p-6 pt-4 pb-24">
-        <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-border p-6">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 pt-4 pb-24">
+        <div className="max-w-5xl mx-auto">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-semibold text-insta-text">Real Estate Coaching Scenarios</h2>
             <Button onClick={handleAddScenarioClick} className="flex items-center gap-2">

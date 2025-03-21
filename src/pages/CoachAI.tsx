@@ -77,10 +77,8 @@ const CoachAI: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Sidebar - using simple props without specific component props */}
-      <div className="w-64 h-full bg-white border-r border-border">
-        <CoachSidebar />
-      </div>
+      {/* Sidebar */}
+      <CoachSidebar />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
