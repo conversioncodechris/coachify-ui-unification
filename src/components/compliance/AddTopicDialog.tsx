@@ -13,8 +13,6 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../ui/tabs";
-import PromptEnhancementSuggestion from '../settings/add-prompt/PromptEnhancementSuggestion';
-import { enhancePrompt } from '@/utils/promptEnhancer';
 import { useToast } from '@/hooks/use-toast';
 import { Upload, FileText, Link, Youtube } from 'lucide-react';
 import { validateYouTubeUrl } from '@/lib/utils';
@@ -51,8 +49,6 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
 }) => {
   const { toast } = useToast();
   const [content, setContent] = useState("");
-  const [showEnhancement, setShowEnhancement] = useState(false);
-  const [enhancedPromptSuggestion, setEnhancedPromptSuggestion] = useState(null);
   const [sourceType, setSourceType] = useState<'text' | 'pdf' | 'url' | 'youtube'>('text');
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [url, setUrl] = useState("");
@@ -61,36 +57,6 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
 
   const handleSelectEmoji = (emoji: string) => {
     setNewTopic(prev => ({ ...prev, icon: emoji }));
-  };
-
-  React.useEffect(() => {
-    if (content.trim().length > 15) {
-      const enhancedPrompt = enhancePrompt(content);
-      setEnhancedPromptSuggestion(enhancedPrompt);
-      setShowEnhancement(true);
-    } else {
-      setEnhancedPromptSuggestion(null);
-      setShowEnhancement(false);
-    }
-  }, [content]);
-
-  const acceptEnhancedPrompt = (enhancedText: string) => {
-    setContent(enhancedText);
-    setShowEnhancement(false);
-    
-    toast({
-      title: "Enhancement Applied",
-      description: "The AI-enhanced prompt has been applied",
-    });
-  };
-
-  const rejectEnhancedPrompt = () => {
-    setShowEnhancement(false);
-    
-    toast({
-      title: "Enhancement Rejected",
-      description: "Keeping your original prompt",
-    });
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -310,12 +276,6 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
                     onChange={(e) => setContent(e.target.value)}
                     placeholder="Enter detailed compliance information, regulations, and guidelines..."
                     className="min-h-[150px]"
-                  />
-                  
-                  <PromptEnhancementSuggestion
-                    enhancedPrompt={showEnhancement ? enhancedPromptSuggestion : null}
-                    onAccept={acceptEnhancedPrompt}
-                    onReject={rejectEnhancedPrompt}
                   />
                 </div>
               </TabsContent>
