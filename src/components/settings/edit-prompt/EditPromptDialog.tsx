@@ -60,32 +60,38 @@ const EditPromptDialog: React.FC<EditPromptDialogProps> = ({
       }
       onOpenChange(open);
     }}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[800px] w-full">
         <DialogHeader>
           <DialogTitle>Edit Prompt</DialogTitle>
         </DialogHeader>
         
-        <PromptFormFields
-          selectedEmoji={selectedEmoji}
-          emojiOptions={emojiOptions}
-          title={title}
-          subtitle={subtitle}
-          content={content}
-          selectedAiType={selectedAiType}
-          onSelectEmoji={handleSelectEmoji}
-          onTitleChange={setTitle}
-          onSubtitleChange={setSubtitle}
-          onContentChange={setContent}
-          onAiTypeChange={setSelectedAiType}
-        />
-        
-        {showEnhancement && enhancedPromptSuggestion && (
-          <PromptEnhancementSuggestion
-            enhancedPrompt={enhancedPromptSuggestion}
-            onAccept={acceptEnhancedPrompt}
-            onReject={rejectEnhancedPrompt}
-          />
-        )}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div>
+            <PromptFormFields
+              selectedEmoji={selectedEmoji}
+              emojiOptions={emojiOptions}
+              title={title}
+              subtitle={subtitle}
+              content={content}
+              selectedAiType={selectedAiType}
+              onSelectEmoji={handleSelectEmoji}
+              onTitleChange={setTitle}
+              onSubtitleChange={setSubtitle}
+              onContentChange={setContent}
+              onAiTypeChange={setSelectedAiType}
+            />
+          </div>
+          
+          <div>
+            {showEnhancement && enhancedPromptSuggestion && (
+              <PromptEnhancementSuggestion
+                enhancedPrompt={enhancedPromptSuggestion}
+                onAccept={acceptEnhancedPrompt}
+                onReject={rejectEnhancedPrompt}
+              />
+            )}
+          </div>
+        </div>
         
         <DialogFooter className="flex items-center justify-between sm:justify-between flex-row">
           <Button 
