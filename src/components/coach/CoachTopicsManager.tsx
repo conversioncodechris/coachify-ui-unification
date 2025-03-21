@@ -4,8 +4,6 @@ import { useToast } from "../../hooks/use-toast";
 import { CoachTopic } from './CoachTypes';
 import CoachTopicsGrid from './CoachTopicsGrid';
 import AddScenarioDialog from './AddScenarioDialog';
-import { Plus } from 'lucide-react';
-import { Button } from "@/components/ui/button";
 import { DEFAULT_EMOJI_OPTIONS } from '@/data/defaultTopics';
 
 interface CoachTopicsManagerProps {
@@ -90,16 +88,8 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
 
   return (
     <>
-      <div className="flex-1 overflow-y-auto p-4 md:p-6 pt-4 pb-24">
+      <div className="flex-1 overflow-y-auto p-6">
         <div className="max-w-5xl mx-auto">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold text-insta-text">Real Estate Coaching Scenarios</h2>
-            <Button onClick={handleAddScenarioClick} className="flex items-center gap-2">
-              <Plus className="h-4 w-4" />
-              Add New Scenario
-            </Button>
-          </div>
-          
           <CoachTopicsGrid 
             topics={topics}
             onTopicClick={onTopicClick}
