@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { EnhancedPrompt } from "@/utils/promptEnhancer";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
-import { Sparkles, Check, X } from "lucide-react";
+import { Sparkles, Check, X, Lightbulb } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface PromptEnhancementSuggestionProps {
@@ -18,8 +17,6 @@ const PromptEnhancementSuggestion: React.FC<PromptEnhancementSuggestionProps> = 
   onAccept,
   onReject
 }) => {
-  if (!enhancedPrompt) return null;
-
   const categoryLabels: Record<string, string> = {
     'social-media': 'Social Media',
     'email': 'Email',
@@ -43,6 +40,39 @@ const PromptEnhancementSuggestion: React.FC<PromptEnhancementSuggestionProps> = 
       onAccept(enhancedPrompt.enhanced);
     }
   };
+
+  if (!enhancedPrompt) {
+    return (
+      <Card className="mt-0 border-2 border-gray-100 bg-gray-50 h-full">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Lightbulb className="h-5 w-5 text-gray-500" />
+            AI Enhancement Tips
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div className="space-y-4 text-sm text-muted-foreground">
+            <p>Enter your prompt content to see AI-powered enhancements appear here.</p>
+            
+            <div className="bg-white p-4 rounded-md border border-gray-100">
+              <h3 className="font-medium text-gray-700 mb-2">Tips for effective prompts:</h3>
+              <ul className="list-disc list-inside space-y-2">
+                <li>Be specific about your desired output</li>
+                <li>Include context about the audience or purpose</li>
+                <li>Mention tone, style, or format preferences</li>
+                <li>Add at least 15 characters to see enhancement suggestions</li>
+              </ul>
+            </div>
+            
+            <p className="italic">
+              Write your prompt content in the left panel, and our AI will suggest 
+              improvements based on the purpose and content.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="mt-0 border-2 border-yellow-200 bg-yellow-50 h-full">
