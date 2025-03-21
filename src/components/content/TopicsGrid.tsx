@@ -1,7 +1,6 @@
 
 import React from 'react';
 import ContentTopicCard, { ContentTopic } from './ContentTopicCard';
-import AddContentTopicCard from './AddContentTopicCard';
 
 interface TopicsGridProps {
   topics: ContentTopic[];
@@ -42,8 +41,6 @@ const TopicsGrid: React.FC<TopicsGridProps> = ({
           onTogglePin={onTogglePin}
         />
       ))}
-      
-      <AddContentTopicCard onClick={onAddTopicClick} />
     </div>
   );
 };
