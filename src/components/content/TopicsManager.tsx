@@ -25,7 +25,8 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     id: `manual-${Date.now()}`,
     icon: '📝',
     title: '',
-    description: ''
+    description: '',
+    content: ''
   });
   const [isAddTopicOpen, setIsAddTopicOpen] = useState(false);
   const [prompts, setPrompts] = useState<ContentAsset[]>([]);
@@ -151,7 +152,8 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
       id: `manual-${Date.now()}`,
       icon: '📝',
       title: '',
-      description: ''
+      description: '',
+      content: ''
     });
     setIsAddTopicOpen(true);
   };
@@ -173,9 +175,40 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
       return;
     }
 
+    // Create a new ContentAsset for the prompt
+    const newPromptAsset: ContentAsset = {
+      id: `manual-${Date.now()}`,
+      type: 'prompt',
+      title: newTopic.title.trim(),
+      subtitle: newTopic.description.trim(),
+      icon: newTopic.icon,
+      source: "created",
+      dateAdded: new Date(),
+      content: newTopic.content || "",
+      isNew: true,
+      aiType: "content"
+    };
+    
+    // Save to localStorage
+    const storageKey = 'contentAssets';
+    let existingAssets: ContentAsset[] = [];
+    
+    const storedAssets = localStorage.getItem(storageKey);
+    if (storedAssets) {
+      try {
+        existingAssets = JSON.parse(storedAssets);
+      } catch (error) {
+        console.error(`Error parsing ${storageKey}:`, error);
+      }
+    }
+    
+    existingAssets.push(newPromptAsset);
+    localStorage.setItem(storageKey, JSON.stringify(existingAssets));
+
+    // Add to topics state
     setTopics(prevTopics => [{ 
       ...newTopic,
-      id: `manual-${Date.now()}`,
+      id: newPromptAsset.id,
       title: newTopic.title.trim(),
       description: newTopic.description.trim(),
       isNew: true
@@ -183,8 +216,12 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     
     setIsAddTopicOpen(false);
     
+    // Trigger UI update
+    const customEvent = new Event('contentAssetsUpdated');
+    window.dispatchEvent(customEvent);
+    
     toast({
-      title: "Topic Added",
+      title: "Prompt Added",
       description: `"${newTopic.title}" has been added to your topics.`,
     });
   };

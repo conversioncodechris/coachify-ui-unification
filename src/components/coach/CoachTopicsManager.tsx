@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useToast } from "../../hooks/use-toast";
 import { CoachTopic } from './CoachTopicCard';
@@ -23,7 +24,8 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
   const [newTopic, setNewTopic] = useState<CoachTopic>({
     icon: '😊',
     title: '',
-    description: ''
+    description: '',
+    content: ''
   });
   const [isAddTopicOpen, setIsAddTopicOpen] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -128,7 +130,8 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
     setNewTopic({
       icon: '😊',
       title: '',
-      description: ''
+      description: '',
+      content: ''
     });
     setIsAddTopicOpen(true);
   };
@@ -150,17 +153,53 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
       return;
     }
 
+    // Create a new ContentAsset for the roleplay scenario
+    const newRoleplayAsset: ContentAsset = {
+      id: `coach-${Date.now()}`,
+      type: 'roleplay',
+      title: newTopic.title.trim(),
+      subtitle: newTopic.description.trim(),
+      icon: newTopic.icon,
+      source: "created",
+      dateAdded: new Date(),
+      content: newTopic.content || "",
+      isNew: true,
+      aiType: "coach"
+    };
+    
+    // Save to localStorage
+    const storageKey = 'coachAssets';
+    let existingAssets: ContentAsset[] = [];
+    
+    const storedAssets = localStorage.getItem(storageKey);
+    if (storedAssets) {
+      try {
+        existingAssets = JSON.parse(storedAssets);
+      } catch (error) {
+        console.error(`Error parsing ${storageKey}:`, error);
+      }
+    }
+    
+    existingAssets.push(newRoleplayAsset);
+    localStorage.setItem(storageKey, JSON.stringify(existingAssets));
+
+    // Add to topics state
     setTopics(prevTopics => [...prevTopics, { 
       ...newTopic,
       title: newTopic.title.trim(),
-      description: newTopic.description.trim()
+      description: newTopic.description.trim(),
+      isNew: true
     }]);
     
     setIsAddTopicOpen(false);
     
+    // Trigger UI update
+    const customEvent = new Event('contentAssetsUpdated');
+    window.dispatchEvent(customEvent);
+    
     toast({
-      title: "Persona Added",
-      description: `"${newTopic.title}" has been added to your roleplay scenarios.`,
+      title: "Roleplay Scenario Added",
+      description: `"${newTopic.title}" has been added to your scenarios.`,
     });
   };
 
