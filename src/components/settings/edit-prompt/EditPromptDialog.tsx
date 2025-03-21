@@ -60,12 +60,12 @@ const EditPromptDialog: React.FC<EditPromptDialogProps> = ({
       }
       onOpenChange(open);
     }}>
-      <DialogContent className="sm:max-w-[800px] w-full">
+      <DialogContent className="sm:max-w-[800px] w-full max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Edit Prompt</DialogTitle>
         </DialogHeader>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 py-2">
           <div>
             <PromptFormFields
               selectedEmoji={selectedEmoji}

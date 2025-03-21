@@ -45,14 +45,14 @@ const PromptEnhancementSuggestion: React.FC<PromptEnhancementSuggestionProps> = 
   };
 
   return (
-    <Card className="mt-6 border-2 border-yellow-200 bg-yellow-50">
+    <Card className="mt-0 border-2 border-yellow-200 bg-yellow-50 h-full">
       <CardHeader className="pb-2">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap gap-2">
           <CardTitle className="text-lg flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-yellow-500" />
-            AI-Enhanced Prompt Suggestion
+            AI-Enhanced Prompt
           </CardTitle>
-          <Badge variant="outline" className={categoryColors[enhancedPrompt.category]}>
+          <Badge variant="outline" className={`${categoryColors[enhancedPrompt.category]} whitespace-nowrap`}>
             {categoryLabels[enhancedPrompt.category]}
           </Badge>
         </div>
@@ -63,11 +63,11 @@ const PromptEnhancementSuggestion: React.FC<PromptEnhancementSuggestionProps> = 
         </p>
         <Textarea 
           value={enhancedPrompt.enhanced} 
-          className="min-h-[200px] text-sm bg-white"
+          className="min-h-[180px] text-sm bg-white w-full resize-none"
           readOnly
         />
       </CardContent>
-      <CardFooter className="flex justify-between gap-2">
+      <CardFooter className="flex justify-between gap-2 flex-wrap">
         <Button variant="outline" size="sm" onClick={onReject}>
           <X className="h-4 w-4 mr-2" />
           Keep Original
