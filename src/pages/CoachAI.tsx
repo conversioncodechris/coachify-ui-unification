@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CoachSidebar from '../components/sidebar/CoachSidebar';
@@ -7,7 +6,7 @@ import ChatSessionManager from '../components/coach/ChatSessionManager';
 import { useCoachChatSessions } from '../hooks/useCoachChatSessions';
 import { DEFAULT_COACH_TOPICS, DEFAULT_EMOJI_OPTIONS } from '../data/defaultCoachTopics';
 import CoachTopicsManager from '../components/coach/CoachTopicsManager';
-import { CoachTopic } from '../components/coach/CoachTopicCard';
+import { CoachTopic } from '../components/coach/CoachTypes';
 
 const CoachAI = () => {
   const [topics, setTopics] = useState<CoachTopic[]>(DEFAULT_COACH_TOPICS);
