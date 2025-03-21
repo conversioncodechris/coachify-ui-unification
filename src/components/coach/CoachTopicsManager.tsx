@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useToast } from "../../hooks/use-toast";
-import { CoachTopic } from './CoachTypes'; // Updated import path
+import { CoachTopic, RoleplayScenario } from './CoachTypes'; // Updated import
 import CoachTopicsGrid from './CoachTopicsGrid';
 import AddTopicDialog from '../compliance/AddTopicDialog';
 import ContentFooter from '../content/ContentFooter';
@@ -27,7 +27,15 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
     icon: '😊',
     title: '',
     description: '',
-    content: '' // This is now valid because we've added content to the CoachTopic interface
+    content: '',
+    roleplay: {
+      agentRole: '',
+      clientProfile: '',
+      setting: '',
+      objectives: [''],
+      backgroundInfo: '',
+      keyPoints: ['']
+    }
   });
   const [isAddTopicOpen, setIsAddTopicOpen] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -130,10 +138,18 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
 
   const handleAddTopicClick = () => {
     setNewTopic({
-      icon: '😊',
+      icon: '🎭',
       title: '',
       description: '',
-      content: '' // This is now valid
+      content: '',
+      roleplay: {
+        agentRole: '',
+        clientProfile: '',
+        setting: '',
+        objectives: [''],
+        backgroundInfo: '',
+        keyPoints: ['']
+      }
     });
     setIsAddTopicOpen(true);
   };
@@ -155,6 +171,33 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
       return;
     }
 
+    // Create a roleplay content string from the structured data
+    let structuredContent = '';
+    if (newTopic.roleplay) {
+      const rp = newTopic.roleplay;
+      structuredContent = `# Roleplay Scenario: ${newTopic.title}\n\n`;
+      structuredContent += `## Agent Role\n${rp.agentRole || 'Not specified'}\n\n`;
+      structuredContent += `## Client Profile\n${rp.clientProfile || 'Not specified'}\n\n`;
+      structuredContent += `## Setting\n${rp.setting || 'Not specified'}\n\n`;
+      structuredContent += `## Background Information\n${rp.backgroundInfo || 'Not specified'}\n\n`;
+      
+      if (rp.objectives && rp.objectives.length > 0) {
+        structuredContent += "## Objectives\n";
+        rp.objectives.forEach((obj, i) => {
+          if (obj.trim()) structuredContent += `${i+1}. ${obj.trim()}\n`;
+        });
+        structuredContent += "\n";
+      }
+      
+      if (rp.keyPoints && rp.keyPoints.length > 0) {
+        structuredContent += "## Key Talking Points\n";
+        rp.keyPoints.forEach((point, i) => {
+          if (point.trim()) structuredContent += `${i+1}. ${point.trim()}\n`;
+        });
+        structuredContent += "\n";
+      }
+    }
+
     // Create a new ContentAsset for the roleplay scenario
     const newRoleplayAsset: ContentAsset = {
       id: `coach-${Date.now()}`,
@@ -164,7 +207,7 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
       icon: newTopic.icon,
       source: "created",
       dateAdded: new Date(),
-      content: newTopic.content || "", // This is now valid
+      content: structuredContent || newTopic.content || "",
       isNew: true,
       aiType: "coach"
     };
@@ -190,6 +233,7 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
       ...newTopic,
       title: newTopic.title.trim(),
       description: newTopic.description.trim(),
+      content: structuredContent,
       isNew: true
     }]);
     
@@ -236,6 +280,8 @@ const CoachTopicsManager: React.FC<CoachTopicsManagerProps> = ({
         setNewTopic={setNewTopic}
         onSubmit={handleAddTopicSubmit}
         emojiOptions={emojiOptions}
+        dialogTitle="Add New Roleplay Scenario"
+        showRoleplayForm={true}
       />
     </>
   );

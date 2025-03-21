@@ -27,4 +27,14 @@ export interface CoachTopic {
   hidden?: boolean;
   pinned?: boolean;
   isNew?: boolean;
+  roleplay?: RoleplayScenario;
+}
+
+export interface RoleplayScenario {
+  agentRole: string;
+  clientProfile: string;
+  setting: string;
+  objectives: string[];
+  backgroundInfo: string;
+  keyPoints: string[];
 }
