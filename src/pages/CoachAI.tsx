@@ -1,59 +1,26 @@
-
-import React, { useState } from 'react';
+import React from 'react';
 import CoachChatInterface from '../components/CoachChatInterface';
 import CoachSidebar from '../components/sidebar/CoachSidebar';
+import { useCoachChatSessions } from '../hooks/useCoachChatSessions';
+import { useCoachSidebar } from '../hooks/useCoachSidebar';
 import ChatSessionManager from '../components/coach/ChatSessionManager';
 import CoachTopicsManager from '../components/coach/CoachTopicsManager';
 import { DEFAULT_COACH_TOPICS } from '../data/defaultCoachTopics';
-import { useIsMobile } from '../hooks/use-mobile';
+import useMediaQuery from '../hooks/use-mobile';
+// Correct the import to use the types from CoachTypes.ts
 import { CoachTopic } from '../components/coach/CoachTypes';
-import { useToast } from '../hooks/use-toast';
-
-interface ChatSession {
-  id: string;
-  title: string;
-  messages: any[];
-}
 
 const CoachAI: React.FC = () => {
-  const isMobile = useIsMobile();
-  const { toast } = useToast();
-  
-  // State for chat interface visibility
-  const [chatInterfaceVisible, setChatInterfaceVisible] = useState(false);
-  const [selectedSession, setSelectedSession] = useState<ChatSession | null>(null);
-  const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
-  const [coachTopics, setCoachTopics] = useState<CoachTopic[]>(DEFAULT_COACH_TOPICS);
+  const isMobile = useMediaQuery(768);
+  const {
+    chatInterfaceVisible,
+    toggleChatInterfaceVisibility,
+    selectedSession,
+    setSelectedSession,
+  } = useCoachSidebar();
+  const { chatSessions, addSession, updateSession, deleteSession } = useCoachChatSessions();
 
-  // Toggle chat interface visibility
-  const toggleChatInterfaceVisibility = () => {
-    setChatInterfaceVisible(!chatInterfaceVisible);
-  };
-
-  // Session management functions
-  const addSession = (session: ChatSession) => {
-    setChatSessions([...chatSessions, session]);
-  };
-
-  const updateSession = (updatedSession: ChatSession) => {
-    setChatSessions(chatSessions.map(session => 
-      session.id === updatedSession.id ? updatedSession : session
-    ));
-  };
-
-  const deleteSession = (sessionId: string) => {
-    setChatSessions(chatSessions.filter(session => session.id !== sessionId));
-    
-    if (selectedSession?.id === sessionId) {
-      setSelectedSession(null);
-      setChatInterfaceVisible(false);
-    }
-    
-    toast({
-      title: "Session deleted",
-      description: "Your coaching session has been removed.",
-    });
-  };
+  const [coachTopics, setCoachTopics] = React.useState<CoachTopic[]>(DEFAULT_COACH_TOPICS);
 
   const handleTopicClick = (title: string) => {
     if (!chatInterfaceVisible) {
@@ -77,21 +44,22 @@ const CoachAI: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-gray-50">
-      {/* Sidebar - using simple props without specific component props */}
-      <div className="w-64 h-full bg-white border-r border-border">
-        <CoachSidebar />
-      </div>
+      {/* Sidebar */}
+      <CoachSidebar
+        chatSessions={chatSessions}
+        selectedSession={selectedSession}
+        setSelectedSession={setSelectedSession}
+        toggleChatInterfaceVisibility={toggleChatInterfaceVisibility}
+        deleteSession={deleteSession}
+      />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Chat Interface or Topics Manager */}
         {chatInterfaceVisible && selectedSession ? (
-          <CoachChatInterface 
-            topic={selectedSession.title} 
-            onBackToTopics={() => {
-              setSelectedSession(null);
-              toggleChatInterfaceVisibility();
-            }} 
+          <CoachChatInterface
+            session={selectedSession}
+            updateSession={updateSession}
           />
         ) : (
           <CoachTopicsManager
@@ -103,10 +71,16 @@ const CoachAI: React.FC = () => {
       </div>
 
       {/* Chat Session Manager (Mobile Only) */}
-      {isMobile && selectedSession && (
-        <ChatSessionManager 
-          topic={selectedSession.title} 
-          chatId={selectedSession.id}
+      {isMobile && (
+        <ChatSessionManager
+          chatSessions={chatSessions}
+          selectedSession={selectedSession}
+          setSelectedSession={setSelectedSession}
+          addSession={addSession}
+          updateSession={updateSession}
+          deleteSession={deleteSession}
+          chatInterfaceVisible={chatInterfaceVisible}
+          toggleChatInterfaceVisibility={toggleChatInterfaceVisibility}
         />
       )}
     </div>
