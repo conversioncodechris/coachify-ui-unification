@@ -1,8 +1,7 @@
 
-import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { useToast } from '@/hooks/use-toast';
 import { ContentAsset } from '@/types/contentAssets';
+import { useToast } from '@/hooks/use-toast';
 import { PromptPurpose, PromptPlatform } from './types';
 
 export const usePromptFormActions = () => {
@@ -10,17 +9,17 @@ export const usePromptFormActions = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const resetForm = (
-    setSelectedEmoji: (value: string) => void,
-    setTitle: (value: string) => void,
-    setSubtitle: (value: string) => void,
-    setContent: (value: string) => void,
-    setSelectedAiType: (value: "content" | "compliance" | "coach") => void,
+    setSelectedEmoji: React.Dispatch<React.SetStateAction<string>>,
+    setTitle: React.Dispatch<React.SetStateAction<string>>,
+    setSubtitle: React.Dispatch<React.SetStateAction<string>>,
+    setContent: React.Dispatch<React.SetStateAction<string>>,
+    setSelectedAiType: React.Dispatch<React.SetStateAction<"content" | "compliance" | "coach">>,
     defaultAiType: "content" | "compliance" | "coach",
-    setEnhancedPromptSuggestion: (value: any) => void,
-    setShowEnhancement: (value: boolean) => void,
-    setSelectedPurpose: (value: PromptPurpose) => void,
-    setSelectedPlatforms: (value: PromptPlatform[]) => void,
-    setSelectAllPlatforms: (value: boolean) => void
+    setEnhancedPromptSuggestion: React.Dispatch<React.SetStateAction<any>>,
+    setShowEnhancement: React.Dispatch<React.SetStateAction<boolean>>,
+    setSelectedPurpose: React.Dispatch<React.SetStateAction<PromptPurpose>>,
+    setSelectedPlatforms: React.Dispatch<React.SetStateAction<string[]>>,
+    setSelectAllPlatforms: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
     setSelectedEmoji("💬");
     setTitle("");
@@ -41,7 +40,7 @@ export const usePromptFormActions = () => {
     content: string,
     selectedAiType: "content" | "compliance" | "coach",
     selectedPurpose: PromptPurpose,
-    selectedPlatforms: PromptPlatform[],
+    selectedPlatforms: string[],
     onPromptAdded: (prompt: ContentAsset) => void,
     onClose: () => void,
     resetFormFn: () => void
@@ -58,17 +57,15 @@ export const usePromptFormActions = () => {
     setIsSubmitting(true);
 
     try {
-      // Create the prompt/asset object
       const newPrompt: ContentAsset = {
         id: uuidv4(),
         type: 'prompt',
         title: title.trim(),
         subtitle: subtitle.trim() || "Custom prompt",
         icon: selectedEmoji,
+        content: content.trim(),
         source: "created",
         dateAdded: new Date(),
-        content: content,
-        isNew: true,
         aiType: selectedAiType,
         metadata: {
           purpose: selectedPurpose,
@@ -76,17 +73,17 @@ export const usePromptFormActions = () => {
         }
       };
 
-      // Add the prompt
+      // Here we would typically save to database
+      console.log("Adding new prompt:", newPrompt);
+      
       onPromptAdded(newPrompt);
       setIsSubmitting(false);
       
-      // Show success toast
       toast({
         title: "Prompt Added",
         description: "Your prompt has been successfully added",
       });
       
-      // Reset form and close dialog
       resetFormFn();
       onClose();
     } catch (error) {
@@ -94,7 +91,7 @@ export const usePromptFormActions = () => {
       setIsSubmitting(false);
       
       toast({
-        title: "Add Failed",
+        title: "Error",
         description: "There was an error adding your prompt",
         variant: "destructive",
       });
@@ -102,8 +99,11 @@ export const usePromptFormActions = () => {
   };
 
   return {
+    isSubmitting,
     resetForm,
-    handleSubmit,
-    isSubmitting
+    handleSubmit
   };
 };
+
+// Don't forget to add the import for useState
+import { useState } from 'react';

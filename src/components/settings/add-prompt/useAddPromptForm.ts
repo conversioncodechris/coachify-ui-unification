@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { UseAddPromptFormProps, PromptPurpose } from './types';
 import { DEFAULT_EMOJI_OPTIONS, PROMPT_PURPOSES, PROMPT_PLATFORMS } from './constants';
@@ -72,9 +72,9 @@ export const useAddPromptForm = ({
   };
 
   // Initialize the form
-  useState(() => {
+  useEffect(() => {
     resetFormFn();
-  });
+  }, []);
 
   const handleClose = () => {
     resetFormFn();
