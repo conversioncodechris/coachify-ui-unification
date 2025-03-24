@@ -70,8 +70,10 @@ export const usePromptFormActions = () => {
         content: content,
         isNew: true,
         aiType: selectedAiType,
-        purpose: selectedPurpose,
-        platforms: selectedPlatforms
+        metadata: {
+          purpose: selectedPurpose,
+          platforms: selectedPlatforms
+        }
       };
 
       // Add the prompt
