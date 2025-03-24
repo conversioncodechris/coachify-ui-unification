@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ContentAsset } from '@/types/contentAssets';
 import { useToast } from '@/hooks/use-toast';
 import { PromptPurpose, PromptPlatform } from './types';
+import { useState } from 'react';
 
 export const usePromptFormActions = () => {
   const { toast } = useToast();
@@ -104,6 +105,3 @@ export const usePromptFormActions = () => {
     handleSubmit
   };
 };
-
-// Don't forget to add the import for useState
-import { useState } from 'react';
