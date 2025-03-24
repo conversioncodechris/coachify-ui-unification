@@ -12,6 +12,8 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import PromptEnhancementSuggestion from '../settings/add-prompt/PromptEnhancementSuggestion';
 import { enhancePrompt } from '@/utils/promptEnhancer';
 import { useToast } from '@/hooks/use-toast';
@@ -21,7 +23,33 @@ export interface NewTopicData {
   title: string;
   description: string;
   content?: string;
+  purpose?: string;
+  platforms?: string[];
 }
+
+const PURPOSES = [
+  "Open House",
+  "Price Reduction",
+  "Market Report",
+  "New Listing",
+  "Just Sold",
+  "Testimonial",
+  "Neighborhood Highlight",
+  "Home Improvement Tips",
+  "Other"
+];
+
+const PLATFORMS = [
+  "Facebook",
+  "Instagram",
+  "LinkedIn",
+  "Twitter/X",
+  "Email",
+  "Video Script",
+  "SMS Message",
+  "Press Release",
+  "Blog Post"
+];
 
 interface AddTopicDialogProps {
   isOpen: boolean;
@@ -44,9 +72,21 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
   const [content, setContent] = React.useState("");
   const [showEnhancement, setShowEnhancement] = React.useState(false);
   const [enhancedPromptSuggestion, setEnhancedPromptSuggestion] = React.useState(null);
+  const [selectedPurpose, setSelectedPurpose] = React.useState<string>(PURPOSES[0]);
+  const [selectedPlatforms, setSelectedPlatforms] = React.useState<string[]>([]);
 
   const handleSelectEmoji = (emoji: string) => {
     setNewTopic(prev => ({ ...prev, icon: emoji }));
+  };
+
+  const togglePlatform = (platform: string) => {
+    setSelectedPlatforms(prev => {
+      if (prev.includes(platform)) {
+        return prev.filter(p => p !== platform);
+      } else {
+        return [...prev, platform];
+      }
+    });
   };
 
   React.useEffect(() => {
@@ -88,8 +128,13 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
       return;
     }
     
-    // Update the newTopic with content before submitting
-    setNewTopic(prev => ({ ...prev, content }));
+    // Update the newTopic with content, purpose and platforms before submitting
+    setNewTopic(prev => ({ 
+      ...prev, 
+      content,
+      purpose: selectedPurpose,
+      platforms: selectedPlatforms
+    }));
     setTimeout(onSubmit, 0); // Use setTimeout to ensure state is updated before submission
   };
 
@@ -147,6 +192,44 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
                 placeholder="Brief description (one line)"
                 maxLength={60}
               />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="purpose">Purpose</Label>
+              <Select 
+                value={selectedPurpose} 
+                onValueChange={setSelectedPurpose}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select purpose" />
+                </SelectTrigger>
+                <SelectContent>
+                  {PURPOSES.map((purpose) => (
+                    <SelectItem key={purpose} value={purpose}>
+                      {purpose}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid gap-2">
+              <Label>Platforms</Label>
+              <div className="grid grid-cols-2 gap-2 border rounded-md p-3">
+                {PLATFORMS.map((platform) => (
+                  <div key={platform} className="flex items-center space-x-2">
+                    <Checkbox 
+                      id={`platform-${platform}`} 
+                      checked={selectedPlatforms.includes(platform)}
+                      onCheckedChange={() => togglePlatform(platform)}
+                    />
+                    <Label 
+                      htmlFor={`platform-${platform}`}
+                      className="cursor-pointer text-sm"
+                    >
+                      {platform}
+                    </Label>
+                  </div>
+                ))}
+              </div>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="content">Prompt Content (Optional)</Label>

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { EyeOff, Pin, PinOff, Sparkle } from 'lucide-react';
 import {
@@ -9,14 +8,16 @@ import {
 } from "@/components/ui/tooltip";
 
 export interface ContentTopic {
-  id: string;  // Required ID field to track unique topics
+  id: string;
   icon: string;
   title: string;
   description: string;
-  content?: string; // Added content property
-  hidden?: boolean;
-  pinned?: boolean;
+  content?: string;
   isNew?: boolean;
+  pinned?: boolean;
+  hidden?: boolean;
+  purpose?: string;
+  platforms?: string[];
 }
 
 interface ContentTopicCardProps {
@@ -42,7 +43,6 @@ const ContentTopicCard: React.FC<ContentTopicCardProps> = ({
             }`}
             onClick={() => onTopicClick(topic.title)}
           >
-            {/* New ribbon badge */}
             {topic.isNew && (
               <div className="absolute -top-1 -right-1 bg-insta-blue text-white px-2 py-0.5 rounded-br-md rounded-tl-md shadow-sm flex items-center gap-1 text-xs font-medium z-10">
                 <Sparkle size={12} className="animate-pulse" />
@@ -60,7 +60,6 @@ const ContentTopicCard: React.FC<ContentTopicCardProps> = ({
               </div>
             </div>
             
-            {/* Action buttons on hover */}
             <div className="absolute top-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
               <TooltipProvider>
                 <Tooltip>
@@ -95,7 +94,6 @@ const ContentTopicCard: React.FC<ContentTopicCardProps> = ({
               </TooltipProvider>
             </div>
             
-            {/* Pin indicator */}
             {topic.pinned && (
               <div className="absolute top-0 left-0 bg-insta-blue text-white p-1 text-xs rounded-tl-md rounded-br-md">
                 <Pin size={12} />

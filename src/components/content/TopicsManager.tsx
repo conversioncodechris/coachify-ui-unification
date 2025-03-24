@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useToast } from "../../hooks/use-toast";
 import { ContentTopic } from './ContentTopicCard';
@@ -28,7 +27,9 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     icon: '📝',
     title: '',
     description: '',
-    content: ''
+    content: '',
+    purpose: 'Open House',
+    platforms: []
   });
   const [isAddTopicOpen, setIsAddTopicOpen] = useState(false);
   const [prompts, setPrompts] = useState<ContentAsset[]>([]);
@@ -56,7 +57,6 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
             const newTopics: ContentTopic[] = [];
             
             filteredPrompts.forEach((prompt: ContentAsset) => {
-              // Only add if not already processed AND not already in topics list
               if (!currentProcessedIds.has(prompt.id) && !existingTopicIds.has(prompt.id)) {
                 console.log("Converting prompt to topic:", prompt.title);
                 newTopics.push({
@@ -89,7 +89,6 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
       }
     };
 
-    // Only trigger the auto-load on initial render
     if (isInitialLoad) {
       loadPromptsAsTopics();
       setIsInitialLoad(false);
@@ -116,15 +115,6 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
       window.removeEventListener('contentAssetsUpdated', handleCustomEvent as EventListener);
     };
   }, [topics, setTopics, toast, processedPromptIds, isInitialLoad]);
-
-  // Remove this effect that was causing duplicate events
-  /*useEffect(() => {
-    if (processedPromptIds.size === 0) {
-      const customEvent = new Event('contentAssetsUpdated');
-      console.log("Manually dispatching contentAssetsUpdated event");
-      window.dispatchEvent(customEvent);
-    }
-  }, [processedPromptIds.size]);*/
 
   const handleHideTopic = (topicId: string, event: React.MouseEvent) => {
     event.stopPropagation();
@@ -155,7 +145,9 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
       icon: '📝',
       title: '',
       description: '',
-      content: ''
+      content: '',
+      purpose: 'Open House',
+      platforms: []
     });
     setIsAddTopicOpen(true);
   };
@@ -177,7 +169,6 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
       return;
     }
 
-    // Create a new ContentAsset for the prompt
     const newPromptAsset: ContentAsset = {
       id: `manual-${Date.now()}`,
       type: 'prompt',
@@ -188,10 +179,13 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
       dateAdded: new Date(),
       content: newTopic.content || "",
       isNew: true,
-      aiType: "content"
+      aiType: "content",
+      metadata: {
+        purpose: newTopic.purpose,
+        platforms: newTopic.platforms
+      }
     };
     
-    // Save to localStorage
     const storageKey = 'contentAssets';
     let existingAssets: ContentAsset[] = [];
     
@@ -207,7 +201,6 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     existingAssets.push(newPromptAsset);
     localStorage.setItem(storageKey, JSON.stringify(existingAssets));
 
-    // Add to topics state
     setTopics(prevTopics => [{ 
       ...newTopic,
       id: newPromptAsset.id,
@@ -218,7 +211,6 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
     
     setIsAddTopicOpen(false);
     
-    // Trigger UI update
     const customEvent = new Event('contentAssetsUpdated');
     window.dispatchEvent(customEvent);
     

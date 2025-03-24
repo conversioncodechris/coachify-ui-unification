@@ -17,7 +17,11 @@ export interface ContentAsset {
   dateAdded: Date;
   isNew?: boolean;
   aiType?: "compliance" | "coach" | "content";
-  pinned?: boolean; // Added pinned property
-  hidden?: boolean; // Added hidden property
-  metadata?: Record<string, any>; // Added metadata property for additional info
+  pinned?: boolean;
+  hidden?: boolean;
+  metadata?: {
+    purpose?: string;
+    platforms?: string[];
+    [key: string]: any;
+  };
 }
