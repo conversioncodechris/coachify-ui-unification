@@ -45,7 +45,11 @@ const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
     enhancedPromptSuggestion,
     showEnhancement,
     acceptEnhancedPrompt,
-    rejectEnhancedPrompt
+    rejectEnhancedPrompt,
+    selectedPurpose,
+    setSelectedPurpose,
+    selectedPlatforms,
+    togglePlatform
   } = useAddPromptForm({ 
     defaultAiType, 
     onPromptAdded, 
@@ -81,6 +85,10 @@ const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
               onSubtitleChange={setSubtitle}
               onContentChange={setContent}
               onAiTypeChange={setSelectedAiType}
+              selectedPurpose={selectedPurpose}
+              onPurposeChange={setSelectedPurpose}
+              selectedPlatforms={selectedPlatforms}
+              onPlatformToggle={togglePlatform}
             />
           </div>
           

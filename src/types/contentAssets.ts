@@ -19,4 +19,5 @@ export interface ContentAsset {
   aiType?: "compliance" | "coach" | "content";
   pinned?: boolean; // Added pinned property
   hidden?: boolean; // Added hidden property
+  metadata?: Record<string, any>; // Added metadata property for additional info
 }

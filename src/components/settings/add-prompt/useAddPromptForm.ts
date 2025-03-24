@@ -5,6 +5,28 @@ import { ContentAsset } from '@/types/contentAssets';
 import { enhancePrompt, EnhancedPrompt } from '@/utils/promptEnhancer';
 import { useToast } from '@/hooks/use-toast';
 
+export type PromptPurpose = 
+  | "Open House" 
+  | "Price Reduction" 
+  | "Market Report" 
+  | "New Listing" 
+  | "Just Sold" 
+  | "Testimonial" 
+  | "Neighborhood Highlight" 
+  | "Home Improvement Tips" 
+  | "Other";
+
+export type PromptPlatform = 
+  | "Facebook" 
+  | "Instagram" 
+  | "LinkedIn" 
+  | "Twitter/X" 
+  | "Email" 
+  | "Video Script" 
+  | "SMS Message" 
+  | "Press Release" 
+  | "Blog Post";
+
 interface UseAddPromptFormProps {
   defaultAiType: "content" | "compliance" | "coach";
   onPromptAdded: (prompt: ContentAsset) => void;
@@ -27,6 +49,8 @@ export const useAddPromptForm = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [enhancedPromptSuggestion, setEnhancedPromptSuggestion] = useState<EnhancedPrompt | null>(null);
   const [showEnhancement, setShowEnhancement] = useState(false);
+  const [selectedPurpose, setSelectedPurpose] = useState<PromptPurpose>("Open House");
+  const [selectedPlatforms, setSelectedPlatforms] = useState<PromptPlatform[]>([]);
 
   const emojiOptions = [
     "💬", "🗣️", "📝", "📚", "🧠", "💡", "🔍", "📊", "📋", "📈",
@@ -54,6 +78,16 @@ export const useAddPromptForm = ({
     setSelectedEmoji(emoji);
   };
 
+  const togglePlatform = (platform: PromptPlatform) => {
+    setSelectedPlatforms(prev => {
+      if (prev.includes(platform)) {
+        return prev.filter(p => p !== platform);
+      } else {
+        return [...prev, platform];
+      }
+    });
+  };
+
   const resetForm = () => {
     setSelectedEmoji("💬");
     setTitle("");
@@ -63,6 +97,8 @@ export const useAddPromptForm = ({
     setIsSubmitting(false);
     setEnhancedPromptSuggestion(null);
     setShowEnhancement(false);
+    setSelectedPurpose("Open House");
+    setSelectedPlatforms([]);
   };
 
   const handleClose = () => {
@@ -85,6 +121,12 @@ export const useAddPromptForm = ({
     setIsSubmitting(true);
     
     try {
+      // Create metadata for purpose and platforms
+      const metadata = {
+        purpose: selectedPurpose,
+        platforms: selectedPlatforms
+      };
+      
       // Create new prompt asset
       const newPrompt: ContentAsset = {
         id: uuidv4(),
@@ -96,7 +138,8 @@ export const useAddPromptForm = ({
         dateAdded: new Date(),
         content: content || "",
         isNew: true,
-        aiType: selectedAiType
+        aiType: selectedAiType,
+        metadata: metadata
       };
       
       // Pass to parent handler
@@ -155,6 +198,10 @@ export const useAddPromptForm = ({
     enhancedPromptSuggestion,
     showEnhancement,
     acceptEnhancedPrompt,
-    rejectEnhancedPrompt
+    rejectEnhancedPrompt,
+    selectedPurpose,
+    setSelectedPurpose,
+    selectedPlatforms,
+    togglePlatform
   };
 };
