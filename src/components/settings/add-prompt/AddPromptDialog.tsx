@@ -49,7 +49,9 @@ const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
     selectedPurpose,
     setSelectedPurpose,
     selectedPlatforms,
-    togglePlatform
+    togglePlatform,
+    selectAllPlatforms,
+    handleSelectAllPlatforms
   } = useAddPromptForm({ 
     defaultAiType, 
     onPromptAdded, 
@@ -89,6 +91,8 @@ const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
               onPurposeChange={setSelectedPurpose}
               selectedPlatforms={selectedPlatforms}
               onPlatformToggle={togglePlatform}
+              selectAllPlatforms={selectAllPlatforms}
+              onSelectAllPlatforms={handleSelectAllPlatforms}
             />
           </div>
           

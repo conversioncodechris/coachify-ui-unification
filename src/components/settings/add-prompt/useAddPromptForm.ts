@@ -51,6 +51,7 @@ export const useAddPromptForm = ({
   const [showEnhancement, setShowEnhancement] = useState(false);
   const [selectedPurpose, setSelectedPurpose] = useState<PromptPurpose>("Open House");
   const [selectedPlatforms, setSelectedPlatforms] = useState<PromptPlatform[]>([]);
+  const [selectAllPlatforms, setSelectAllPlatforms] = useState(false);
 
   const emojiOptions = [
     "💬", "🗣️", "📝", "📚", "🧠", "💡", "🔍", "📊", "📋", "📈",
@@ -74,6 +75,12 @@ export const useAddPromptForm = ({
     }
   }, [content]);
 
+  // Update selectAllPlatforms state when individual platforms change
+  useEffect(() => {
+    const allPlatforms = Object.values(PromptPlatform) as PromptPlatform[];
+    setSelectAllPlatforms(selectedPlatforms.length === allPlatforms.length);
+  }, [selectedPlatforms]);
+
   const handleSelectEmoji = (emoji: string) => {
     setSelectedEmoji(emoji);
   };
@@ -88,6 +95,16 @@ export const useAddPromptForm = ({
     });
   };
 
+  const handleSelectAllPlatforms = (checked: boolean) => {
+    const allPlatforms = Object.values(PromptPlatform) as PromptPlatform[];
+    if (checked) {
+      setSelectedPlatforms([...allPlatforms]);
+    } else {
+      setSelectedPlatforms([]);
+    }
+    setSelectAllPlatforms(checked);
+  };
+
   const resetForm = () => {
     setSelectedEmoji("💬");
     setTitle("");
@@ -99,6 +116,7 @@ export const useAddPromptForm = ({
     setShowEnhancement(false);
     setSelectedPurpose("Open House");
     setSelectedPlatforms([]);
+    setSelectAllPlatforms(false);
   };
 
   const handleClose = () => {
@@ -202,6 +220,8 @@ export const useAddPromptForm = ({
     selectedPurpose,
     setSelectedPurpose,
     selectedPlatforms,
-    togglePlatform
+    togglePlatform,
+    selectAllPlatforms,
+    handleSelectAllPlatforms
   };
 };

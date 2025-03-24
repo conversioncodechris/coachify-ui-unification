@@ -18,6 +18,7 @@ interface PromptFormFieldsProps {
   selectedAiType: "content" | "compliance" | "coach";
   selectedPurpose?: PromptPurpose;
   selectedPlatforms?: PromptPlatform[];
+  selectAllPlatforms?: boolean;
   onSelectEmoji: (emoji: string) => void;
   onTitleChange: (value: string) => void;
   onSubtitleChange: (value: string) => void;
@@ -25,6 +26,7 @@ interface PromptFormFieldsProps {
   onAiTypeChange: (value: "content" | "compliance" | "coach") => void;
   onPurposeChange?: (value: PromptPurpose) => void;
   onPlatformToggle?: (platform: PromptPlatform) => void;
+  onSelectAllPlatforms?: (checked: boolean) => void;
 }
 
 const PURPOSES: PromptPurpose[] = [
@@ -60,13 +62,15 @@ const PromptFormFields: React.FC<PromptFormFieldsProps> = ({
   selectedAiType,
   selectedPurpose = "Open House",
   selectedPlatforms = [],
+  selectAllPlatforms = false,
   onSelectEmoji,
   onTitleChange,
   onSubtitleChange,
   onContentChange,
   onAiTypeChange,
   onPurposeChange,
-  onPlatformToggle
+  onPlatformToggle,
+  onSelectAllPlatforms
 }) => {
   return (
     <div className="grid gap-4 py-4">
@@ -130,25 +134,40 @@ const PromptFormFields: React.FC<PromptFormFieldsProps> = ({
         </div>
       )}
       
-      {onPlatformToggle && (
+      {onPlatformToggle && onSelectAllPlatforms && (
         <div className="grid gap-2">
           <Label>Platforms</Label>
-          <div className="grid grid-cols-2 gap-2 border rounded-md p-3">
-            {PLATFORMS.map((platform) => (
-              <div key={platform} className="flex items-center space-x-2">
-                <Checkbox 
-                  id={`platform-${platform}`} 
-                  checked={selectedPlatforms.includes(platform)}
-                  onCheckedChange={() => onPlatformToggle(platform)}
-                />
-                <Label 
-                  htmlFor={`platform-${platform}`}
-                  className="cursor-pointer text-sm"
-                >
-                  {platform}
-                </Label>
-              </div>
-            ))}
+          <div className="grid gap-2 border rounded-md p-3">
+            <div className="flex items-center space-x-2 border-b pb-2 mb-2">
+              <Checkbox 
+                id="select-all-platforms"
+                checked={selectAllPlatforms}
+                onCheckedChange={(checked) => onSelectAllPlatforms(checked as boolean)}
+              />
+              <Label 
+                htmlFor="select-all-platforms"
+                className="cursor-pointer text-sm font-medium"
+              >
+                Select All Platforms
+              </Label>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {PLATFORMS.map((platform) => (
+                <div key={platform} className="flex items-center space-x-2">
+                  <Checkbox 
+                    id={`platform-${platform}`} 
+                    checked={selectedPlatforms.includes(platform)}
+                    onCheckedChange={() => onPlatformToggle(platform)}
+                  />
+                  <Label 
+                    htmlFor={`platform-${platform}`}
+                    className="cursor-pointer text-sm"
+                  >
+                    {platform}
+                  </Label>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

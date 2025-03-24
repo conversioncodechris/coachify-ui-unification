@@ -74,6 +74,7 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
   const [enhancedPromptSuggestion, setEnhancedPromptSuggestion] = React.useState(null);
   const [selectedPurpose, setSelectedPurpose] = React.useState<string>(PURPOSES[0]);
   const [selectedPlatforms, setSelectedPlatforms] = React.useState<string[]>([]);
+  const [selectAllPlatforms, setSelectAllPlatforms] = React.useState(false);
 
   const handleSelectEmoji = (emoji: string) => {
     setNewTopic(prev => ({ ...prev, icon: emoji }));
@@ -88,6 +89,20 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
       }
     });
   };
+
+  const handleSelectAllPlatforms = (checked: boolean) => {
+    if (checked) {
+      setSelectedPlatforms([...PLATFORMS]);
+    } else {
+      setSelectedPlatforms([]);
+    }
+    setSelectAllPlatforms(checked);
+  };
+
+  // Update selectAllPlatforms state when individual platforms change
+  React.useEffect(() => {
+    setSelectAllPlatforms(selectedPlatforms.length === PLATFORMS.length);
+  }, [selectedPlatforms]);
 
   React.useEffect(() => {
     if (content.trim().length > 15) {
@@ -213,22 +228,37 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
             </div>
             <div className="grid gap-2">
               <Label>Platforms</Label>
-              <div className="grid grid-cols-2 gap-2 border rounded-md p-3">
-                {PLATFORMS.map((platform) => (
-                  <div key={platform} className="flex items-center space-x-2">
-                    <Checkbox 
-                      id={`platform-${platform}`} 
-                      checked={selectedPlatforms.includes(platform)}
-                      onCheckedChange={() => togglePlatform(platform)}
-                    />
-                    <Label 
-                      htmlFor={`platform-${platform}`}
-                      className="cursor-pointer text-sm"
-                    >
-                      {platform}
-                    </Label>
-                  </div>
-                ))}
+              <div className="grid gap-2 border rounded-md p-3">
+                <div className="flex items-center space-x-2 border-b pb-2 mb-2">
+                  <Checkbox 
+                    id="select-all-platforms"
+                    checked={selectAllPlatforms}
+                    onCheckedChange={(checked) => handleSelectAllPlatforms(checked as boolean)}
+                  />
+                  <Label 
+                    htmlFor="select-all-platforms"
+                    className="cursor-pointer text-sm font-medium"
+                  >
+                    Select All Platforms
+                  </Label>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {PLATFORMS.map((platform) => (
+                    <div key={platform} className="flex items-center space-x-2">
+                      <Checkbox 
+                        id={`platform-${platform}`} 
+                        checked={selectedPlatforms.includes(platform)}
+                        onCheckedChange={() => togglePlatform(platform)}
+                      />
+                      <Label 
+                        htmlFor={`platform-${platform}`}
+                        className="cursor-pointer text-sm"
+                      >
+                        {platform}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             <div className="grid gap-2">
