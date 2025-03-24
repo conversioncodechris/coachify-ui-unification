@@ -59,7 +59,7 @@ const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
       }
       onOpenChange(open);
     }}>
-      <DialogContent className="sm:max-w-[800px] w-full max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle>Add New Prompt</DialogTitle>
           <DialogDescription>
