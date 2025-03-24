@@ -1,60 +1,14 @@
-import { useState, useEffect } from 'react';
-import { nanoid } from 'nanoid';
-import { ContentAsset } from '@/types/contentAssets';
-import { enhancePrompt } from '@/utils/promptEnhancer';
+
+import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { UseAddPromptFormProps, PromptPurpose } from './types';
+import { DEFAULT_EMOJI_OPTIONS, PROMPT_PURPOSES, PROMPT_PLATFORMS } from './constants';
+import { usePromptFormActions } from './usePromptFormActions';
+import { useEnhancedPrompt } from './useEnhancedPrompt';
+import { usePlatformSelection } from './usePlatformSelection';
 
-export type PromptPurpose = 
-  | "Open House"
-  | "Price Reduction"
-  | "Market Report"
-  | "New Listing"
-  | "Just Sold"
-  | "Testimonial" 
-  | "Neighborhood Highlight"
-  | "Home Improvement Tips"
-  | "Other";
-
-export type PromptPlatform = 
-  | "Facebook"
-  | "Instagram"
-  | "LinkedIn"
-  | "Twitter/X"
-  | "Email"
-  | "Video Script"
-  | "SMS Message"
-  | "Press Release"
-  | "Blog Post";
-
-export const PROMPT_PURPOSES: PromptPurpose[] = [
-  "Open House",
-  "Price Reduction",
-  "Market Report",
-  "New Listing",
-  "Just Sold",
-  "Testimonial", 
-  "Neighborhood Highlight",
-  "Home Improvement Tips",
-  "Other"
-];
-
-export const PROMPT_PLATFORMS: PromptPlatform[] = [
-  "Facebook",
-  "Instagram",
-  "LinkedIn",
-  "Twitter/X",
-  "Email",
-  "Video Script",
-  "SMS Message",
-  "Press Release",
-  "Blog Post"
-];
-
-interface UseAddPromptFormProps {
-  defaultAiType: "content" | "compliance" | "coach";
-  onPromptAdded: (prompt: ContentAsset) => void;
-  onClose: () => void;
-}
+export { PROMPT_PURPOSES, PROMPT_PLATFORMS } from './constants';
+export type { PromptPurpose, PromptPlatform } from './types';
 
 export const useAddPromptForm = ({ 
   defaultAiType, 
@@ -69,156 +23,80 @@ export const useAddPromptForm = ({
   const [subtitle, setSubtitle] = useState("");
   const [content, setContent] = useState("");
   const [selectedAiType, setSelectedAiType] = useState<"content" | "compliance" | "coach">(defaultAiType);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [enhancedPromptSuggestion, setEnhancedPromptSuggestion] = useState<EnhancedPrompt | null>(null);
-  const [showEnhancement, setShowEnhancement] = useState(false);
   const [selectedPurpose, setSelectedPurpose] = useState<PromptPurpose>("Open House");
-  const [selectedPlatforms, setSelectedPlatforms] = useState<PromptPlatform[]>([]);
-  const [selectAllPlatforms, setSelectAllPlatforms] = useState(false);
+  
+  // Enhanced prompt
+  const {
+    enhancedPromptSuggestion,
+    showEnhancement,
+    acceptEnhancedPrompt,
+    rejectEnhancedPrompt,
+    setEnhancedPromptSuggestion,
+    setShowEnhancement
+  } = useEnhancedPrompt(content);
 
-  const emojiOptions = [
-    "💬", "🗣️", "📝", "📚", "🧠", "💡", "🔍", "📊", "📋", "📈",
-    "🤔", "🎯", "🏆", "✅", "⚠️", "🚨", "🔒", "🛡️", "📑", "📌"
-  ];
+  // Platform selection
+  const {
+    selectedPlatforms,
+    selectAllPlatforms,
+    togglePlatform,
+    handleSelectAllPlatforms,
+    setSelectedPlatforms,
+    setSelectAllPlatforms
+  } = usePlatformSelection();
+
+  // Form actions
+  const { resetForm, handleSubmit, isSubmitting } = usePromptFormActions();
+
+  const emojiOptions = DEFAULT_EMOJI_OPTIONS;
 
   // Reset the form when the dialog opens
-  useEffect(() => {
-    resetForm();
-  }, []);
-  
-  // Generate enhanced prompt suggestion when content changes
-  useEffect(() => {
-    if (content.trim().length > 15) {
-      const enhancedPrompt = enhancePrompt(content);
-      setEnhancedPromptSuggestion(enhancedPrompt);
-      setShowEnhancement(true);
-    } else {
-      setEnhancedPromptSuggestion(null);
-      setShowEnhancement(false);
-    }
-  }, [content]);
-
-  // Update selectAllPlatforms state when individual platforms change
-  useEffect(() => {
-    const allPlatforms = Object.values(PromptPlatform) as PromptPlatform[];
-    setSelectAllPlatforms(selectedPlatforms.length === allPlatforms.length);
-  }, [selectedPlatforms]);
+  useState(() => {
+    resetFormFn();
+  });
 
   const handleSelectEmoji = (emoji: string) => {
     setSelectedEmoji(emoji);
   };
 
-  const togglePlatform = (platform: PromptPlatform) => {
-    setSelectedPlatforms(prev => {
-      if (prev.includes(platform)) {
-        return prev.filter(p => p !== platform);
-      } else {
-        return [...prev, platform];
-      }
-    });
-  };
-
-  const handleSelectAllPlatforms = (checked: boolean) => {
-    const allPlatforms = Object.values(PromptPlatform) as PromptPlatform[];
-    if (checked) {
-      setSelectedPlatforms([...allPlatforms]);
-    } else {
-      setSelectedPlatforms([]);
-    }
-    setSelectAllPlatforms(checked);
-  };
-
-  const resetForm = () => {
-    setSelectedEmoji("💬");
-    setTitle("");
-    setSubtitle("");
-    setContent("");
-    setSelectedAiType(defaultAiType);
-    setIsSubmitting(false);
-    setEnhancedPromptSuggestion(null);
-    setShowEnhancement(false);
-    setSelectedPurpose("Open House");
-    setSelectedPlatforms([]);
-    setSelectAllPlatforms(false);
+  const resetFormFn = () => {
+    resetForm(
+      setSelectedEmoji,
+      setTitle,
+      setSubtitle,
+      setContent,
+      setSelectedAiType,
+      defaultAiType,
+      setEnhancedPromptSuggestion,
+      setShowEnhancement,
+      setSelectedPurpose,
+      setSelectedPlatforms,
+      setSelectAllPlatforms
+    );
   };
 
   const handleClose = () => {
-    resetForm();
+    resetFormFn();
     onClose();
   };
 
-  const handleSubmit = () => {
-    if (isSubmitting) return;
-    
-    if (!title.trim()) {
-      toast({
-        title: "Error",
-        description: "Title is required",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    setIsSubmitting(true);
-    
-    try {
-      // Create metadata for purpose and platforms
-      const metadata = {
-        purpose: selectedPurpose,
-        platforms: selectedPlatforms
-      };
-      
-      // Create new prompt asset
-      const newPrompt: ContentAsset = {
-        id: nanoid(),
-        type: 'prompt',
-        title: title.trim(),
-        subtitle: subtitle.trim() || "Prompt-based topic",
-        icon: selectedEmoji,
-        source: "created",
-        dateAdded: new Date(),
-        content: content || "",
-        isNew: true,
-        aiType: selectedAiType,
-        metadata: metadata
-      };
-      
-      // Pass to parent handler
-      onPromptAdded(newPrompt);
-      
-      // Reset form
-      resetForm();
-      onClose();
-    } catch (error) {
-      console.error("Error creating prompt:", error);
-      setIsSubmitting(false);
-      toast({
-        title: "Error",
-        description: "Failed to create prompt",
-        variant: "destructive"
-      });
-    }
+  const handleFormSubmit = () => {
+    handleSubmit(
+      title,
+      subtitle,
+      selectedEmoji,
+      content,
+      selectedAiType,
+      selectedPurpose,
+      selectedPlatforms,
+      onPromptAdded,
+      onClose,
+      resetFormFn
+    );
   };
 
-  const acceptEnhancedPrompt = (enhancedText: string) => {
-    setContent(enhancedText);
-    setShowEnhancement(false);
-    
-    // Show toast to confirm enhancement accepted
-    toast({
-      title: "Enhancement Applied",
-      description: "The AI-enhanced prompt has been applied",
-    });
-  };
-
-  const rejectEnhancedPrompt = () => {
-    setShowEnhancement(false);
-    
-    // Show toast to confirm rejection
-    toast({
-      title: "Enhancement Rejected",
-      description: "Keeping your original prompt",
-    });
+  const acceptPromptEnhancement = (enhancedText: string) => {
+    acceptEnhancedPrompt(enhancedText, setContent);
   };
 
   return {
@@ -235,10 +113,10 @@ export const useAddPromptForm = ({
     emojiOptions,
     handleSelectEmoji,
     handleClose,
-    handleSubmit,
+    handleSubmit: handleFormSubmit,
     enhancedPromptSuggestion,
     showEnhancement,
-    acceptEnhancedPrompt,
+    acceptEnhancedPrompt: acceptPromptEnhancement,
     rejectEnhancedPrompt,
     selectedPurpose,
     setSelectedPurpose,
