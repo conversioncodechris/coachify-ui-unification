@@ -1,53 +1,52 @@
 
 import { useState, useEffect } from 'react';
 import { enhancePrompt } from '@/utils/promptEnhancer';
-import { useToast } from '@/hooks/use-toast';
 import { EnhancedPrompt } from './types';
 
 export const useEnhancedPrompt = (content: string) => {
-  const { toast } = useToast();
   const [enhancedPromptSuggestion, setEnhancedPromptSuggestion] = useState<EnhancedPrompt | null>(null);
   const [showEnhancement, setShowEnhancement] = useState(false);
 
-  // Generate enhanced prompt suggestion when content changes
   useEffect(() => {
-    if (content.trim().length > 15) {
-      const enhancedPrompt = enhancePrompt(content);
-      setEnhancedPromptSuggestion(enhancedPrompt);
-      setShowEnhancement(true);
+    if (content.trim().length > 20) {
+      // Clear any existing suggestion first
+      setEnhancedPromptSuggestion(null);
+      setShowEnhancement(false);
+      
+      // Add a delay to avoid overwhelming with suggestions
+      const timer = setTimeout(() => {
+        const enhanced = enhancePrompt(content);
+        if (enhanced && enhanced.enhanced !== content) {
+          setEnhancedPromptSuggestion(enhanced);
+          setShowEnhancement(true);
+        }
+      }, 1500);
+      
+      return () => clearTimeout(timer);
     } else {
+      // Reset if content is cleared or too short
       setEnhancedPromptSuggestion(null);
       setShowEnhancement(false);
     }
   }, [content]);
 
-  const acceptEnhancedPrompt = (enhancedText: string, setContent: (text: string) => void) => {
-    setContent(enhancedText);
-    setShowEnhancement(false);
-    
-    // Show toast to confirm enhancement accepted
-    toast({
-      title: "Enhancement Applied",
-      description: "The AI-enhanced prompt has been applied",
-    });
+  const acceptEnhancedPrompt = (enhancedText: string, setContent: (value: string) => void) => {
+    if (enhancedText) {
+      setContent(enhancedText);
+      setShowEnhancement(false);
+    }
   };
 
   const rejectEnhancedPrompt = () => {
     setShowEnhancement(false);
-    
-    // Show toast to confirm rejection
-    toast({
-      title: "Enhancement Rejected",
-      description: "Keeping your original prompt",
-    });
   };
 
   return {
     enhancedPromptSuggestion,
-    showEnhancement,
-    acceptEnhancedPrompt,
-    rejectEnhancedPrompt,
     setEnhancedPromptSuggestion,
-    setShowEnhancement
+    showEnhancement,
+    setShowEnhancement,
+    acceptEnhancedPrompt,
+    rejectEnhancedPrompt
   };
 };
