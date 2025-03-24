@@ -38,7 +38,7 @@ export const useAddPromptForm = ({
   // Form actions
   const { resetForm, handleSubmit, isSubmitting } = usePromptFormActions();
 
-  // Enhanced prompt
+  // Enhanced prompt - this needs to be available
   const {
     enhancedPromptSuggestion,
     showEnhancement,
@@ -54,6 +54,7 @@ export const useAddPromptForm = ({
     setSelectedEmoji(emoji);
   };
 
+  // Define resetFormFn before it's used in the useEffect
   const resetFormFn = () => {
     resetForm(
       setSelectedEmoji,
@@ -70,7 +71,7 @@ export const useAddPromptForm = ({
     );
   };
 
-  // Initialize the form - but moved after resetFormFn is defined
+  // Initialize the form
   useState(() => {
     resetFormFn();
   });

@@ -1,26 +1,26 @@
 
 import { useState } from 'react';
-import { nanoid } from 'nanoid';
-import { ContentAsset } from '@/types/contentAssets';
+import { v4 as uuidv4 } from 'uuid';
 import { useToast } from '@/hooks/use-toast';
+import { ContentAsset } from '@/types/contentAssets';
 import { PromptPurpose, PromptPlatform } from './types';
 
 export const usePromptFormActions = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   const resetForm = (
-    setSelectedEmoji: (emoji: string) => void,
-    setTitle: (title: string) => void,
-    setSubtitle: (subtitle: string) => void,
-    setContent: (content: string) => void,
-    setSelectedAiType: (aiType: "content" | "compliance" | "coach") => void,
+    setSelectedEmoji: (value: string) => void,
+    setTitle: (value: string) => void,
+    setSubtitle: (value: string) => void,
+    setContent: (value: string) => void,
+    setSelectedAiType: (value: "content" | "compliance" | "coach") => void,
     defaultAiType: "content" | "compliance" | "coach",
-    setEnhancedPromptSuggestion: (suggestion: any) => void,
-    setShowEnhancement: (show: boolean) => void,
-    setSelectedPurpose: (purpose: PromptPurpose) => void,
-    setSelectedPlatforms: (platforms: PromptPlatform[]) => void,
-    setSelectAllPlatforms: (selected: boolean) => void
+    setEnhancedPromptSuggestion: (value: any) => void,
+    setShowEnhancement: (value: boolean) => void,
+    setSelectedPurpose: (value: PromptPurpose) => void,
+    setSelectedPlatforms: (value: PromptPlatform[]) => void,
+    setSelectAllPlatforms: (value: boolean) => void
   ) => {
     setSelectedEmoji("💬");
     setTitle("");
@@ -44,56 +44,57 @@ export const usePromptFormActions = () => {
     selectedPlatforms: PromptPlatform[],
     onPromptAdded: (prompt: ContentAsset) => void,
     onClose: () => void,
-    resetFormCallback: () => void
+    resetFormFn: () => void
   ) => {
-    if (isSubmitting) return;
-    
     if (!title.trim()) {
       toast({
-        title: "Error",
-        description: "Title is required",
-        variant: "destructive"
+        title: "Title Required",
+        description: "Please enter a title for your prompt",
+        variant: "destructive",
       });
       return;
     }
-    
+
     setIsSubmitting(true);
-    
+
     try {
-      // Create metadata for purpose and platforms
-      const metadata = {
-        purpose: selectedPurpose,
-        platforms: selectedPlatforms
-      };
-      
-      // Create new prompt asset
+      // Create the prompt/asset object
       const newPrompt: ContentAsset = {
-        id: nanoid(),
+        id: uuidv4(),
         type: 'prompt',
         title: title.trim(),
-        subtitle: subtitle.trim() || "Prompt-based topic",
+        subtitle: subtitle.trim() || "Custom prompt",
         icon: selectedEmoji,
         source: "created",
         dateAdded: new Date(),
-        content: content || "",
+        content: content,
         isNew: true,
         aiType: selectedAiType,
-        metadata: metadata
+        purpose: selectedPurpose,
+        platforms: selectedPlatforms
       };
-      
-      // Pass to parent handler
+
+      // Add the prompt
       onPromptAdded(newPrompt);
+      setIsSubmitting(false);
       
-      // Reset form
-      resetFormCallback();
+      // Show success toast
+      toast({
+        title: "Prompt Added",
+        description: "Your prompt has been successfully added",
+      });
+      
+      // Reset form and close dialog
+      resetFormFn();
       onClose();
     } catch (error) {
-      console.error("Error creating prompt:", error);
+      console.error("Error adding prompt:", error);
       setIsSubmitting(false);
+      
       toast({
-        title: "Error",
-        description: "Failed to create prompt",
-        variant: "destructive"
+        title: "Add Failed",
+        description: "There was an error adding your prompt",
+        variant: "destructive",
       });
     }
   };
