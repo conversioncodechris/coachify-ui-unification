@@ -65,7 +65,7 @@ const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
       }
       onOpenChange(open);
     }}>
-      <DialogContent className="sm:max-w-[800px]">
+      <DialogContent className="sm:max-w-[800px] flex flex-col max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>Add New Prompt</DialogTitle>
           <DialogDescription>
@@ -73,7 +73,7 @@ const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
           </DialogDescription>
         </DialogHeader>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 py-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 py-2 overflow-y-auto">
           <div>
             <PromptFormFields
               selectedEmoji={selectedEmoji}
@@ -105,7 +105,7 @@ const AddPromptDialog: React.FC<AddPromptDialogProps> = ({
           </div>
         </div>
         
-        <DialogFooter>
+        <DialogFooter className="mt-2 pt-2 border-t">
           <Button 
             variant="outline" 
             onClick={handleClose}

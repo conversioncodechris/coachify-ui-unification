@@ -1,31 +1,54 @@
-
 import { useState, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import { nanoid } from 'nanoid';
 import { ContentAsset } from '@/types/contentAssets';
-import { enhancePrompt, EnhancedPrompt } from '@/utils/promptEnhancer';
+import { enhancePrompt } from '@/utils/promptEnhancer';
 import { useToast } from '@/hooks/use-toast';
 
 export type PromptPurpose = 
-  | "Open House" 
-  | "Price Reduction" 
-  | "Market Report" 
-  | "New Listing" 
-  | "Just Sold" 
+  | "Open House"
+  | "Price Reduction"
+  | "Market Report"
+  | "New Listing"
+  | "Just Sold"
   | "Testimonial" 
-  | "Neighborhood Highlight" 
-  | "Home Improvement Tips" 
+  | "Neighborhood Highlight"
+  | "Home Improvement Tips"
   | "Other";
 
 export type PromptPlatform = 
-  | "Facebook" 
-  | "Instagram" 
-  | "LinkedIn" 
-  | "Twitter/X" 
-  | "Email" 
-  | "Video Script" 
-  | "SMS Message" 
-  | "Press Release" 
+  | "Facebook"
+  | "Instagram"
+  | "LinkedIn"
+  | "Twitter/X"
+  | "Email"
+  | "Video Script"
+  | "SMS Message"
+  | "Press Release"
   | "Blog Post";
+
+export const PROMPT_PURPOSES: PromptPurpose[] = [
+  "Open House",
+  "Price Reduction",
+  "Market Report",
+  "New Listing",
+  "Just Sold",
+  "Testimonial", 
+  "Neighborhood Highlight",
+  "Home Improvement Tips",
+  "Other"
+];
+
+export const PROMPT_PLATFORMS: PromptPlatform[] = [
+  "Facebook",
+  "Instagram",
+  "LinkedIn",
+  "Twitter/X",
+  "Email",
+  "Video Script",
+  "SMS Message",
+  "Press Release",
+  "Blog Post"
+];
 
 interface UseAddPromptFormProps {
   defaultAiType: "content" | "compliance" | "coach";
@@ -147,7 +170,7 @@ export const useAddPromptForm = ({
       
       // Create new prompt asset
       const newPrompt: ContentAsset = {
-        id: uuidv4(),
+        id: nanoid(),
         type: 'prompt',
         title: title.trim(),
         subtitle: subtitle.trim() || "Prompt-based topic",

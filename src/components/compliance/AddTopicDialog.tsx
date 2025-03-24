@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   Dialog,
@@ -86,10 +85,8 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
     if (sourceType === 'text') {
       setNewTopic(prev => ({ ...prev, content }));
     } else if (sourceType === 'pdf' && pdfFile) {
-      // Handle PDF upload
       setIsUploading(true);
       
-      // Simulate upload with setTimeout
       setTimeout(() => {
         setIsUploading(false);
         setNewTopic(prev => ({ 
@@ -101,11 +98,10 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
           title: "PDF Uploaded",
           description: "Your PDF has been uploaded successfully"
         });
-        // Proceed with submission
         onSubmit();
       }, 1500);
       
-      return; // Wait for the upload to complete
+      return;
     } else if (sourceType === 'url' && url) {
       if (!url.startsWith('http://') && !url.startsWith('https://')) {
         toast({
@@ -128,7 +124,6 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
       setNewTopic(prev => ({ ...prev, content: `YouTube: ${youtubeUrl}` }));
     }
 
-    // If we're not waiting for an upload, submit right away
     onSubmit();
   };
 
@@ -141,142 +136,146 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[800px]">
+      <DialogContent className="sm:max-w-[800px] flex flex-col max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>{dialogTitle}</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <EmojiSelector
-            selectedEmoji={newTopic.icon}
-            emojiOptions={emojiOptions}
-            onSelectEmoji={handleSelectEmoji}
-          />
-
-          <div className="grid gap-2">
-            <Label htmlFor="title">Title</Label>
-            <Input
-              id="title"
-              value={newTopic.title}
-              onChange={(e) => setNewTopic(prev => ({ ...prev, title: e.target.value }))}
-              placeholder="Enter a descriptive title"
+        
+        <div className="overflow-y-auto">
+          <div className="grid gap-4 py-4">
+            <EmojiSelector
+              selectedEmoji={newTopic.icon}
+              emojiOptions={emojiOptions}
+              onSelectEmoji={handleSelectEmoji}
             />
-          </div>
 
-          <div className="grid gap-2">
-            <Label htmlFor="description">Description</Label>
-            <Input
-              id="description"
-              value={newTopic.description}
-              onChange={(e) => setNewTopic(prev => ({ ...prev, description: e.target.value }))}
-              placeholder="Brief description (one line)"
-            />
-          </div>
-
-          {showRoleplayForm ? (
             <div className="grid gap-2">
-              <Label className="font-semibold text-base">Roleplay Details</Label>
-              <div className="border border-border rounded-md p-4 bg-muted/30">
-                <RoleplayScenarioForm 
-                  scenario={newTopic.roleplay || {}}
-                  onChange={handleRoleplayChange}
-                />
-              </div>
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
+                value={newTopic.title}
+                onChange={(e) => setNewTopic(prev => ({ ...prev, title: e.target.value }))}
+                placeholder="Enter a descriptive title"
+              />
             </div>
-          ) : (
-            <Tabs defaultValue="text" onValueChange={(value) => setSourceType(value as any)}>
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="text" className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
-                  <span>Text</span>
-                </TabsTrigger>
-                <TabsTrigger value="pdf" className="flex items-center gap-2">
-                  <Upload className="h-4 w-4" />
-                  <span>PDF</span>
-                </TabsTrigger>
-                <TabsTrigger value="url" className="flex items-center gap-2">
-                  <Link className="h-4 w-4" />
-                  <span>Website</span>
-                </TabsTrigger>
-                <TabsTrigger value="youtube" className="flex items-center gap-2">
-                  <Youtube className="h-4 w-4" />
-                  <span>YouTube</span>
-                </TabsTrigger>
-              </TabsList>
-  
-              <TabsContent value="text">
-                <div className="grid gap-2 mt-4">
-                  <Label htmlFor="content">Content</Label>
-                  <Textarea
-                    id="content"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    placeholder="Enter detailed compliance information, regulations, and guidelines..."
-                    className="min-h-[150px]"
+
+            <div className="grid gap-2">
+              <Label htmlFor="description">Description</Label>
+              <Input
+                id="description"
+                value={newTopic.description}
+                onChange={(e) => setNewTopic(prev => ({ ...prev, description: e.target.value }))}
+                placeholder="Brief description (one line)"
+              />
+            </div>
+
+            {showRoleplayForm ? (
+              <div className="grid gap-2">
+                <Label className="font-semibold text-base">Roleplay Details</Label>
+                <div className="border border-border rounded-md p-4 bg-muted/30">
+                  <RoleplayScenarioForm 
+                    scenario={newTopic.roleplay || {}}
+                    onChange={handleRoleplayChange}
                   />
                 </div>
-              </TabsContent>
-  
-              <TabsContent value="pdf">
-                <div className="grid gap-2 mt-4">
-                  <Label htmlFor="pdf-upload">Upload PDF</Label>
-                  <div className="border-2 border-dashed border-border rounded-md p-6 text-center">
-                    <input
-                      type="file"
-                      id="pdf-upload"
-                      accept=".pdf"
-                      onChange={handleFileChange}
-                      className="hidden"
+              </div>
+            ) : (
+              <Tabs defaultValue="text" onValueChange={(value) => setSourceType(value as any)}>
+                <TabsList className="grid w-full grid-cols-4">
+                  <TabsTrigger value="text" className="flex items-center gap-2">
+                    <FileText className="h-4 w-4" />
+                    <span>Text</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="pdf" className="flex items-center gap-2">
+                    <Upload className="h-4 w-4" />
+                    <span>PDF</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="url" className="flex items-center gap-2">
+                    <Link className="h-4 w-4" />
+                    <span>Website</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="youtube" className="flex items-center gap-2">
+                    <Youtube className="h-4 w-4" />
+                    <span>YouTube</span>
+                  </TabsTrigger>
+                </TabsList>
+    
+                <TabsContent value="text">
+                  <div className="grid gap-2 mt-4">
+                    <Label htmlFor="content">Content</Label>
+                    <Textarea
+                      id="content"
+                      value={content}
+                      onChange={(e) => setContent(e.target.value)}
+                      placeholder="Enter detailed compliance information, regulations, and guidelines..."
+                      className="min-h-[150px]"
                     />
-                    <label htmlFor="pdf-upload" className="cursor-pointer">
-                      <div className="flex flex-col items-center">
-                        <Upload className="h-8 w-8 mb-2 text-muted-foreground" />
-                        <span className="text-sm font-medium">
-                          {pdfFile ? pdfFile.name : "Drag & drop or click to upload PDF"}
-                        </span>
-                        <span className="text-xs text-muted-foreground mt-1">
-                          {pdfFile ? `${(pdfFile.size / 1024 / 1024).toFixed(2)} MB` : "Maximum file size: 5MB"}
-                        </span>
-                      </div>
-                    </label>
                   </div>
-                </div>
-              </TabsContent>
-  
-              <TabsContent value="url">
-                <div className="grid gap-2 mt-4">
-                  <Label htmlFor="website-url">Website URL</Label>
-                  <Input
-                    id="website-url"
-                    type="url"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    placeholder="https://example.com/compliance-document"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Enter the URL of a website containing compliance information.
-                  </p>
-                </div>
-              </TabsContent>
-  
-              <TabsContent value="youtube">
-                <div className="grid gap-2 mt-4">
-                  <Label htmlFor="youtube-url">YouTube URL</Label>
-                  <Input
-                    id="youtube-url"
-                    type="url"
-                    value={youtubeUrl}
-                    onChange={(e) => setYoutubeUrl(e.target.value)}
-                    placeholder="https://www.youtube.com/watch?v=..."
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Enter the URL of a YouTube video containing compliance information.
-                  </p>
-                </div>
-              </TabsContent>
-            </Tabs>
-          )}
+                </TabsContent>
+    
+                <TabsContent value="pdf">
+                  <div className="grid gap-2 mt-4">
+                    <Label htmlFor="pdf-upload">Upload PDF</Label>
+                    <div className="border-2 border-dashed border-border rounded-md p-6 text-center">
+                      <input
+                        type="file"
+                        id="pdf-upload"
+                        accept=".pdf"
+                        onChange={handleFileChange}
+                        className="hidden"
+                      />
+                      <label htmlFor="pdf-upload" className="cursor-pointer">
+                        <div className="flex flex-col items-center">
+                          <Upload className="h-8 w-8 mb-2 text-muted-foreground" />
+                          <span className="text-sm font-medium">
+                            {pdfFile ? pdfFile.name : "Drag & drop or click to upload PDF"}
+                          </span>
+                          <span className="text-xs text-muted-foreground mt-1">
+                            {pdfFile ? `${(pdfFile.size / 1024 / 1024).toFixed(2)} MB` : "Maximum file size: 5MB"}
+                          </span>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                </TabsContent>
+    
+                <TabsContent value="url">
+                  <div className="grid gap-2 mt-4">
+                    <Label htmlFor="website-url">Website URL</Label>
+                    <Input
+                      id="website-url"
+                      type="url"
+                      value={url}
+                      onChange={(e) => setUrl(e.target.value)}
+                      placeholder="https://example.com/compliance-document"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Enter the URL of a website containing compliance information.
+                    </p>
+                  </div>
+                </TabsContent>
+    
+                <TabsContent value="youtube">
+                  <div className="grid gap-2 mt-4">
+                    <Label htmlFor="youtube-url">YouTube URL</Label>
+                    <Input
+                      id="youtube-url"
+                      type="url"
+                      value={youtubeUrl}
+                      onChange={(e) => setYoutubeUrl(e.target.value)}
+                      placeholder="https://www.youtube.com/watch?v=..."
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Enter the URL of a YouTube video containing compliance information.
+                    </p>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            )}
+          </div>
         </div>
-        <DialogFooter>
+        
+        <DialogFooter className="mt-2 pt-2 border-t">
           <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>

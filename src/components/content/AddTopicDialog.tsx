@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Dialog,
@@ -99,7 +98,6 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
     setSelectAllPlatforms(checked);
   };
 
-  // Update selectAllPlatforms state when individual platforms change
   React.useEffect(() => {
     setSelectAllPlatforms(selectedPlatforms.length === PLATFORMS.length);
   }, [selectedPlatforms]);
@@ -143,19 +141,18 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
       return;
     }
     
-    // Update the newTopic with content, purpose and platforms before submitting
     setNewTopic(prev => ({ 
       ...prev, 
       content,
       purpose: selectedPurpose,
       platforms: selectedPlatforms
     }));
-    setTimeout(onSubmit, 0); // Use setTimeout to ensure state is updated before submission
+    setTimeout(onSubmit, 0);
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[800px] w-full max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[800px] w-full flex flex-col max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>Add New Prompt</DialogTitle>
           <DialogDescription>
@@ -163,7 +160,7 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
           </DialogDescription>
         </DialogHeader>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 py-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 py-2 overflow-y-auto">
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
               <Label htmlFor="icon">Icon</Label>
@@ -186,7 +183,6 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
                 id="title"
                 value={newTopic.title} 
                 onChange={(e) => {
-                  // Prevent newlines from being entered
                   const value = e.target.value.replace(/[\r\n]/g, '');
                   setNewTopic(prev => ({ ...prev, title: value }))
                 }}
@@ -200,7 +196,6 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
                 id="description"
                 value={newTopic.description}
                 onChange={(e) => {
-                  // Prevent newlines from being entered
                   const value = e.target.value.replace(/[\r\n]/g, '');
                   setNewTopic(prev => ({ ...prev, description: value }))
                 }}
@@ -282,7 +277,7 @@ const AddTopicDialog: React.FC<AddTopicDialogProps> = ({
           </div>
         </div>
         
-        <DialogFooter>
+        <DialogFooter className="mt-2 pt-2 border-t">
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
           <Button onClick={handleSubmitWithContent}>Add Prompt</Button>
         </DialogFooter>
