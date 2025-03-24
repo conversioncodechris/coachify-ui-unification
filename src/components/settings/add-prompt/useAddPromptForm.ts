@@ -25,16 +25,6 @@ export const useAddPromptForm = ({
   const [selectedAiType, setSelectedAiType] = useState<"content" | "compliance" | "coach">(defaultAiType);
   const [selectedPurpose, setSelectedPurpose] = useState<PromptPurpose>("Open House");
   
-  // Enhanced prompt
-  const {
-    enhancedPromptSuggestion,
-    showEnhancement,
-    acceptEnhancedPrompt,
-    rejectEnhancedPrompt,
-    setEnhancedPromptSuggestion,
-    setShowEnhancement
-  } = useEnhancedPrompt(content);
-
   // Platform selection
   const {
     selectedPlatforms,
@@ -47,6 +37,16 @@ export const useAddPromptForm = ({
 
   // Form actions
   const { resetForm, handleSubmit, isSubmitting } = usePromptFormActions();
+
+  // Enhanced prompt
+  const {
+    enhancedPromptSuggestion,
+    showEnhancement,
+    acceptEnhancedPrompt,
+    rejectEnhancedPrompt,
+    setEnhancedPromptSuggestion,
+    setShowEnhancement
+  } = useEnhancedPrompt(content);
 
   const emojiOptions = DEFAULT_EMOJI_OPTIONS;
 
