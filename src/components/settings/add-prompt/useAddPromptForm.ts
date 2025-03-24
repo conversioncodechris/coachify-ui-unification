@@ -50,11 +50,6 @@ export const useAddPromptForm = ({
 
   const emojiOptions = DEFAULT_EMOJI_OPTIONS;
 
-  // Reset the form when the dialog opens
-  useState(() => {
-    resetFormFn();
-  });
-
   const handleSelectEmoji = (emoji: string) => {
     setSelectedEmoji(emoji);
   };
@@ -74,6 +69,11 @@ export const useAddPromptForm = ({
       setSelectAllPlatforms
     );
   };
+
+  // Initialize the form - but moved after resetFormFn is defined
+  useState(() => {
+    resetFormFn();
+  });
 
   const handleClose = () => {
     resetFormFn();
