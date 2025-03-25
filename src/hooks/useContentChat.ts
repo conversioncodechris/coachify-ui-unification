@@ -41,11 +41,27 @@ export const useContentChat = (topic: string) => {
 
   // Initialize messages with a welcome message
   useEffect(() => {
+    // Check if this is a conversational interview
+    const isConversationalInterview = topic === "Conversational Interview";
+    
+    // If it's a conversational interview, don't show suggestions by default
+    if (isConversationalInterview) {
+      setShowSuggestions(false);
+    }
+    
     if (messages.length === 0) {
+      // Default welcome message
+      let welcomeMessage = `Welcome to the ${topic} content creation! What kind of content would you like to create today?`;
+      
+      // Custom welcome message for Conversational Interview
+      if (isConversationalInterview) {
+        welcomeMessage = "Let's have a conversation about your business or recent activities that we can turn into content. Tell me about a recent client interaction, deal, or industry insight you'd like to share.";
+      }
+      
       setMessages([
         {
           sender: 'ai',
-          content: `Welcome to the ${topic} content creation! What kind of content would you like to create today?`,
+          content: welcomeMessage,
           timestamp: new Date(),
           sources: [
             {
@@ -84,9 +100,16 @@ export const useContentChat = (topic: string) => {
     setShowSuggestions(false);
     
     setTimeout(() => {
+      // Customize response for Conversational Interview
+      let responseContent = `Here's some guidance for creating your ${topic}. This is a simulated response that would typically include tailored content advice, formatting tips, and platform-specific recommendations.`;
+      
+      if (topic === "Conversational Interview") {
+        responseContent = "Thanks for sharing! I can turn this into content for various platforms. Would you like me to create social media posts, a newsletter section, or a blog post based on what you've shared?";
+      }
+      
       const aiResponse: Message = {
         sender: 'ai',
-        content: `Here's some guidance for creating your ${topic}. This is a simulated response that would typically include tailored content advice, formatting tips, and platform-specific recommendations.`,
+        content: responseContent,
         timestamp: new Date(),
         sources: mockSources
       };
