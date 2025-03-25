@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useToast } from "../../hooks/use-toast";
 import { ContentTopic } from './ContentTopicCard';
@@ -234,11 +235,12 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
         
         const customEvent = new Event('contentAssetsUpdated');
         window.dispatchEvent(customEvent);
+        
+        // Open the conversational interview chat directly
+        onTopicClick("Conversational Interview");
       } else {
-        toast({
-          title: "Already Exists",
-          description: "This conversational prompt is already in your collection.",
-        });
+        // If the prompt already exists, just open the chat
+        onTopicClick("Conversational Interview");
       }
     } catch (error) {
       console.error("Error adding conversational prompt:", error);
@@ -276,7 +278,7 @@ const TopicsManager: React.FC<TopicsManagerProps> = ({
                   className="bg-purple-100 text-purple-800 hover:bg-purple-200 flex items-center gap-1"
                 >
                   <MessageSquare className="h-4 w-4" />
-                  Add to My Prompts
+                  Turn a convo into content
                 </Button>
               </div>
             </div>

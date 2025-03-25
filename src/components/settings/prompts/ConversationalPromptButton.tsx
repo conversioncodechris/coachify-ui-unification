@@ -4,13 +4,19 @@ import { Button } from '@/components/ui/button';
 import { MessageSquare } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { addConversationalPrompt } from './addConversationalPrompt';
+import { useNavigate } from 'react-router-dom';
 
 interface ConversationalPromptButtonProps {
   onSuccess?: () => void;
+  openChat?: boolean;
 }
 
-const ConversationalPromptButton: React.FC<ConversationalPromptButtonProps> = ({ onSuccess }) => {
+const ConversationalPromptButton: React.FC<ConversationalPromptButtonProps> = ({ 
+  onSuccess, 
+  openChat = false 
+}) => {
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleAddConversationalPrompt = () => {
     try {
@@ -23,11 +29,86 @@ const ConversationalPromptButton: React.FC<ConversationalPromptButtonProps> = ({
         });
         
         if (onSuccess) onSuccess();
+
+        // Navigate to chat if openChat is true
+        if (openChat) {
+          // Create a new chat session with the prompt title
+          const createChatSession = () => {
+            const promptTitle = "Conversational Interview";
+            const newChatId = Date.now().toString();
+            const chatPath = `/content/chat/${newChatId}`;
+            
+            // Get existing active chats from localStorage
+            const savedChats = localStorage.getItem('contentActiveChats');
+            let activeChats = [];
+            
+            if (savedChats) {
+              try {
+                activeChats = JSON.parse(savedChats);
+              } catch (e) {
+                console.error('Error parsing active chats:', e);
+              }
+            }
+            
+            // Add new chat to active chats
+            const updatedChats = [
+              ...activeChats,
+              {
+                title: promptTitle,
+                path: chatPath
+              }
+            ];
+            
+            localStorage.setItem('contentActiveChats', JSON.stringify(updatedChats));
+            
+            // Navigate to the new chat
+            navigate(chatPath);
+          };
+          
+          createChatSession();
+        }
       } else {
         toast({
           title: "Already exists",
           description: "This conversational prompt is already in your collection.",
         });
+        
+        if (openChat) {
+          // Find an existing chat with "Conversational Interview" title or create a new one
+          const savedChats = localStorage.getItem('contentActiveChats');
+          let activeChats = [];
+          
+          if (savedChats) {
+            try {
+              activeChats = JSON.parse(savedChats);
+              const existingChat = activeChats.find(
+                (chat: any) => chat.title === "Conversational Interview" && !chat.hidden
+              );
+              
+              if (existingChat) {
+                navigate(existingChat.path);
+                return;
+              }
+            } catch (e) {
+              console.error('Error parsing active chats:', e);
+            }
+          }
+          
+          // No existing chat found, create a new one
+          const newChatId = Date.now().toString();
+          const chatPath = `/content/chat/${newChatId}`;
+          
+          const updatedChats = [
+            ...activeChats,
+            {
+              title: "Conversational Interview",
+              path: chatPath
+            }
+          ];
+          
+          localStorage.setItem('contentActiveChats', JSON.stringify(updatedChats));
+          navigate(chatPath);
+        }
       }
     } catch (error) {
       console.error("Error adding conversational prompt:", error);
