@@ -29,7 +29,9 @@ const PromptCard: React.FC<PromptCardProps> = ({
     return isNaN(d.getTime()) ? 'Invalid date' : d.toLocaleDateString();
   };
   
-  const isConversational = prompt.conversational || prompt.content?.includes("Let's turn your expertise");
+  // Check if this is a conversational prompt by looking at the conversational property
+  // or checking if the content includes a specific string
+  const isConversational = prompt.conversational || (prompt.content?.includes("Let's turn your expertise") ?? false);
 
   return (
     <Card className={`relative overflow-hidden ${prompt.pinned ? 'border-accent' : ''}`}>
@@ -44,7 +46,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
           <div className="text-4xl mr-3">{prompt.icon || '📄'}</div>
           <div className="flex-1">
             <h3 className="font-semibold text-lg">{prompt.title}</h3>
-            <p className="text-sm text-muted-foreground">{prompt.subtitle || prompt.description || 'No description available'}</p>
+            <p className="text-sm text-muted-foreground">{prompt.subtitle || 'No description available'}</p>
           </div>
         </div>
         

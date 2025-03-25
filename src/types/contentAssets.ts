@@ -19,6 +19,8 @@ export interface ContentAsset {
   aiType?: "compliance" | "coach" | "content";
   pinned?: boolean;
   hidden?: boolean;
+  conversational?: boolean;
+  description?: string; // Adding description as an optional property
   metadata?: {
     purpose?: string;
     platforms?: string[];
