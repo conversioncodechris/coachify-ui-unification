@@ -2,12 +2,14 @@
 import React, { useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { Plus, MessageSquare } from 'lucide-react';
 import { AddPromptDialog } from '@/components/settings/add-prompt';
 import { EditPromptDialog } from '@/components/settings/edit-prompt';
 import { usePrompts } from './usePrompts';
 import PromptsList from './PromptsList';
 import PromptsInfo from './PromptsInfo';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,6 +23,8 @@ import {
 import { Trash2 } from 'lucide-react';
 
 const PromptsTab: React.FC = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const {
     visiblePrompts,
     hiddenPrompts,
@@ -85,6 +89,73 @@ const PromptsTab: React.FC = () => {
     }
   };
 
+  // Function to handle opening a conversational prompt
+  const openInChat = (prompt: any) => {
+    if (!prompt.content) {
+      toast({
+        title: "Error",
+        description: "This prompt doesn't have content to use in a chat.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      // Create a new chat topic with this prompt
+      const newTopic = {
+        id: `prompt-${prompt.id}`,
+        icon: prompt.icon || "💬",
+        title: prompt.title,
+        description: prompt.subtitle || "Conversational prompt",
+        content: prompt.content,
+        isNew: true,
+        purpose: "content",
+        source: "prompt"
+      };
+
+      // Store the new topic in localStorage for content topics
+      const topicsKey = "contentTopics";
+      let existingTopics = [];
+      const storedTopics = localStorage.getItem(topicsKey);
+      if (storedTopics) {
+        try {
+          existingTopics = JSON.parse(storedTopics);
+        } catch (error) {
+          console.error(`Error parsing ${topicsKey}:`, error);
+        }
+      }
+      
+      // Add the new topic or update if it exists
+      const topicIndex = existingTopics.findIndex((t: any) => t.id === newTopic.id);
+      if (topicIndex >= 0) {
+        existingTopics[topicIndex] = newTopic;
+      } else {
+        existingTopics.push(newTopic);
+      }
+      
+      localStorage.setItem(topicsKey, JSON.stringify(existingTopics));
+      
+      // Trigger a content assets updated event to refresh the UI
+      const customEvent = new Event('contentAssetsUpdated');
+      window.dispatchEvent(customEvent);
+      
+      // Navigate to content page
+      navigate('/content');
+      
+      toast({
+        title: "Prompt Ready",
+        description: `"${prompt.title}" is now available in your Content AI topics.`,
+      });
+    } catch (error) {
+      console.error("Error creating chat from prompt:", error);
+      toast({
+        title: "Error",
+        description: "Failed to create chat from this prompt.",
+        variant: "destructive"
+      });
+    }
+  };
+
   return (
     <div className="space-y-8">
       <Card>
@@ -109,6 +180,7 @@ const PromptsTab: React.FC = () => {
             onTogglePin={togglePinPrompt}
             onToggleHide={toggleHidePrompt}
             onDeletePrompt={openDeleteConfirm}
+            onOpenInChat={openInChat}
           />
         </CardContent>
       </Card>

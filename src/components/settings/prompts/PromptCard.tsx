@@ -1,16 +1,10 @@
 
 import React from 'react';
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from '@/components/ui/button';
-import { Bot, Pin, PinOff, Eye, EyeOff, Trash2 } from 'lucide-react';
 import { ContentAsset } from '@/types/contentAssets';
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
-  ContextMenuSeparator,
-} from "@/components/ui/context-menu";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Edit, Pin, PinOff, EyeOff, Trash2, MessageSquare } from 'lucide-react';
 
 interface PromptCardProps {
   prompt: ContentAsset;
@@ -18,6 +12,7 @@ interface PromptCardProps {
   onTogglePin: (prompt: ContentAsset) => void;
   onToggleHide: (prompt: ContentAsset) => void;
   onDeletePrompt: (id: string) => void;
+  onOpenInChat?: (prompt: ContentAsset) => void;
 }
 
 const PromptCard: React.FC<PromptCardProps> = ({
@@ -25,132 +20,85 @@ const PromptCard: React.FC<PromptCardProps> = ({
   onEditPrompt,
   onTogglePin,
   onToggleHide,
-  onDeletePrompt
+  onDeletePrompt,
+  onOpenInChat
 }) => {
-  // Separate handler for delete button click to prevent event propagation
-  const handleDeleteClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log('Delete button clicked for prompt ID:', prompt.id);
-    // Call the delete handler with the prompt ID
-    if (prompt.id) {
-      onDeletePrompt(prompt.id);
-    } else {
-      console.error('Cannot delete prompt with undefined ID');
-    }
+  const formatDate = (date: Date | string) => {
+    if (!date) return 'Unknown date';
+    const d = new Date(date);
+    return isNaN(d.getTime()) ? 'Invalid date' : d.toLocaleDateString();
   };
+  
+  const isConversational = prompt.conversational || prompt.content?.includes("Let's turn your expertise");
 
   return (
-    <ContextMenu>
-      <ContextMenuTrigger>
-        <Card 
-          className={`cursor-pointer hover:shadow-md transition-shadow group relative ${
-            prompt.aiType === 'content' ? 'border-blue-100' : 
-            prompt.aiType === 'compliance' ? 'border-green-100' : 
-            'border-purple-100'
-          } ${prompt.pinned ? 'ring-2 ring-primary/20' : ''}`}
-          onClick={() => onEditPrompt(prompt)}
-        >
-          <CardContent className="p-4">
-            <div className="flex items-start gap-3">
-              <div className="text-2xl">{prompt.icon}</div>
-              <div className="flex-1">
-                <div className="font-medium flex items-center">
-                  {prompt.title}
-                  {prompt.pinned && (
-                    <Pin className="ml-2 h-3 w-3 text-primary" />
-                  )}
-                </div>
-                <div className="text-sm text-muted-foreground">{prompt.subtitle}</div>
-                <div className="mt-2 flex items-center gap-1 text-xs">
-                  <Bot className="h-3 w-3" />
-                  <span className={`px-2 py-0.5 rounded-full ${
-                    prompt.aiType === 'content' ? 'bg-blue-100 text-blue-800' : 
-                    prompt.aiType === 'compliance' ? 'bg-green-100 text-green-800' : 
-                    'bg-purple-100 text-purple-800'
-                  }`}>
-                    {prompt.aiType?.charAt(0).toUpperCase() + prompt.aiType?.slice(1)} AI
-                  </span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-8 w-8 rounded-full bg-background/90 backdrop-blur-sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onTogglePin(prompt);
-                }}
-              >
-                {prompt.pinned ? (
-                  <PinOff className="h-4 w-4" />
-                ) : (
-                  <Pin className="h-4 w-4" />
-                )}
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-8 w-8 rounded-full bg-background/90 backdrop-blur-sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onToggleHide(prompt);
-                }}
-              >
-                <EyeOff className="h-4 w-4" />
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-8 w-8 rounded-full bg-background/90 backdrop-blur-sm text-destructive hover:text-destructive hover:bg-destructive/10"
-                onClick={handleDeleteClick}
-                aria-label="Delete prompt"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </ContextMenuTrigger>
-      <ContextMenuContent>
-        <ContextMenuItem onClick={() => onEditPrompt(prompt)}>
-          Edit Prompt
-        </ContextMenuItem>
-        <ContextMenuItem onClick={() => onTogglePin(prompt)}>
-          {prompt.pinned ? (
-            <>
-              <PinOff className="mr-2 h-4 w-4" />
-              Unpin Prompt
-            </>
-          ) : (
-            <>
-              <Pin className="mr-2 h-4 w-4" />
-              Pin Prompt
-            </>
+    <Card className={`relative overflow-hidden ${prompt.pinned ? 'border-accent' : ''}`}>
+      {prompt.pinned && (
+        <div className="absolute top-0 right-0 bg-accent text-accent-foreground px-2 py-1 text-xs">
+          Pinned
+        </div>
+      )}
+      
+      <CardContent className="pt-6">
+        <div className="flex items-start mb-4">
+          <div className="text-4xl mr-3">{prompt.icon || '📄'}</div>
+          <div className="flex-1">
+            <h3 className="font-semibold text-lg">{prompt.title}</h3>
+            <p className="text-sm text-muted-foreground">{prompt.subtitle || prompt.description || 'No description available'}</p>
+          </div>
+        </div>
+        
+        <div className="text-sm mb-4">
+          <div className="flex flex-wrap gap-2 mb-2">
+            <Badge variant="outline">{prompt.aiType || 'content'}</Badge>
+            {prompt.isNew && <Badge variant="secondary">New</Badge>}
+            {isConversational && <Badge variant="secondary" className="bg-purple-100 text-purple-800 border-purple-200">Conversational</Badge>}
+          </div>
+          
+          <div className="text-muted-foreground text-xs">
+            Added: {formatDate(prompt.dateAdded)}
+          </div>
+        </div>
+        
+        {prompt.content && (
+          <div className="border-t pt-2 mt-2">
+            <p className="text-sm line-clamp-2 text-muted-foreground">
+              {prompt.content.substring(0, 100)}{prompt.content.length > 100 ? '...' : ''}
+            </p>
+          </div>
+        )}
+      </CardContent>
+      
+      <CardFooter className="flex justify-between pt-2 pb-4 gap-2">
+        <div className="flex gap-1">
+          <Button variant="outline" size="sm" onClick={() => onEditPrompt(prompt)}>
+            <Edit className="h-4 w-4 mr-1" />
+            Edit
+          </Button>
+          
+          {onOpenInChat && isConversational && (
+            <Button variant="secondary" size="sm" className="bg-purple-100 text-purple-800 hover:bg-purple-200" onClick={() => onOpenInChat(prompt)}>
+              <MessageSquare className="h-4 w-4 mr-1" />
+              Open in Chat
+            </Button>
           )}
-        </ContextMenuItem>
-        <ContextMenuItem onClick={() => onToggleHide(prompt)}>
-          <EyeOff className="mr-2 h-4 w-4" />
-          Hide Prompt
-        </ContextMenuItem>
-        <ContextMenuSeparator />
-        <ContextMenuItem 
-          className="text-red-600 focus:text-red-600"
-          onClick={(e) => {
-            e.preventDefault();
-            if (prompt.id) {
-              onDeletePrompt(prompt.id);
-            }
-          }}
-        >
-          <Trash2 className="mr-2 h-4 w-4" />
-          Delete Prompt
-        </ContextMenuItem>
-      </ContextMenuContent>
-    </ContextMenu>
+        </div>
+        
+        <div className="flex gap-1">
+          <Button variant="ghost" size="icon" onClick={() => onTogglePin(prompt)}>
+            {prompt.pinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />}
+          </Button>
+          
+          <Button variant="ghost" size="icon" onClick={() => onToggleHide(prompt)}>
+            <EyeOff className="h-4 w-4" />
+          </Button>
+          
+          <Button variant="ghost" size="icon" className="text-destructive" onClick={() => onDeletePrompt(prompt.id)}>
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      </CardFooter>
+    </Card>
   );
 };
 

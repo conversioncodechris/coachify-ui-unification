@@ -9,7 +9,7 @@ import ChatMessagesArea from './content/ChatMessagesArea';
 import ChatSourceIndicator from './content/ChatSourceIndicator';
 import { useContentChat } from '../hooks/useContentChat';
 import { ContentAsset } from '@/types/contentAssets';
-import { AlertCircle, RefreshCw } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -26,8 +26,48 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
-  const [promptAssets, setPromptAssets] = useState<ContentAsset[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  
+  // Get topic content from local storage if available
+  const [topicContent, setTopicContent] = useState<string | null>(null);
+  
+  // Load topic content
+  useEffect(() => {
+    // First check contentTopics for content
+    const topicsFromStorage = localStorage.getItem('contentTopics');
+    if (topicsFromStorage) {
+      try {
+        const topics = JSON.parse(topicsFromStorage);
+        const currentTopic = topics.find((t: any) => t.title === topic);
+        if (currentTopic && currentTopic.content) {
+          setTopicContent(currentTopic.content);
+          return;
+        }
+      } catch (error) {
+        console.error('Error parsing content topics:', error);
+      }
+    }
+    
+    // If not found, check contentAssets
+    const assetsFromStorage = localStorage.getItem('contentAssets');
+    if (assetsFromStorage) {
+      try {
+        const assets = JSON.parse(assetsFromStorage);
+        const topicAsset = assets.find((a: ContentAsset) => 
+          a.type === 'prompt' && a.title === topic
+        );
+        if (topicAsset && topicAsset.content) {
+          setTopicContent(topicAsset.content);
+          return;
+        }
+      } catch (error) {
+        console.error('Error parsing content assets:', error);
+      }
+    }
+    
+    // Set to null if not found
+    setTopicContent(null);
+  }, [topic]);
   
   const {
     messages,
@@ -39,46 +79,16 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
     setActiveSourceIndex,
     toggleSourcesPanel,
     handleSendMessage,
-    handleSuggestedQuestion
+    handleSuggestedQuestion,
+    setInitialAiMessage
   } = useContentChat(topic);
 
-  // Load prompt assets from localStorage
-  const loadPromptAssets = () => {
-    const storedAssets = localStorage.getItem('contentAssets');
-    if (storedAssets) {
-      try {
-        const assets = JSON.parse(storedAssets);
-        // Filter assets to only show prompts
-        const prompts = assets.filter((asset: ContentAsset) => asset.type === 'prompt');
-        setPromptAssets(prompts);
-      } catch (error) {
-        console.error('Error parsing content assets:', error);
-      }
-    } else {
-      // If no contentAssets, set empty array
-      setPromptAssets([]);
-    }
-  };
-
-  // Load prompt assets initially
+  // Set initial AI message based on topic content
   useEffect(() => {
-    loadPromptAssets();
-  }, []);
-
-  const handleRefreshAssets = () => {
-    setIsRefreshing(true);
-    // Re-load prompt assets
-    loadPromptAssets();
-    
-    // Show loading spinner for a moment
-    setTimeout(() => {
-      setIsRefreshing(false);
-      toast({
-        title: "Assets Refreshed",
-        description: `${promptAssets.length} prompts available.`,
-      });
-    }, 500);
-  };
+    if (topicContent && messages.length === 0) {
+      setInitialAiMessage(topicContent);
+    }
+  }, [topicContent, messages.length, setInitialAiMessage]);
 
   // Check if topic exists and chat session is valid, if not, redirect to content page
   useEffect(() => {
@@ -126,33 +136,6 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
             allSourcesLength={allSources.length}
             onBackToTopics={onBackToTopics}
           />
-          
-          {/* Prompt assets banner - only show if there are prompts */}
-          {promptAssets.length > 0 && (
-            <div className="bg-blue-50 px-4 py-2 border-b flex items-center justify-between overflow-x-auto">
-              <div className="flex items-center gap-2">
-                <AlertCircle className="h-4 w-4 text-blue-500" />
-                <span className="text-sm font-medium">Available Prompts:</span>
-                <div className="flex gap-1 overflow-x-auto">
-                  {promptAssets.map((asset) => (
-                    <Badge key={asset.id} variant="outline" className="whitespace-nowrap flex items-center gap-1">
-                      <span>{asset.icon}</span>
-                      <span className="max-w-40 truncate">{asset.title}</span>
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={handleRefreshAssets}
-                disabled={isRefreshing}
-                className="h-8 w-8 p-0"
-              >
-                <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-              </Button>
-            </div>
-          )}
         </div>
 
         <ChatMessagesArea 

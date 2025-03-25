@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Message, Source } from '../components/content/ContentTypes';
 
 export const useContentChat = (topic: string) => {
@@ -34,29 +34,35 @@ export const useContentChat = (topic: string) => {
     }
   ];
 
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      sender: 'ai',
-      content: `Welcome to the ${topic} content creation! What kind of content would you like to create today?`,
-      timestamp: new Date(),
-      sources: [
-        {
-          title: 'Content Best Practices',
-          content: 'This resource provides guidance on creating engaging and effective content for various platforms.',
-          url: 'https://example.com/content-best-practices'
-        },
-        {
-          title: 'Platform-Specific Guidelines',
-          content: 'Learn about character limits, image sizes, and other technical requirements for different platforms.',
-          url: 'https://example.com/platform-guidelines'
-        }
-      ]
-    }
-  ]);
-  
+  const [messages, setMessages] = useState<Message[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [isSourcesPanelOpen, setIsSourcesPanelOpen] = useState(false);
   const [activeSourceIndex, setActiveSourceIndex] = useState<number | null>(0);
+
+  // Initialize messages with a welcome message
+  useEffect(() => {
+    if (messages.length === 0) {
+      setMessages([
+        {
+          sender: 'ai',
+          content: `Welcome to the ${topic} content creation! What kind of content would you like to create today?`,
+          timestamp: new Date(),
+          sources: [
+            {
+              title: 'Content Best Practices',
+              content: 'This resource provides guidance on creating engaging and effective content for various platforms.',
+              url: 'https://example.com/content-best-practices'
+            },
+            {
+              title: 'Platform-Specific Guidelines',
+              content: 'Learn about character limits, image sizes, and other technical requirements for different platforms.',
+              url: 'https://example.com/platform-guidelines'
+            }
+          ]
+        }
+      ]);
+    }
+  }, [topic, messages.length]);
 
   const toggleSourcesPanel = () => {
     setIsSourcesPanelOpen(!isSourcesPanelOpen);
@@ -92,6 +98,18 @@ export const useContentChat = (topic: string) => {
     handleSendMessage(question);
   };
 
+  // Set initial AI message for conversational prompts
+  const setInitialAiMessage = useCallback((content: string) => {
+    setMessages([
+      {
+        sender: 'ai',
+        content: content,
+        timestamp: new Date(),
+        sources: mockSources.slice(0, 2)
+      }
+    ]);
+  }, []);
+
   const allSources = messages
     .filter(msg => msg.sender === 'ai' && msg.sources && msg.sources.length > 0)
     .flatMap(msg => msg.sources || []);
@@ -106,6 +124,7 @@ export const useContentChat = (topic: string) => {
     setActiveSourceIndex,
     toggleSourcesPanel,
     handleSendMessage,
-    handleSuggestedQuestion
+    handleSuggestedQuestion,
+    setInitialAiMessage
   };
 };

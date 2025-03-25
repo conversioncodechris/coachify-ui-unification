@@ -9,6 +9,7 @@ interface PromptsGridProps {
   onTogglePin: (prompt: ContentAsset) => void;
   onToggleHide: (prompt: ContentAsset) => void;
   onDeletePrompt: (id: string) => void;
+  onOpenInChat?: (prompt: ContentAsset) => void;
 }
 
 const PromptsGrid: React.FC<PromptsGridProps> = ({
@@ -16,7 +17,8 @@ const PromptsGrid: React.FC<PromptsGridProps> = ({
   onEditPrompt,
   onTogglePin,
   onToggleHide,
-  onDeletePrompt
+  onDeletePrompt,
+  onOpenInChat
 }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -28,6 +30,7 @@ const PromptsGrid: React.FC<PromptsGridProps> = ({
           onTogglePin={onTogglePin}
           onToggleHide={onToggleHide}
           onDeletePrompt={onDeletePrompt}
+          onOpenInChat={onOpenInChat}
         />
       ))}
     </div>

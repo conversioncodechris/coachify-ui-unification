@@ -12,6 +12,7 @@ interface PromptsListProps {
   onTogglePin: (prompt: ContentAsset) => void;
   onToggleHide: (prompt: ContentAsset) => void;
   onDeletePrompt: (id: string) => void;
+  onOpenInChat?: (prompt: ContentAsset) => void;
 }
 
 const PromptsList: React.FC<PromptsListProps> = ({
@@ -20,7 +21,8 @@ const PromptsList: React.FC<PromptsListProps> = ({
   onEditPrompt,
   onTogglePin,
   onToggleHide,
-  onDeletePrompt
+  onDeletePrompt,
+  onOpenInChat
 }) => {
   if (visiblePrompts.length === 0) {
     return <EmptyState />;
@@ -34,6 +36,7 @@ const PromptsList: React.FC<PromptsListProps> = ({
         onTogglePin={onTogglePin}
         onToggleHide={onToggleHide}
         onDeletePrompt={onDeletePrompt}
+        onOpenInChat={onOpenInChat}
       />
       
       {hiddenPrompts.length > 0 && (
