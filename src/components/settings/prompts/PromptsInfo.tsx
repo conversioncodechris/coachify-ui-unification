@@ -1,57 +1,23 @@
 
 import React from 'react';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import ConversationalPromptButton from './ConversationalPromptButton';
 
 const PromptsInfo: React.FC = () => {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>About Prompts</CardTitle>
-        <CardDescription>
-          Learn how prompts enhance the AI experience for users
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card className="p-4 border border-blue-100 bg-blue-50">
-            <div className="flex gap-3">
-              <div className="text-2xl">💬</div>
-              <div>
-                <h3 className="font-medium mb-1">Content AI Prompts</h3>
-                <p className="text-sm text-muted-foreground">Create topic cards for generating content in various formats</p>
-              </div>
-            </div>
-          </Card>
-          
-          <Card className="p-4 border border-green-100 bg-green-50">
-            <div className="flex gap-3">
-              <div className="text-2xl">📋</div>
-              <div>
-                <h3 className="font-medium mb-1">Compliance AI Prompts</h3>
-                <p className="text-sm text-muted-foreground">Add compliance-related topics for users to quickly get answers</p>
-              </div>
-            </div>
-          </Card>
-          
-          <Card className="p-4 border border-purple-100 bg-purple-50">
-            <div className="flex gap-3">
-              <div className="text-2xl">🎭</div>
-              <div>
-                <h3 className="font-medium mb-1">Coach AI Prompts</h3>
-                <p className="text-sm text-muted-foreground">Create coaching scenarios for training and practice</p>
-              </div>
-            </div>
-          </Card>
-          
-          <Card className="p-4 border border-amber-100 bg-amber-50">
-            <div className="flex gap-3">
-              <div className="text-2xl">🧠</div>
-              <div>
-                <h3 className="font-medium mb-1">Best Practices</h3>
-                <p className="text-sm text-muted-foreground">Keep prompts clear, specific, and relevant to the AI's purpose</p>
-              </div>
-            </div>
-          </Card>
+      <CardContent className="pt-6 space-y-4">
+        <h3 className="text-lg font-medium">Special Prompts</h3>
+        
+        <ConversationalPromptButton />
+        
+        <div className="p-4 border rounded bg-muted/50">
+          <h4 className="font-medium mb-2">About Prompts</h4>
+          <p className="text-sm text-muted-foreground">
+            Prompts help you interact with AI assistants more effectively. 
+            They can be pinned for quick access and can be conversational to enable 
+            natural language interactions.
+          </p>
         </div>
       </CardContent>
     </Card>
