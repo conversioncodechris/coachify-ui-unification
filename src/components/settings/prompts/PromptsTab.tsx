@@ -8,7 +8,6 @@ import { EditPromptDialog } from '@/components/settings/edit-prompt';
 import { usePrompts } from './usePrompts';
 import PromptsList from './PromptsList';
 import PromptsInfo from './PromptsInfo';
-import PromptPacksImporter from './PromptPacksImporter';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -111,21 +110,6 @@ const PromptsTab: React.FC = () => {
             onToggleHide={toggleHidePrompt}
             onDeletePrompt={openDeleteConfirm}
           />
-        </CardContent>
-      </Card>
-      
-      {/* Add the Prompt Packs section */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Prompt Packs</CardTitle>
-          <CardDescription>
-            Import curated prompt collections to jumpstart your content creation
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <PromptPacksImporter onImportPrompts={(prompts) => {
-            prompts.forEach(handleAddPrompt);
-          }} />
         </CardContent>
       </Card>
       
