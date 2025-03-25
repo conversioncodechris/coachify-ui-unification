@@ -1,4 +1,3 @@
-
 import { ContentAsset } from '@/types/contentAssets';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -17,6 +16,81 @@ export const contentPromptPacks: PromptPack[] = [
     description: "Content Creation Prompts",
     icon: "✨",
     prompts: [
+      {
+        id: uuidv4(),
+        type: 'prompt',
+        title: "Conversational Interview",
+        subtitle: "Multi-Platform Output",
+        icon: "💬",
+        content: "Hey! Let's turn your expertise into 🔥 content. Pretend I'm a friend asking this:\n'My sister wants to buy a house but needs to sell hers first—what should I tell her?'\nJust answer like you would in real life, and I'll turn it into magic for Facebook, Instagram, and an email follow-up. Ready?",
+        source: "created",
+        dateAdded: new Date(),
+        aiType: "content",
+        metadata: {
+          purpose: "Quick Content Kickstart",
+          platforms: ["Facebook", "Instagram", "Email"]
+        }
+      },
+      {
+        id: uuidv4(),
+        type: 'prompt',
+        title: "Testimonial Content Extractor",
+        subtitle: "Real Story Builder",
+        icon: "💬",
+        content: "You ever save a deal that almost blew up? 😅 Walk me through one. What happened, what did you do, and how did it end? I'll spin that into a powerful testimonial + Instagram story.",
+        source: "created",
+        dateAdded: new Date(),
+        aiType: "content",
+        metadata: {
+          purpose: "Real Story Builder",
+          platforms: ["Instagram", "Testimonial"]
+        }
+      },
+      {
+        id: uuidv4(),
+        type: 'prompt',
+        title: "Market Update Reflection",
+        subtitle: "Voice of the Expert",
+        icon: "💬",
+        content: "If you ran into a neighbor and they asked, 'What's happening in the market right now?' — how would you explain it in one minute? I'll package that for LinkedIn, Blog + SMS.",
+        source: "created",
+        dateAdded: new Date(),
+        aiType: "content",
+        metadata: {
+          purpose: "Voice of the Expert",
+          platforms: ["LinkedIn", "Blog", "SMS"]
+        }
+      },
+      {
+        id: uuidv4(),
+        type: 'prompt',
+        title: "Shame-Free Re-engagement",
+        subtitle: "Today's Content Spark",
+        icon: "💬",
+        content: "Hey… haven't posted in a while? No biggie. Let's do one today together. Just answer this:\n'What's the biggest misconception buyers have right now?'\nI'll handle the rest.",
+        source: "created",
+        dateAdded: new Date(),
+        aiType: "content",
+        metadata: {
+          purpose: "Today's Content Spark",
+          platforms: ["Any Platform"]
+        }
+      },
+      {
+        id: uuidv4(),
+        type: 'prompt',
+        title: "Carousel Builder",
+        subtitle: "Advanced Template",
+        icon: "💬",
+        content: "Let's build a swipe-through Instagram carousel! 🎠\nFirst—tell me 3 things first-time buyers should never do. I'll guide you through it, one card at a time.",
+        source: "created",
+        dateAdded: new Date(),
+        aiType: "content",
+        metadata: {
+          purpose: "Advanced Template",
+          platforms: ["Instagram"]
+        }
+      },
       {
         id: uuidv4(),
         type: 'prompt',

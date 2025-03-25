@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { contentPromptPacks } from '@/data/promptPacks';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
+import { Sparkles, ChevronDown, ChevronUp, Copy } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { useToast } from '@/hooks/use-toast';
@@ -12,15 +12,54 @@ const PromptPackBanner: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
+  const [activePromptIndex, setActivePromptIndex] = useState(0);
   // Just show the first pack for now
   const pack = contentPromptPacks[0];
 
   if (!pack) return null;
 
+  const prompts = [
+    {
+      id: "format-1",
+      title: "Conversational Interview → Multi-Platform Output",
+      icon: "💬",
+      content: "Hey! Let's turn your expertise into 🔥 content. Pretend I'm a friend asking this:\n'My sister wants to buy a house but needs to sell hers first—what should I tell her?'\nJust answer like you would in real life, and I'll turn it into magic for Facebook, Instagram, and an email follow-up. Ready?",
+      badge: "Quick Content Kickstart"
+    },
+    {
+      id: "format-2",
+      title: "Testimonial Content Extractor",
+      icon: "💬",
+      content: "You ever save a deal that almost blew up? 😅 Walk me through one. What happened, what did you do, and how did it end? I'll spin that into a powerful testimonial + Instagram story.",
+      badge: "Real Story Builder"
+    },
+    {
+      id: "format-3",
+      title: "Market Update Reflection Prompt",
+      icon: "💬",
+      content: "If you ran into a neighbor and they asked, 'What's happening in the market right now?' — how would you explain it in one minute? I'll package that for LinkedIn, Blog + SMS.",
+      badge: "Voice of the Expert"
+    },
+    {
+      id: "format-4",
+      title: "Shame-Free Re-engagement",
+      icon: "💬",
+      content: "Hey… haven't posted in a while? No biggie. Let's do one today together. Just answer this:\n'What's the biggest misconception buyers have right now?'\nI'll handle the rest.",
+      badge: "Today's Content Spark"
+    },
+    {
+      id: "format-5",
+      title: "Carousel Builder",
+      icon: "💬",
+      content: "Let's build a swipe-through Instagram carousel! 🎠\nFirst—tell me 3 things first-time buyers should never do. I'll guide you through it, one card at a time.",
+      badge: "Advanced Template"
+    }
+  ];
+
+  const activePrompt = prompts[activePromptIndex];
+
   const handleCopyPrompt = () => {
-    const promptText = "💬 Prompt Format #1: Conversational Interview → Multi-Platform Output\n\"Hey! Let's turn your expertise into 🔥 content. Pretend I'm a friend asking this:\n'My sister wants to buy a house but needs to sell hers first—what should I tell her?'\nJust answer like you would in real life, and I'll turn it into magic for Facebook, Instagram, and an email follow-up. Ready?\"";
-    
-    navigator.clipboard.writeText(promptText)
+    navigator.clipboard.writeText(activePrompt.content)
       .then(() => {
         toast({
           title: "Prompt Copied!",
@@ -48,21 +87,17 @@ const PromptPackBanner: React.FC = () => {
             <Sparkles className="h-4 w-4 text-purple-500 flex-shrink-0" />
             <span className="text-sm font-medium whitespace-nowrap">{pack.name} Pack:</span>
             <div className="flex gap-1 overflow-x-auto hide-scrollbar">
-              {pack.prompts.slice(0, 3).map((prompt) => (
+              {prompts.map((prompt, index) => (
                 <Badge 
                   key={prompt.id} 
-                  variant="outline" 
-                  className="whitespace-nowrap flex items-center gap-1 bg-white/70"
+                  variant={activePromptIndex === index ? "default" : "outline"}
+                  className={`whitespace-nowrap flex items-center gap-1 cursor-pointer ${activePromptIndex === index ? 'bg-purple-100 text-purple-800 hover:bg-purple-200' : 'bg-white/70'}`}
+                  onClick={() => setActivePromptIndex(index)}
                 >
                   <span>{prompt.icon}</span>
                   <span className="max-w-28 truncate">{prompt.title}</span>
                 </Badge>
               ))}
-              {pack.prompts.length > 3 && (
-                <Badge variant="outline" className="whitespace-nowrap bg-white/70">
-                  +{pack.prompts.length - 3} more
-                </Badge>
-              )}
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -86,8 +121,8 @@ const PromptPackBanner: React.FC = () => {
           <div className="bg-white rounded-lg p-3 border">
             <div className="flex justify-between items-start">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-xl">💬</span>
-                <h3 className="font-medium text-sm">Conversational Interview → Multi-Platform Output</h3>
+                <span className="text-xl">{activePrompt.icon}</span>
+                <h3 className="font-medium text-sm">{activePrompt.title}</h3>
               </div>
               <Button 
                 variant="ghost" 
@@ -95,17 +130,16 @@ const PromptPackBanner: React.FC = () => {
                 className="h-7 text-blue-600"
                 onClick={handleCopyPrompt}
               >
+                <Copy className="h-4 w-4 mr-1" />
                 Copy
               </Button>
             </div>
-            <p className="text-sm text-gray-700 mb-2 ml-8">
-              "Hey! Let's turn your expertise into 🔥 content. Pretend I'm a friend asking this:
-              'My sister wants to buy a house but needs to sell hers first—what should I tell her?'
-              Just answer like you would in real life, and I'll turn it into magic for Facebook, Instagram, and an email follow-up. Ready?"
+            <p className="text-sm text-gray-700 mb-2 ml-8 whitespace-pre-line">
+              {activePrompt.content}
             </p>
             <div className="flex justify-end">
               <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-none">
-                Quick Content Kickstart
+                {activePrompt.badge}
               </Badge>
             </div>
           </div>
