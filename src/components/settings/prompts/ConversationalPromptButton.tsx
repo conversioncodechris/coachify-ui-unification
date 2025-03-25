@@ -55,7 +55,8 @@ const ConversationalPromptButton: React.FC<ConversationalPromptButtonProps> = ({
               ...activeChats,
               {
                 title: promptTitle,
-                path: chatPath
+                path: chatPath,
+                skipSuggestions: true  // Flag to skip suggestions
               }
             ];
             
@@ -86,6 +87,15 @@ const ConversationalPromptButton: React.FC<ConversationalPromptButtonProps> = ({
               );
               
               if (existingChat) {
+                // Update the chat to skip suggestions if it doesn't have that flag
+                if (!existingChat.skipSuggestions) {
+                  const updatedChats = activeChats.map((chat: any) => 
+                    chat.title === "Conversational Interview" && !chat.hidden
+                      ? { ...chat, skipSuggestions: true }
+                      : chat
+                  );
+                  localStorage.setItem('contentActiveChats', JSON.stringify(updatedChats));
+                }
                 navigate(existingChat.path);
                 return;
               }
@@ -102,7 +112,8 @@ const ConversationalPromptButton: React.FC<ConversationalPromptButtonProps> = ({
             ...activeChats,
             {
               title: "Conversational Interview",
-              path: chatPath
+              path: chatPath,
+              skipSuggestions: true
             }
           ];
           

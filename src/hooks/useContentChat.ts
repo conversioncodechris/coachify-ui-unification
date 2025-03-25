@@ -125,6 +125,7 @@ export const useContentChat = (topic: string) => {
     toggleSourcesPanel,
     handleSendMessage,
     handleSuggestedQuestion,
-    setInitialAiMessage
+    setInitialAiMessage,
+    setShowSuggestions
   };
 };

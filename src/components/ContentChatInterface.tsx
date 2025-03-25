@@ -27,6 +27,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
   const location = useLocation();
   const { toast } = useToast();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [skipSuggestions, setSkipSuggestions] = useState(false);
   
   // Get topic content from local storage if available
   const [topicContent, setTopicContent] = useState<string | null>(null);
@@ -68,6 +69,26 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
     // Set to null if not found
     setTopicContent(null);
   }, [topic]);
+
+  // Check if we should skip suggestions
+  useEffect(() => {
+    const savedChats = localStorage.getItem('contentActiveChats');
+    if (savedChats) {
+      try {
+        const activeChats = JSON.parse(savedChats);
+        const currentPath = location.pathname;
+        const matchingChat = activeChats.find((chat: any) => 
+          chat.path === currentPath && !chat.hidden
+        );
+        
+        if (matchingChat && matchingChat.skipSuggestions) {
+          setSkipSuggestions(true);
+        }
+      } catch (error) {
+        console.error('Error checking skipSuggestions flag:', error);
+      }
+    }
+  }, [location.pathname]);
   
   const {
     messages,
@@ -80,15 +101,21 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
     toggleSourcesPanel,
     handleSendMessage,
     handleSuggestedQuestion,
-    setInitialAiMessage
+    setInitialAiMessage,
+    setShowSuggestions
   } = useContentChat(topic);
 
   // Set initial AI message based on topic content
   useEffect(() => {
     if (topicContent && messages.length === 0) {
       setInitialAiMessage(topicContent);
+      
+      // If this is a conversational interview with skipSuggestions, hide suggestions
+      if (skipSuggestions) {
+        setShowSuggestions(false);
+      }
     }
-  }, [topicContent, messages.length, setInitialAiMessage]);
+  }, [topicContent, messages.length, setInitialAiMessage, skipSuggestions, setShowSuggestions]);
 
   // Check if topic exists and chat session is valid, if not, redirect to content page
   useEffect(() => {
@@ -141,7 +168,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
         <ChatMessagesArea 
           messages={messages}
           topic={topic}
-          showSuggestions={showSuggestions}
+          showSuggestions={showSuggestions && !skipSuggestions}
           suggestedQuestions={suggestedQuestions}
           toggleSourcesPanel={toggleSourcesPanel}
           onSuggestedQuestionSelect={handleSuggestedQuestion}
