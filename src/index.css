@@ -144,3 +144,12 @@
     @apply inline-flex items-center px-3 py-1 text-sm rounded-full bg-brand-lightGray text-brand-black font-montserrat;
   }
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}

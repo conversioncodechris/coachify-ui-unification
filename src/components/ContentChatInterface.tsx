@@ -7,6 +7,7 @@ import MessageInput from './content/MessageInput';
 import SourcesPanel from './content/SourcesPanel';
 import ChatMessagesArea from './content/ChatMessagesArea';
 import ChatSourceIndicator from './content/ChatSourceIndicator';
+import PromptPackBanner from './content/PromptPackBanner';
 import { useContentChat } from '../hooks/useContentChat';
 import { ContentAsset } from '@/types/contentAssets';
 import { AlertCircle, RefreshCw } from 'lucide-react';
@@ -126,6 +127,9 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
             allSourcesLength={allSources.length}
             onBackToTopics={onBackToTopics}
           />
+          
+          {/* Prompt Pack Banner - always show this */}
+          <PromptPackBanner />
           
           {/* Prompt assets banner - only show if there are prompts */}
           {promptAssets.length > 0 && (
