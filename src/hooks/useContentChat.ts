@@ -53,9 +53,9 @@ export const useContentChat = (topic: string) => {
       // Default welcome message
       let welcomeMessage = `Welcome to the ${topic} content creation! What kind of content would you like to create today?`;
       
-      // Custom welcome message for Conversational Interview
+      // Custom welcome message for Conversational Interview - more specific and direct
       if (isConversationalInterview) {
-        welcomeMessage = "Let's have a conversation about your business or recent activities that we can turn into content. Tell me about a recent client interaction, deal, or industry insight you'd like to share.";
+        welcomeMessage = "What was the most significant transaction or deal you closed in the past month? Please share the specific property type, location, and what made this deal unique.";
       }
       
       setMessages([
@@ -100,11 +100,11 @@ export const useContentChat = (topic: string) => {
     setShowSuggestions(false);
     
     setTimeout(() => {
-      // Customize response for Conversational Interview
+      // Customize response for Conversational Interview with specific follow-up questions
       let responseContent = `Here's some guidance for creating your ${topic}. This is a simulated response that would typically include tailored content advice, formatting tips, and platform-specific recommendations.`;
       
       if (topic === "Conversational Interview") {
-        responseContent = "Thanks for sharing! I can turn this into content for various platforms. Would you like me to create social media posts, a newsletter section, or a blog post based on what you've shared?";
+        responseContent = "Thank you for sharing those details. What challenges did you face during this transaction, and how did you overcome them?";
       }
       
       const aiResponse: Message = {
