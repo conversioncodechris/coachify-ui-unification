@@ -23,6 +23,19 @@ const ContentOutputPanel: React.FC<ContentOutputPanelProps> = ({
   const [editing, setEditing] = useState<boolean>(false);
   const [editedContent, setEditedContent] = useState<ContentOutput>(content);
 
+  // Map platform keys to display names
+  const platformNames: Record<string, string> = {
+    facebook: 'Facebook',
+    instagram: 'Instagram',
+    twitter: 'Twitter/X',
+    linkedin: 'LinkedIn',
+    email: 'Email',
+    videoScript: 'Video Script',
+    smsMessage: 'SMS Message',
+    pressRelease: 'Press Release',
+    blogPost: 'Blog Post'
+  };
+
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
     toast({
@@ -71,32 +84,38 @@ const ContentOutputPanel: React.FC<ContentOutputPanelProps> = ({
         </CardHeader>
         
         <Tabs defaultValue="facebook" className="flex-1 overflow-hidden flex flex-col" onValueChange={setActiveTab}>
-          <div className="px-6">
-            <TabsList className="grid grid-cols-4 md:grid-cols-6">
-              {Object.keys(content).map(platform => (
-                <TabsTrigger key={platform} value={platform} className="capitalize">
-                  {platform}
-                </TabsTrigger>
-              ))}
+          <div className="px-6 overflow-auto">
+            <TabsList className="inline-flex flex-wrap h-auto p-1 mb-2">
+              {Object.entries(content).map(([platform, text]) => {
+                if (!text) return null;
+                return (
+                  <TabsTrigger key={platform} value={platform} className="capitalize whitespace-nowrap my-1">
+                    {platformNames[platform] || platform}
+                  </TabsTrigger>
+                );
+              })}
             </TabsList>
           </div>
           
           <div className="flex-1 overflow-auto p-6">
-            {Object.entries(content).map(([platform, text]) => (
-              <TabsContent key={platform} value={platform} className="h-full flex flex-col">
-                {editing ? (
-                  <textarea
-                    className="w-full h-full min-h-[300px] p-4 rounded-md border resize-none"
-                    value={editedContent[platform as keyof ContentOutput]}
-                    onChange={handleContentChange}
-                  />
-                ) : (
-                  <div className="bg-muted p-4 rounded-md whitespace-pre-wrap h-full overflow-auto">
-                    {editedContent[platform as keyof ContentOutput]}
-                  </div>
-                )}
-              </TabsContent>
-            ))}
+            {Object.entries(content).map(([platform, text]) => {
+              if (!text) return null;
+              return (
+                <TabsContent key={platform} value={platform} className="h-full flex flex-col">
+                  {editing ? (
+                    <textarea
+                      className="w-full h-full min-h-[300px] p-4 rounded-md border resize-none"
+                      value={editedContent[platform as keyof ContentOutput]}
+                      onChange={handleContentChange}
+                    />
+                  ) : (
+                    <div className="bg-muted p-4 rounded-md whitespace-pre-wrap h-full overflow-auto">
+                      {editedContent[platform as keyof ContentOutput]}
+                    </div>
+                  )}
+                </TabsContent>
+              );
+            })}
           </div>
         </Tabs>
         

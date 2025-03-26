@@ -18,6 +18,8 @@ export interface ContentOutput {
   twitter?: string;
   linkedin?: string;
   email?: string;
-  blog?: string;
-  other?: string;
+  videoScript?: string;
+  smsMessage?: string;
+  pressRelease?: string;
+  blogPost?: string;
 }

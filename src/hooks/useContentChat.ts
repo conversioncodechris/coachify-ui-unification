@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { Message, Source, ContentOutput } from '../components/content/ContentTypes';
 
@@ -42,53 +41,43 @@ export const useContentChat = (topic: string) => {
   const [generatedContent, setGeneratedContent] = useState<ContentOutput | null>(null);
   const [showContentOutput, setShowContentOutput] = useState<boolean>(false);
 
-  // Conversational interview stages
   const conversationalStages = [
     {
       question: "What was the most significant transaction or deal you closed in the past month? Please share the specific property type, location, and what made this deal unique.",
       responseHandler: (userResponse: string) => {
-        // Store initial property details
         return "Thank you for sharing those details. What challenges did you face during this transaction, and how did you overcome them?";
       }
     },
     {
       question: "Thank you for sharing those details. What challenges did you face during this transaction, and how did you overcome them?",
       responseHandler: (userResponse: string) => {
-        // Store challenges and solutions
         return "That's interesting to hear about those challenges. What made this particular client unique, and how did you adapt your approach to meet their specific needs?";
       }
     },
     {
       question: "That's interesting to hear about those challenges. What made this particular client unique, and how did you adapt your approach to meet their specific needs?",
       responseHandler: (userResponse: string) => {
-        // Store client information
         return "What was the most rewarding aspect of closing this deal, and what did you learn that you'll apply to future transactions?";
       }
     },
     {
       question: "What was the most rewarding aspect of closing this deal, and what did you learn that you'll apply to future transactions?",
       responseHandler: (userResponse: string) => {
-        // Generate content based on all responses
         return "Thank you for sharing your experience! I've created content based on our conversation that you can use across multiple platforms. Would you like to see the generated content?";
       }
     }
   ];
 
-  // Initialize messages with a welcome message
   useEffect(() => {
-    // Check if this is a conversational interview
     const isConversationalInterview = topic === "Conversational Interview";
     
-    // If it's a conversational interview, don't show suggestions by default
     if (isConversationalInterview) {
       setShowSuggestions(false);
     }
     
     if (messages.length === 0) {
-      // Default welcome message
       let welcomeMessage = `Welcome to the ${topic} content creation! What kind of content would you like to create today?`;
       
-      // Custom welcome message for Conversational Interview - more specific and direct
       if (isConversationalInterview) {
         welcomeMessage = conversationalStages[0].question;
       }
@@ -123,12 +112,10 @@ export const useContentChat = (topic: string) => {
   };
 
   const generateContentFromConversation = (messages: Message[]): ContentOutput => {
-    // Filter out just the user responses
     const userResponses = messages
       .filter(msg => msg.sender === 'user')
       .map(msg => msg.content);
     
-    // Generate content based on conversation
     return {
       facebook: `🏠 SUCCESS STORY: Just closed an amazing deal on a unique property! ${userResponses[0]?.substring(0, 100)}... 
 
@@ -160,6 +147,12 @@ I'm grateful for clients who trust me with their real estate journeys and lookin
 
 #RealEstate #ProfessionalDevelopment #ClientSuccess`,
       
+      twitter: `Just closed on an amazing property! 🏠 ${userResponses[0]?.substring(0, 80)}...
+
+The best part? ${userResponses[3]?.substring(0, 80)}...
+
+#RealEstate #Success #ClosedDeal`,
+      
       email: `Subject: How We Overcame Challenges to Close on a Unique Property
 
 Hi [Client Name],
@@ -178,7 +171,77 @@ The most rewarding part was ${userResponses[3]?.substring(0, 100)}...
 I'd be happy to apply these successful strategies to your real estate goals as well. Are you available for a quick call next week to discuss?
 
 Best regards,
-[Your Name]`
+[Your Name]`,
+
+      videoScript: `[INTRO]
+Hi everyone! Today I want to share an exciting success story from my recent real estate work.
+
+[MAIN CONTENT]
+I recently closed a deal on ${userResponses[0]?.substring(0, 100)}...
+
+The journey had its challenges. ${userResponses[1]?.substring(0, 100)}...
+
+What made this transaction special was ${userResponses[2]?.substring(0, 100)}...
+
+The most rewarding aspect was ${userResponses[3]?.substring(0, 100)}...
+
+[CALL TO ACTION]
+If you're looking to buy or sell property, I'd love to help you navigate the process with the same care and attention. Reach out using the contact information in the description below!
+
+[OUTRO]
+Thanks for watching, and I'll see you in the next video!`,
+
+      smsMessage: `Hi [Name], just wanted to share that I closed on a great property deal similar to what we discussed! The key to success was ${userResponses[3]?.substring(0, 60)}... Would love to chat about how this applies to your situation. Available next week?`,
+
+      pressRelease: `FOR IMMEDIATE RELEASE
+[YOUR COMPANY NAME] SUCCESSFULLY CLOSES CHALLENGING REAL ESTATE TRANSACTION
+
+[CITY, STATE] - [DATE] - [Your Name], a real estate professional with [Your Company], recently closed a significant transaction involving ${userResponses[0]?.substring(0, 100)}...
+
+The transaction presented several challenges, including ${userResponses[1]?.substring(0, 150)}...
+
+"What made this deal special was our ability to adapt to the client's unique situation," said [Your Name]. "${userResponses[2]?.substring(0, 100)}..."
+
+[Your Name] credits the successful outcome to ${userResponses[3]?.substring(0, 100)}...
+
+For more information about [Your Company Name] and its real estate services, please visit [your website] or contact [phone/email].
+
+###
+
+Contact:
+[Your Name]
+[Your Title]
+[Your Company]
+[Phone]
+[Email]`,
+
+      blogPost: `# How I Navigated a Challenging Real Estate Transaction to Success
+
+In the world of real estate, each transaction tells a unique story. Today, I'd like to share a recent success story that showcases the importance of perseverance, adaptability, and client-focused service.
+
+## The Property
+
+${userResponses[0]}
+
+## The Challenges
+
+No worthwhile achievement comes without obstacles. This transaction was no exception:
+
+${userResponses[1]}
+
+## Understanding the Client's Unique Situation
+
+${userResponses[2]}
+
+## The Rewarding Outcome
+
+${userResponses[3]}
+
+## Lessons Learned
+
+Through this experience, I've refined my approach to handling complex real estate transactions. Every challenge presents an opportunity to grow professionally and provide better service to future clients.
+
+If you're facing similar challenges in your real estate journey, I'd love to share how these strategies might help you too. Reach out today for a consultation!`
     };
   };
 
@@ -194,25 +257,21 @@ Best regards,
     setMessages(prev => [...prev, userMessage]);
     setShowSuggestions(false);
     
-    // Handle Conversational Interview flow
     const isConversationalInterview = topic === "Conversational Interview";
     
     setTimeout(() => {
       let responseContent = `Here's some guidance for creating your ${topic}. This is a simulated response that would typically include tailored content advice, formatting tips, and platform-specific recommendations.`;
       
       if (isConversationalInterview) {
-        // Progress through conversation stages for Conversational Interview
         if (conversationStage < conversationalStages.length - 1) {
           responseContent = conversationalStages[conversationStage + 1].question;
           setConversationStage(prev => prev + 1);
         } else if (conversationStage === conversationalStages.length - 1) {
-          // Final stage - generate content
           const content = generateContentFromConversation([...messages, userMessage]);
           setGeneratedContent(content);
           responseContent = "Thank you for sharing your experience! I've created content based on our conversation that you can use across multiple platforms. Would you like to see the generated content?";
           setConversationStage(prev => prev + 1);
         } else {
-          // After content generation
           responseContent = "You can edit and customize this content as needed. Would you like to start a new conversation or discuss another topic?";
         }
       }
@@ -224,7 +283,6 @@ Best regards,
         sources: mockSources
       };
       
-      // Add content generation message if at appropriate stage
       if (isConversationalInterview && conversationStage === conversationalStages.length) {
         setShowContentOutput(true);
       }
@@ -237,7 +295,6 @@ Best regards,
     handleSendMessage(question);
   };
 
-  // Set initial AI message for conversational prompts
   const setInitialAiMessage = useCallback((content: string) => {
     setMessages([
       {
@@ -253,14 +310,12 @@ Best regards,
     .filter(msg => msg.sender === 'ai' && msg.sources && msg.sources.length > 0)
     .flatMap(msg => msg.sources || []);
 
-  // Reset the conversation to start fresh
   const resetConversation = () => {
     setMessages([]);
     setConversationStage(0);
     setGeneratedContent(null);
     setShowContentOutput(false);
     
-    // Initialize with the first message
     const isConversationalInterview = topic === "Conversational Interview";
     const welcomeMessage = isConversationalInterview 
       ? conversationalStages[0].question
@@ -275,7 +330,6 @@ Best regards,
       }
     ]);
     
-    // Hide suggestions for conversational interview
     if (isConversationalInterview) {
       setShowSuggestions(false);
     } else {
