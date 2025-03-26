@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { Message, Source, ContentOutput } from '../components/content/ContentTypes';
 
@@ -41,6 +42,7 @@ export const useContentChat = (topic: string) => {
   const [generatedContent, setGeneratedContent] = useState<ContentOutput | null>(null);
   const [showContentOutput, setShowContentOutput] = useState<boolean>(false);
 
+  // Questions for each interview stage
   const alternativeQuestions = [
     [
       "What was the most significant transaction or deal you closed in the past month? Please share the specific property type, location, and what made this deal unique.",
@@ -320,7 +322,7 @@ If you're facing similar challenges in your real estate journey, I'd love to sha
     setMessages(prev => [...prev, userMessage]);
     setShowSuggestions(false);
     
-    const isConversationalInterview = topic === "Conversational Interview";
+    const isConversationalInterview = topic === "Conversational Interview → Multi-Platform Output";
     
     setTimeout(() => {
       let responseContent = `Here's some guidance for creating your ${topic}. This is a simulated response that would typically include tailored content advice, formatting tips, and platform-specific recommendations.`;
@@ -379,9 +381,9 @@ If you're facing similar challenges in your real estate journey, I'd love to sha
     setGeneratedContent(null);
     setShowContentOutput(false);
     
-    const isConversationalInterview = topic === "Conversational Interview";
+    const isConversationalInterview = topic === "Conversational Interview → Multi-Platform Output";
     const welcomeMessage = isConversationalInterview 
-      ? conversationalStages[0].question
+      ? alternativeQuestions[0][currentQuestionIndices[0]]
       : `Welcome to the ${topic} content creation! What kind of content would you like to create today?`;
     
     setMessages([
@@ -399,6 +401,21 @@ If you're facing similar challenges in your real estate journey, I'd love to sha
       setShowSuggestions(true);
     }
   };
+
+  const handleSuggestedQuestion = (question: string) => {
+    handleSendMessage(question);
+  };
+
+  const setInitialAiMessage = useCallback((content: string) => {
+    setMessages([
+      {
+        sender: 'ai',
+        content: content,
+        timestamp: new Date(),
+        sources: mockSources.slice(0, 2)
+      }
+    ]);
+  }, []);
 
   return {
     messages,
