@@ -19,11 +19,11 @@ interface ChatMessagesAreaProps {
 
 // Set of common interview questions for realtors - set 1
 const INTERVIEW_QUESTIONS_SET_1 = [
-  "What's your approach to pricing a home in today's market?",
-  "How do you handle multiple offers on a property?",
-  "What strategies do you use to market a difficult property?",
-  "Tell me about a challenging transaction and how you overcame it",
-  "How do you stay informed about the local real estate market?"
+  "What made you decide to become a real estate agent?",
+  "How do you stay informed about current market conditions?",
+  "What's your approach to pricing a property in this market?",
+  "How do you handle multiple offer situations?",
+  "What strategies do you use to market difficult properties?"
 ];
 
 // Set of common interview questions for realtors - set 2
