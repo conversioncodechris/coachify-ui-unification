@@ -11,3 +11,13 @@ export interface Source {
   content: string;
   url?: string;
 }
+
+export interface ContentOutput {
+  facebook?: string;
+  instagram?: string;
+  twitter?: string;
+  linkedin?: string;
+  email?: string;
+  blog?: string;
+  other?: string;
+}

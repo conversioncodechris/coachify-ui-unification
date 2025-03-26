@@ -56,7 +56,8 @@ const ConversationalPromptButton: React.FC<ConversationalPromptButtonProps> = ({
               {
                 title: promptTitle,
                 path: chatPath,
-                skipSuggestions: true  // Flag to skip suggestions
+                skipSuggestions: true,  // Flag to skip suggestions
+                isConversational: true  // Flag to indicate conversational flow
               }
             ];
             
@@ -88,10 +89,10 @@ const ConversationalPromptButton: React.FC<ConversationalPromptButtonProps> = ({
               
               if (existingChat) {
                 // Update the chat to skip suggestions if it doesn't have that flag
-                if (!existingChat.skipSuggestions) {
+                if (!existingChat.skipSuggestions || !existingChat.isConversational) {
                   const updatedChats = activeChats.map((chat: any) => 
                     chat.title === "Conversational Interview" && !chat.hidden
-                      ? { ...chat, skipSuggestions: true }
+                      ? { ...chat, skipSuggestions: true, isConversational: true }
                       : chat
                   );
                   localStorage.setItem('contentActiveChats', JSON.stringify(updatedChats));
@@ -113,7 +114,8 @@ const ConversationalPromptButton: React.FC<ConversationalPromptButtonProps> = ({
             {
               title: "Conversational Interview",
               path: chatPath,
-              skipSuggestions: true
+              skipSuggestions: true,
+              isConversational: true
             }
           ];
           

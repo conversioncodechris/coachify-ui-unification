@@ -12,7 +12,7 @@ export const addConversationalPrompt = () => {
     icon: '🎙️',
     source: 'created',
     dateAdded: new Date(),
-    content: "Hey! Let's turn your expertise into 🔥 content. Pretend I'm a friend asking this:\n'My sister wants to buy a house but needs to sell hers first—what should I tell her?'\nJust answer like you would in real life, and I'll turn it into magic for Facebook, Instagram, and an email follow-up. Ready?",
+    content: "I'll guide you through a structured conversation about a recent real estate transaction. We'll cover the property details, challenges you faced, client specifics, and key learnings. Your responses will automatically be transformed into ready-to-use content for Facebook, Instagram, LinkedIn, and email marketing. Just answer each question naturally, and I'll handle the content creation!",
     aiType: 'content',
     conversational: true
   };

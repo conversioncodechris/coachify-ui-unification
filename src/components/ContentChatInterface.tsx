@@ -13,6 +13,7 @@ import { RefreshCw } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import ContentOutputPanel from './content/ContentOutputPanel';
 
 interface ContentChatInterfaceProps {
   topic: string;
@@ -97,12 +98,16 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
     isSourcesPanelOpen,
     activeSourceIndex,
     allSources,
+    generatedContent,
+    showContentOutput,
     setActiveSourceIndex,
     toggleSourcesPanel,
     handleSendMessage,
     handleSuggestedQuestion,
     setInitialAiMessage,
-    setShowSuggestions
+    setShowSuggestions,
+    resetConversation,
+    setShowContentOutput
   } = useContentChat(topic);
 
   // Set initial AI message based on topic content
@@ -197,6 +202,17 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
         activeSourceIndex={activeSourceIndex}
         setActiveSourceIndex={setActiveSourceIndex}
       />
+      
+      {showContentOutput && generatedContent && (
+        <ContentOutputPanel
+          content={generatedContent}
+          onClose={() => setShowContentOutput(false)}
+          onReset={() => {
+            setShowContentOutput(false);
+            resetConversation();
+          }}
+        />
+      )}
     </div>
   );
 };
