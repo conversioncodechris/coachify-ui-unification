@@ -19,29 +19,29 @@ interface ChatMessagesAreaProps {
 
 // Set of common interview questions for realtors - set 1
 const INTERVIEW_QUESTIONS_SET_1 = [
-  "What made you decide to become a real estate agent?",
-  "How do you stay informed about current market conditions?",
-  "What's your approach to pricing a property in this market?",
-  "How do you handle multiple offer situations?",
-  "What strategies do you use to market difficult properties?"
+  "Tell me about your background in real estate and what brought you to this profession.",
+  "How do you stay informed about changes in the real estate market?",
+  "What is your approach to pricing a property in today's market?",
+  "How do you handle difficult negotiations with buyers or sellers?",
+  "What marketing strategies do you find most effective for selling properties?"
 ];
 
 // Set of common interview questions for realtors - set 2
 const INTERVIEW_QUESTIONS_SET_2 = [
-  "What's your process for qualifying potential buyers?",
-  "How do you handle client objections during negotiations?",
-  "What differentiates you from other real estate agents?",
-  "How do you maintain relationships with past clients?",
-  "What technology tools do you use to improve your business?"
+  "How do you build and maintain relationships with clients?",
+  "Describe your process for qualifying potential buyers.",
+  "What sets you apart from other real estate agents in the area?",
+  "How do you handle multiple offer situations?",
+  "What technology tools do you use to improve your real estate business?"
 ];
 
 // Set of common interview questions for realtors - set 3
 const INTERVIEW_QUESTIONS_SET_3 = [
   "How do you prepare sellers for the home inspection process?",
-  "What's your strategy for pricing in a competitive market?",
-  "How do you handle a property that isn't selling?",
-  "What's your approach to winning listings in your area?",
-  "How do you help first-time homebuyers through the process?"
+  "What challenges have you faced in this market and how did you overcome them?",
+  "How do you help first-time homebuyers navigate the purchasing process?",
+  "What continuing education have you pursued to enhance your real estate knowledge?",
+  "How do you handle properties that aren't selling as quickly as expected?"
 ];
 
 const ChatMessagesArea: React.FC<ChatMessagesAreaProps> = ({
