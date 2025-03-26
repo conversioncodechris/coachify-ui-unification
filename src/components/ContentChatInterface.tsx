@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -30,12 +29,9 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [skipSuggestions, setSkipSuggestions] = useState(false);
   
-  // Get topic content from local storage if available
   const [topicContent, setTopicContent] = useState<string | null>(null);
   
-  // Load topic content
   useEffect(() => {
-    // First check contentTopics for content
     const topicsFromStorage = localStorage.getItem('contentTopics');
     if (topicsFromStorage) {
       try {
@@ -50,7 +46,6 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
       }
     }
     
-    // If not found, check contentAssets
     const assetsFromStorage = localStorage.getItem('contentAssets');
     if (assetsFromStorage) {
       try {
@@ -67,11 +62,9 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
       }
     }
     
-    // Set to null if not found
     setTopicContent(null);
   }, [topic]);
 
-  // Check if we should skip suggestions
   useEffect(() => {
     const savedChats = localStorage.getItem('contentActiveChats');
     if (savedChats) {
@@ -107,29 +100,28 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
     setInitialAiMessage,
     setShowSuggestions,
     resetConversation,
-    setShowContentOutput
+    setShowContentOutput,
+    changeCurrentQuestion
   } = useContentChat(topic);
 
-  // Set initial AI message based on topic content
+  const isConversationalInterview = topic === "Conversational Interview → Multi-Platform Output";
+
   useEffect(() => {
     if (topicContent && messages.length === 0) {
       setInitialAiMessage(topicContent);
       
-      // If this is a conversational interview with skipSuggestions, hide suggestions
       if (skipSuggestions) {
         setShowSuggestions(false);
       }
     }
   }, [topicContent, messages.length, setInitialAiMessage, skipSuggestions, setShowSuggestions]);
 
-  // Check if topic exists and chat session is valid, if not, redirect to content page
   useEffect(() => {
     if (!topic) {
       onBackToTopics();
       return;
     }
     
-    // Verify the chat exists in localStorage
     const savedChats = localStorage.getItem('contentActiveChats');
     if (savedChats) {
       try {
@@ -140,19 +132,26 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
         );
         
         if (!matchingChat) {
-          // Chat not found, redirect
           onBackToTopics();
         }
       } catch (error) {
-        // JSON parse error, redirect
         console.error('Error verifying chat session:', error);
         onBackToTopics();
       }
     } else {
-      // No active chats in storage, redirect
       onBackToTopics();
     }
   }, [topic, navigate, location.pathname, onBackToTopics]);
+
+  const handleNewQuestion = () => {
+    if (isConversationalInterview && messages.length > 0) {
+      changeCurrentQuestion();
+      toast({
+        title: "New question selected",
+        description: "The interview question has been changed."
+      });
+    }
+  };
 
   return (
     <div className="flex h-full">
@@ -177,6 +176,8 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
           suggestedQuestions={suggestedQuestions}
           toggleSourcesPanel={toggleSourcesPanel}
           onSuggestedQuestionSelect={handleSuggestedQuestion}
+          onNewQuestion={handleNewQuestion}
+          isConversationalInterview={isConversationalInterview}
         />
 
         <div className="absolute bottom-0 left-0 right-0">

@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { Message, Source, ContentOutput } from '../components/content/ContentTypes';
 
@@ -41,27 +42,57 @@ export const useContentChat = (topic: string) => {
   const [generatedContent, setGeneratedContent] = useState<ContentOutput | null>(null);
   const [showContentOutput, setShowContentOutput] = useState<boolean>(false);
 
+  // Alternative questions for each conversational stage
+  const alternativeQuestions = [
+    [
+      "What was the most significant transaction or deal you closed in the past month? Please share the specific property type, location, and what made this deal unique.",
+      "Can you tell me about a recent property you sold that presented unique challenges or opportunities?",
+      "What was your most memorable real estate transaction recently, and what made it stand out?",
+      "Describe a recent listing you worked with that had special features or required a creative approach."
+    ],
+    [
+      "Thank you for sharing those details. What challenges did you face during this transaction, and how did you overcome them?",
+      "What obstacles did you encounter with this property, and what strategies did you use to address them?",
+      "Tell me about any difficulties that came up during this transaction and how you resolved them.",
+      "Were there any unexpected issues that arose during this deal, and how did you handle them?"
+    ],
+    [
+      "That's interesting to hear about those challenges. What made this particular client unique, and how did you adapt your approach to meet their specific needs?",
+      "How would you describe the client's personality and expectations, and how did you tailor your services to them?",
+      "What was special about working with this client, and how did you customize your approach for them?",
+      "Tell me about the relationship you built with this client and how you addressed their specific concerns."
+    ],
+    [
+      "What was the most rewarding aspect of closing this deal, and what did you learn that you'll apply to future transactions?",
+      "What gave you the most satisfaction about completing this transaction, and what lessons will you carry forward?",
+      "Looking back on this deal, what was the highlight for you, and what new insights did you gain?",
+      "What made this transaction particularly fulfilling, and how will it influence your approach going forward?"
+    ]
+  ];
+
+  const [currentQuestionIndices, setCurrentQuestionIndices] = useState<number[]>([0, 0, 0, 0]);
+
   const conversationalStages = [
     {
-      question: "What was the most significant transaction or deal you closed in the past month? Please share the specific property type, location, and what made this deal unique.",
+      question: alternativeQuestions[0][currentQuestionIndices[0]],
       responseHandler: (userResponse: string) => {
-        return "Thank you for sharing those details. What challenges did you face during this transaction, and how did you overcome them?";
+        return alternativeQuestions[1][currentQuestionIndices[1]];
       }
     },
     {
-      question: "Thank you for sharing those details. What challenges did you face during this transaction, and how did you overcome them?",
+      question: alternativeQuestions[1][currentQuestionIndices[1]],
       responseHandler: (userResponse: string) => {
-        return "That's interesting to hear about those challenges. What made this particular client unique, and how did you adapt your approach to meet their specific needs?";
+        return alternativeQuestions[2][currentQuestionIndices[2]];
       }
     },
     {
-      question: "That's interesting to hear about those challenges. What made this particular client unique, and how did you adapt your approach to meet their specific needs?",
+      question: alternativeQuestions[2][currentQuestionIndices[2]],
       responseHandler: (userResponse: string) => {
-        return "What was the most rewarding aspect of closing this deal, and what did you learn that you'll apply to future transactions?";
+        return alternativeQuestions[3][currentQuestionIndices[3]];
       }
     },
     {
-      question: "What was the most rewarding aspect of closing this deal, and what did you learn that you'll apply to future transactions?",
+      question: alternativeQuestions[3][currentQuestionIndices[3]],
       responseHandler: (userResponse: string) => {
         return "Thank you for sharing your experience! I've created content based on our conversation that you can use across multiple platforms. Would you like to see the generated content?";
       }
@@ -69,7 +100,7 @@ export const useContentChat = (topic: string) => {
   ];
 
   useEffect(() => {
-    const isConversationalInterview = topic === "Conversational Interview";
+    const isConversationalInterview = topic === "Conversational Interview → Multi-Platform Output";
     
     if (isConversationalInterview) {
       setShowSuggestions(false);
@@ -108,6 +139,46 @@ export const useContentChat = (topic: string) => {
     setIsSourcesPanelOpen(!isSourcesPanelOpen);
     if (!isSourcesPanelOpen) {
       setActiveSourceIndex(0);
+    }
+  };
+
+  // Function to change the current question
+  const changeCurrentQuestion = () => {
+    if (topic !== "Conversational Interview → Multi-Platform Output" || messages.length === 0) {
+      return;
+    }
+    
+    // Only allow changing the first question (stage 0)
+    if (conversationStage > 0) {
+      return;
+    }
+    
+    // Select a new question index that's different from the current one
+    const currentIndex = currentQuestionIndices[0];
+    let newIndex = Math.floor(Math.random() * alternativeQuestions[0].length);
+    
+    // Make sure we get a different question (if there are multiple options)
+    if (alternativeQuestions[0].length > 1) {
+      while (newIndex === currentIndex) {
+        newIndex = Math.floor(Math.random() * alternativeQuestions[0].length);
+      }
+    }
+    
+    // Update the question index
+    const newIndices = [...currentQuestionIndices];
+    newIndices[0] = newIndex;
+    setCurrentQuestionIndices(newIndices);
+    
+    // Update the first message with the new question
+    const newQuestion = alternativeQuestions[0][newIndex];
+    
+    if (messages.length > 0) {
+      const updatedMessages = [...messages];
+      updatedMessages[0] = {
+        ...updatedMessages[0],
+        content: newQuestion
+      };
+      setMessages(updatedMessages);
     }
   };
 
@@ -353,6 +424,7 @@ If you're facing similar challenges in your real estate journey, I'd love to sha
     setInitialAiMessage,
     setShowSuggestions,
     resetConversation,
-    setShowContentOutput
+    setShowContentOutput,
+    changeCurrentQuestion
   };
 };
