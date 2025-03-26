@@ -2,7 +2,7 @@
 import React from 'react';
 import { Message } from './ContentTypes';
 import ChatMessage from './ChatMessage';
-import SuggestedQuestions from '../compliance/SuggestedQuestions';
+import SuggestedQuestions from './SuggestedQuestions';
 import { Button } from '@/components/ui/button';
 import { RefreshCw } from 'lucide-react';
 
@@ -112,6 +112,7 @@ const ChatMessagesArea: React.FC<ChatMessagesAreaProps> = ({
           topic={topic}
           questions={suggestedQuestions}
           onSelectQuestion={onSuggestedQuestionSelect}
+          onNewQuestion={onNewQuestion}
         />
       )}
     </div>
