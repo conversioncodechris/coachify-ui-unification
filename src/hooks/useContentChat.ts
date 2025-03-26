@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { Message, Source, ContentOutput } from '../components/content/ContentTypes';
 
@@ -42,7 +41,6 @@ export const useContentChat = (topic: string) => {
   const [generatedContent, setGeneratedContent] = useState<ContentOutput | null>(null);
   const [showContentOutput, setShowContentOutput] = useState<boolean>(false);
 
-  // Alternative questions for each conversational stage
   const alternativeQuestions = [
     [
       "What was the most significant transaction or deal you closed in the past month? Please share the specific property type, location, and what made this deal unique.",
@@ -110,7 +108,7 @@ export const useContentChat = (topic: string) => {
       let welcomeMessage = `Welcome to the ${topic} content creation! What kind of content would you like to create today?`;
       
       if (isConversationalInterview) {
-        welcomeMessage = conversationalStages[0].question;
+        welcomeMessage = alternativeQuestions[0][currentQuestionIndices[0]];
       }
       
       setMessages([
@@ -133,7 +131,7 @@ export const useContentChat = (topic: string) => {
         }
       ]);
     }
-  }, [topic, messages.length]);
+  }, [topic, messages.length, currentQuestionIndices]);
 
   const toggleSourcesPanel = () => {
     setIsSourcesPanelOpen(!isSourcesPanelOpen);
@@ -142,34 +140,28 @@ export const useContentChat = (topic: string) => {
     }
   };
 
-  // Function to change the current question
   const changeCurrentQuestion = () => {
     if (topic !== "Conversational Interview → Multi-Platform Output" || messages.length === 0) {
       return;
     }
     
-    // Only allow changing the first question (stage 0)
     if (conversationStage > 0) {
       return;
     }
     
-    // Select a new question index that's different from the current one
     const currentIndex = currentQuestionIndices[0];
     let newIndex = Math.floor(Math.random() * alternativeQuestions[0].length);
     
-    // Make sure we get a different question (if there are multiple options)
     if (alternativeQuestions[0].length > 1) {
       while (newIndex === currentIndex) {
         newIndex = Math.floor(Math.random() * alternativeQuestions[0].length);
       }
     }
     
-    // Update the question index
     const newIndices = [...currentQuestionIndices];
     newIndices[0] = newIndex;
     setCurrentQuestionIndices(newIndices);
     
-    // Update the first message with the new question
     const newQuestion = alternativeQuestions[0][newIndex];
     
     if (messages.length > 0) {
