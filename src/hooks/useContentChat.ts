@@ -402,21 +402,6 @@ If you're facing similar challenges in your real estate journey, I'd love to sha
     }
   };
 
-  const handleSuggestedQuestion = (question: string) => {
-    handleSendMessage(question);
-  };
-
-  const setInitialAiMessage = useCallback((content: string) => {
-    setMessages([
-      {
-        sender: 'ai',
-        content: content,
-        timestamp: new Date(),
-        sources: mockSources.slice(0, 2)
-      }
-    ]);
-  }, []);
-
   return {
     messages,
     suggestedQuestions,
