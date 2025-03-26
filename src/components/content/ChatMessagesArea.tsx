@@ -17,6 +17,19 @@ interface ChatMessagesAreaProps {
   isConversationalInterview?: boolean;
 }
 
+const INTERVIEW_TOPICS = [
+  "Recent Property Transaction",
+  "Client Success Story",
+  "Neighborhood Market Update",
+  "Challenging Deal Overcome",
+  "Unique Property Feature",
+  "First-time Buyer Experience",
+  "Luxury Property Sale",
+  "Commercial Property Deal",
+  "Investment Property Analysis",
+  "Property Staging Success"
+];
+
 const ChatMessagesArea: React.FC<ChatMessagesAreaProps> = ({
   messages,
   topic,
@@ -61,7 +74,40 @@ const ChatMessagesArea: React.FC<ChatMessagesAreaProps> = ({
         ))}
       </div>
       
-      {showSuggestions && (
+      {/* Display interview topics for conversational interviews */}
+      {isConversationalInterview && messages.length > 0 && (
+        <div className="max-w-3xl mx-auto mt-6 mb-2">
+          <div className="border border-border rounded-lg p-4 bg-white">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-sm font-medium">Interview topics you can discuss:</p>
+              {onNewQuestion && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={onNewQuestion}
+                  className="text-xs border-insta-gray hover:bg-insta-lightBlue hover:text-insta-blue flex items-center gap-1"
+                >
+                  <RefreshCw className="h-3 w-3" />
+                  New Question
+                </Button>
+              )}
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {INTERVIEW_TOPICS.map((topic, index) => (
+                <div key={index} className="flex gap-2 items-center">
+                  <span className="bg-insta-lightBlue text-insta-blue w-6 h-6 flex items-center justify-center rounded-full font-medium flex-shrink-0">
+                    {index + 1}
+                  </span>
+                  <span className="text-sm">{topic}</span>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-insta-lightText mt-3">Share your experience on any of these topics or your own</p>
+          </div>
+        </div>
+      )}
+      
+      {showSuggestions && !isConversationalInterview && (
         <SuggestedQuestions
           topic={topic}
           questions={suggestedQuestions}
