@@ -24,11 +24,15 @@ const MessageInput: React.FC<MessageInputProps> = ({
   const [enhancedPromptSuggestion, setEnhancedPromptSuggestion] = useState<EnhancedPrompt | null>(null);
   const [showEnhancement, setShowEnhancement] = useState(false);
   const { toast } = useToast();
+  
+  // Check if this is a conversational interview
+  const isConversationalInterview = topic === "Conversational Interview → Multi-Platform Output";
 
   // Generate enhanced prompt suggestion when input message changes
   useEffect(() => {
     // Only suggest enhancement if message is substantial (over 15 chars)
-    if (inputMessage.trim().length > 15) {
+    // AND we're not in a conversational interview
+    if (inputMessage.trim().length > 15 && !isConversationalInterview) {
       const enhancedPrompt = enhancePrompt(inputMessage);
       setEnhancedPromptSuggestion(enhancedPrompt);
       setShowEnhancement(true);
@@ -36,7 +40,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
       setEnhancedPromptSuggestion(null);
       setShowEnhancement(false);
     }
-  }, [inputMessage]);
+  }, [inputMessage, isConversationalInterview]);
 
   const handleSendMessage = () => {
     if (!inputMessage.trim()) return;
@@ -69,7 +73,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 p-4 border-t border-border bg-white">
       <div className="max-w-3xl mx-auto relative">
-        {showEnhancement && enhancedPromptSuggestion && (
+        {showEnhancement && enhancedPromptSuggestion && !isConversationalInterview && (
           <ChatEnhancementSuggestion
             enhancedPrompt={enhancedPromptSuggestion}
             onAccept={acceptEnhancedPrompt}
