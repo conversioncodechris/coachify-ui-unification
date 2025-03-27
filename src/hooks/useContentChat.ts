@@ -22,7 +22,8 @@ export const useContentChat = (topic: string) => {
   const {
     suggestedQuestions,
     showSuggestions,
-    setShowSuggestions
+    setShowSuggestions,
+    refreshQuestions
   } = useContentSuggestions(topic);
 
   const {
@@ -140,6 +141,7 @@ export const useContentChat = (topic: string) => {
     setShowSuggestions,
     resetConversation,
     setShowContentOutput,
-    changeCurrentQuestion
+    changeCurrentQuestion,
+    refreshQuestions
   };
 };

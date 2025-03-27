@@ -101,7 +101,8 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
     setShowSuggestions,
     resetConversation,
     setShowContentOutput,
-    changeCurrentQuestion
+    changeCurrentQuestion,
+    refreshQuestions
   } = useContentChat(topic);
 
   const isConversationalInterview = topic === "Conversational Interview → Multi-Platform Output";
@@ -177,6 +178,7 @@ const ContentChatInterface: React.FC<ContentChatInterfaceProps> = ({
           toggleSourcesPanel={toggleSourcesPanel}
           onSuggestedQuestionSelect={handleSuggestedQuestion}
           onNewQuestion={handleNewQuestion}
+          onRefreshQuestions={refreshQuestions}
           isConversationalInterview={isConversationalInterview}
         />
 
