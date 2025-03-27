@@ -75,8 +75,7 @@ const ChatMessagesArea: React.FC<ChatMessagesAreaProps> = ({
       {isConversationalInterview && messages.length === 0 && (
         <div className="max-w-3xl mx-auto mt-6 mb-2">
           <div className="border border-border rounded-lg p-4 bg-white">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-sm font-medium">Common questions I can ask you:</p>
+            <div className="flex justify-end mb-3">
               {onRefreshQuestions && (
                 <Button 
                   variant="outline" 
@@ -105,7 +104,6 @@ const ChatMessagesArea: React.FC<ChatMessagesAreaProps> = ({
                 </div>
               ))}
             </div>
-            <p className="text-xs text-insta-lightText mt-3">Click on a question or ask your own below</p>
           </div>
         </div>
       )}
