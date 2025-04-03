@@ -10,6 +10,7 @@ const LandingPage = () => {
       {/* Hero Section */}
       <section className="pt-24 pb-16 px-4 text-center">
         <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Complete AI Suite for Real Estate Professionals</h2>
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             <span className="inline-block whitespace-nowrap">The AI <span className="text-insta-blue">Operating System</span> for Real Estate</span>{' '}
             <span className="inline-block whitespace-nowrap">Agents and Loan Officers</span>
@@ -36,11 +37,6 @@ const LandingPage = () => {
       {/* AI Features Section - Above the fold */}
       <section className="py-16 px-4 bg-gradient-to-br from-insta-blue-light to-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Complete AI Suite for Real Estate Professionals</h2>
-          <p className="text-xl text-center text-gray-700 mb-12 max-w-3xl mx-auto">
-            Get expert coaching and content creation at just $99/month - compared to $1,200-$1,500/month for traditional coaching with limited support.
-          </p>
-          
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="border-2 border-insta-blue shadow-md hover:shadow-lg transition-all duration-300 bg-white/90 backdrop-blur transform hover:-translate-y-1">
               <CardContent className="pt-8 pb-6 px-6">
@@ -279,7 +275,7 @@ const LandingPage = () => {
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-6">Ready for Expert Coaching at a Fraction of the Cost?</h2>
           <p className="text-xl mb-8">
-            Try AIRE free for 7 days with no credit card required. Join thousands of real estate professionals already using AIRE to grow their business.
+            Try AIRE free for 7 days with no credit card required. Join thousands of real estate professionals already using AIRE to grow your business.
           </p>
           <Link to="/content">
             <Button size="lg" className="bg-white text-insta-blue hover:bg-gray-100">
