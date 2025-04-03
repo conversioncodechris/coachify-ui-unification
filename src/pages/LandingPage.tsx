@@ -193,7 +193,7 @@ const LandingPage = () => {
       {/* Feature Section */}
       <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">What AIRE Helps You With</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">What Can AIRE Help You With?</h2>
           
           <div className="grid md:grid-cols-4 gap-6">
             <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
