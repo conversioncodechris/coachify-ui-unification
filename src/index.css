@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -142,5 +143,10 @@
   
   .insta-chip {
     @apply inline-flex items-center px-3 py-1 text-sm rounded-full bg-brand-lightGray text-brand-black font-montserrat;
+  }
+  
+  /* Feature cards for AI features */
+  .feature-card {
+    @apply border border-border shadow-md transition-all duration-300 bg-white/90 backdrop-blur hover:shadow-lg;
   }
 }
