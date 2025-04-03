@@ -16,7 +16,12 @@ const LandingPage = () => {
             <span className="inline-block whitespace-nowrap">Agents and Loan Officers</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            AIRE provides real estate professionals with instant, expert coaching at a fraction of the cost of traditional coaching. Get personalized guidance whenever you need it.
+            <img 
+              src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" 
+              alt="AIRE Logo" 
+              className="h-8 inline-block mr-2" 
+            /> 
+            provides real estate professionals with instant, expert coaching at a fraction of the cost of traditional coaching. Get personalized guidance whenever you need it.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/content">
@@ -93,14 +98,59 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Target Audience Section - MOVED UP */}
+      {/* Why Choose AIRE? Section - MOVED UP */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-8 inline-block align-baseline" />?</h2>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="pt-6">
+                <div className="mb-5 bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
+                  <DollarSign className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Cost-Effective</h3>
+                <p className="text-gray-600">
+                  Just $99/month compared to $1,200-$1,500/month for traditional coaching. Add team members for only $49/month each.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="pt-6">
+                <div className="mb-5 bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
+                  <Clock className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">24/7 Availability</h3>
+                <p className="text-gray-600">
+                  Get expert guidance whenever you need it, not just during scheduled weekly calls. Voice and mobile app access coming soon.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="pt-6">
+                <div className="mb-5 bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
+                  <TrendingUp className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Always Improving</h3>
+                <p className="text-gray-600">
+                  Knowledge base updated bi-weekly with industry trends and based on real agent requests and scenarios.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Target Audience Section - MOVED DOWN */}
       <section className="py-20 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="md:w-1/2">
-              <h2 className="text-3xl font-bold mb-6">Who Uses AIRE?</h2>
+              <h2 className="text-3xl font-bold mb-6">Who Uses <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-8 inline-block align-baseline" />?</h2>
               <p className="text-lg text-gray-600 mb-4">
-                AIRE is perfect for all types of real estate professionals who need expert coaching and guidance:
+                <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-6 inline-block mr-2 align-baseline" /> is perfect for all types of real estate professionals who need expert coaching and guidance:
               </p>
               <ul className="space-y-3 mb-6">
                 <li className="flex items-start gap-2">
@@ -145,55 +195,10 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Value Proposition Section - MOVED DOWN */}
-      <section className="py-20 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose AIRE?</h2>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="pt-6">
-                <div className="mb-5 bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
-                  <DollarSign className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Cost-Effective</h3>
-                <p className="text-gray-600">
-                  Just $99/month compared to $1,200-$1,500/month for traditional coaching. Add team members for only $49/month each.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="pt-6">
-                <div className="mb-5 bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
-                  <Clock className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">24/7 Availability</h3>
-                <p className="text-gray-600">
-                  Get expert guidance whenever you need it, not just during scheduled weekly calls. Voice and mobile app access coming soon.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="pt-6">
-                <div className="mb-5 bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
-                  <TrendingUp className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Always Improving</h3>
-                <p className="text-gray-600">
-                  Knowledge base updated bi-weekly with industry trends and based on real agent requests and scenarios.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
       {/* Feature Section */}
       <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">What AIRE Helps You With</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">What <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-8 inline-block align-baseline" /> Helps You With</h2>
           
           <div className="grid md:grid-cols-4 gap-6">
             <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
@@ -276,7 +281,7 @@ const LandingPage = () => {
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-6">Ready for Expert Coaching at a Fraction of the Cost?</h2>
           <p className="text-xl mb-8">
-            Try AIRE free for 7 days with no credit card required. Join thousands of real estate professionals already using AIRE to grow your business.
+            Try <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-8 inline-block align-bottom mx-1" /> free for 7 days with no credit card required. Join thousands of real estate professionals already using <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-6 inline-block align-bottom mx-1" /> to grow your business.
           </p>
           <Link to="/content">
             <Button size="lg" className="bg-white text-black hover:bg-gray-100 border border-transparent hover:border-black">
@@ -319,7 +324,7 @@ const LandingPage = () => {
             </div>
           </div>
           <div className="mt-12 pt-6 border-t border-gray-200 text-center text-gray-700">
-            <p>© {new Date().getFullYear()} AIRE. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-5 inline-block mx-1 align-bottom" />. All rights reserved.</p>
           </div>
         </div>
       </footer>
@@ -328,4 +333,3 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
-
