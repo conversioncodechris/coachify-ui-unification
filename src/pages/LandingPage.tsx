@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -289,7 +288,7 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-4 bg-gray-900 text-white">
+      <footer className="py-12 px-4 bg-white text-black">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-6 md:mb-0">
@@ -298,28 +297,28 @@ const LandingPage = () => {
                 alt="AIRE Logo" 
                 className="h-10" 
               />
-              <p className="mt-2 text-gray-400">AI-powered coaching for real estate professionals</p>
+              <p className="mt-2 text-gray-700">AI-powered coaching for real estate professionals</p>
             </div>
             <div className="flex flex-wrap gap-8">
               <div>
                 <h4 className="font-semibold mb-3">Product</h4>
                 <ul className="space-y-2">
-                  <li><Link to="/coach" className="text-gray-400 hover:text-white">Coach AI</Link></li>
-                  <li><Link to="/content" className="text-gray-400 hover:text-white">Content AI</Link></li>
-                  <li><Link to="/compliance" className="text-gray-400 hover:text-white">Compliance AI</Link></li>
+                  <li><Link to="/coach" className="text-gray-700 hover:text-black">Coach AI</Link></li>
+                  <li><Link to="/content" className="text-gray-700 hover:text-black">Content AI</Link></li>
+                  <li><Link to="/compliance" className="text-gray-700 hover:text-black">Compliance AI</Link></li>
                 </ul>
               </div>
               <div>
                 <h4 className="font-semibold mb-3">Company</h4>
                 <ul className="space-y-2">
-                  <li><a href="#" className="text-gray-400 hover:text-white">About Us</a></li>
-                  <li><a href="#" className="text-gray-400 hover:text-white">Contact</a></li>
-                  <li><a href="#" className="text-gray-400 hover:text-white">Privacy Policy</a></li>
+                  <li><a href="#" className="text-gray-700 hover:text-black">About Us</a></li>
+                  <li><a href="#" className="text-gray-700 hover:text-black">Contact</a></li>
+                  <li><a href="#" className="text-gray-700 hover:text-black">Privacy Policy</a></li>
                 </ul>
               </div>
             </div>
           </div>
-          <div className="mt-12 pt-6 border-t border-gray-800 text-center text-gray-500">
+          <div className="mt-12 pt-6 border-t border-gray-200 text-center text-gray-700">
             <p>© {new Date().getFullYear()} AIRE. All rights reserved.</p>
           </div>
         </div>
