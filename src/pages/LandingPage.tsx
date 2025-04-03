@@ -37,6 +37,7 @@ const LandingPage = () => {
       {/* AI Features Section - Above the fold */}
       <section className="py-16 px-4 bg-gradient-to-br from-insta-blue-light to-white">
         <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Complete AI Suite for Real Estate Professionals</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="border-2 border-insta-blue shadow-md hover:shadow-lg transition-all duration-300 bg-white/90 backdrop-blur transform hover:-translate-y-1">
               <CardContent className="pt-8 pb-6 px-6">
