@@ -19,7 +19,7 @@ const LandingPage = () => {
             <img 
               src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" 
               alt="AIRE Logo" 
-              className="h-8 inline-block mr-2" 
+              className="h-[1.25em] inline-block mr-2 align-middle" 
             /> 
             provides real estate professionals with instant, expert coaching at a fraction of the cost of traditional coaching. Get personalized guidance whenever you need it.
           </p>
@@ -101,7 +101,7 @@ const LandingPage = () => {
       {/* Why Choose AIRE? Section - MOVED UP */}
       <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-8 inline-block align-baseline" />?</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-[1em] inline-block align-middle" />?</h2>
           
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
@@ -148,9 +148,9 @@ const LandingPage = () => {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="md:w-1/2">
-              <h2 className="text-3xl font-bold mb-6">Who Uses <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-8 inline-block align-baseline" />?</h2>
+              <h2 className="text-3xl font-bold mb-6">Who Uses <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-[1em] inline-block align-middle" />?</h2>
               <p className="text-lg text-gray-600 mb-4">
-                <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-6 inline-block mr-2 align-baseline" /> is perfect for all types of real estate professionals who need expert coaching and guidance:
+                Our platform is perfect for all types of real estate professionals who need expert coaching and guidance:
               </p>
               <ul className="space-y-3 mb-6">
                 <li className="flex items-start gap-2">
@@ -198,7 +198,7 @@ const LandingPage = () => {
       {/* Feature Section */}
       <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">What <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-8 inline-block align-baseline" /> Helps You With</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">What <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-[1em] inline-block align-middle" /> Helps You With</h2>
           
           <div className="grid md:grid-cols-4 gap-6">
             <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
@@ -281,7 +281,7 @@ const LandingPage = () => {
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-6">Ready for Expert Coaching at a Fraction of the Cost?</h2>
           <p className="text-xl mb-8">
-            Try <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-8 inline-block align-bottom mx-1" /> free for 7 days with no credit card required. Join thousands of real estate professionals already using <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-6 inline-block align-bottom mx-1" /> to grow your business.
+            Try our platform free for 7 days with no credit card required. Join thousands of real estate professionals already using our AI coaching to grow your business.
           </p>
           <Link to="/content">
             <Button size="lg" className="bg-white text-black hover:bg-gray-100 border border-transparent hover:border-black">
@@ -324,7 +324,7 @@ const LandingPage = () => {
             </div>
           </div>
           <div className="mt-12 pt-6 border-t border-gray-200 text-center text-gray-700">
-            <p>© {new Date().getFullYear()} <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-5 inline-block mx-1 align-bottom" />. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-5 inline-block mx-1 align-middle" />. All rights reserved.</p>
           </div>
         </div>
       </footer>
