@@ -67,7 +67,7 @@ const LandingPage = () => {
                   Transform conversations into ready-to-use marketing content for social media, email newsletters, and more through natural dialogue.
                 </p>
                 <Link to="/content" className="block">
-                  <Button variant="outline" className="w-full border-black text-black hover:bg-gray-100 hover:border-black">
+                  <Button variant="default" className="w-full bg-black hover:bg-black/90 text-white border border-transparent hover:border-black">
                     Explore Content AI
                   </Button>
                 </Link>
@@ -84,7 +84,7 @@ const LandingPage = () => {
                   Ensure your marketing materials and communications comply with real estate regulations and industry best practices.
                 </p>
                 <Link to="/compliance" className="block">
-                  <Button variant="outline" className="w-full border-black text-black hover:bg-gray-100 hover:border-black">
+                  <Button variant="default" className="w-full bg-black hover:bg-black/90 text-white border border-transparent hover:border-black">
                     Explore Compliance AI
                   </Button>
                 </Link>
