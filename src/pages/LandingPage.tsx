@@ -9,7 +9,7 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-blue-50">
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 text-center">
+      <section className="pt-24 pb-16 px-4 text-center">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
             Turn Conversations Into <span className="text-insta-blue">Multi-Platform Content</span>
@@ -28,6 +28,69 @@ const LandingPage = () => {
                 Explore Coach AI
               </Button>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* AI Features Section - Moved above fold with enhanced design */}
+      <section className="py-16 px-4 bg-gradient-to-br from-insta-blue-light to-white">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Complete AI Suite for Real Estate</h2>
+          <p className="text-xl text-center text-gray-700 mb-12 max-w-3xl mx-auto">
+            AIRE provides multiple AI tools designed specifically for real estate professionals.
+          </p>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="border-2 border-insta-blue shadow-md hover:shadow-lg transition-all duration-300 bg-white/90 backdrop-blur">
+              <CardContent className="pt-8 pb-6 px-6">
+                <div className="mb-5 bg-insta-blue w-16 h-16 rounded-full flex items-center justify-center text-white mx-auto">
+                  <FileText className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-semibold mb-4 text-center text-gray-900">Content AI</h3>
+                <p className="text-gray-600 mb-6 text-center">
+                  Create engaging social media posts, email newsletters, blog articles, and more through natural conversation.
+                </p>
+                <Link to="/content" className="block">
+                  <Button variant="default" className="w-full bg-insta-blue hover:bg-insta-blue/90 text-white">
+                    Explore Content AI
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border shadow-md hover:shadow-lg transition-all duration-300 bg-white/90 backdrop-blur transform hover:-translate-y-1">
+              <CardContent className="pt-8 pb-6 px-6">
+                <div className="mb-5 bg-insta-lightBlue w-16 h-16 rounded-full flex items-center justify-center text-insta-blue mx-auto">
+                  <Shield className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-semibold mb-4 text-center text-gray-900">Compliance AI</h3>
+                <p className="text-gray-600 mb-6 text-center">
+                  Ensure all your marketing materials and communications comply with real estate regulations and best practices.
+                </p>
+                <Link to="/compliance" className="block">
+                  <Button variant="outline" className="w-full border-insta-blue text-insta-blue hover:bg-insta-lightBlue">
+                    Explore Compliance AI
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border shadow-md hover:shadow-lg transition-all duration-300 bg-white/90 backdrop-blur transform hover:-translate-y-1">
+              <CardContent className="pt-8 pb-6 px-6">
+                <div className="mb-5 bg-insta-lightBlue w-16 h-16 rounded-full flex items-center justify-center text-insta-blue mx-auto">
+                  <MessageSquare className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-semibold mb-4 text-center text-gray-900">Coach AI</h3>
+                <p className="text-gray-600 mb-6 text-center">
+                  Practice client interactions, objection handling, and improve your real estate communication skills.
+                </p>
+                <Link to="/coach" className="block">
+                  <Button variant="outline" className="w-full border-insta-blue text-insta-blue hover:bg-insta-lightBlue">
+                    Explore Coach AI
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
@@ -119,69 +182,6 @@ const LandingPage = () => {
                 className="w-full h-auto"
               />
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* AI Features Section */}
-      <section className="py-20 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-4">Complete AI Suite for Real Estate</h2>
-          <p className="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">
-            AIRE provides multiple AI tools designed specifically for real estate professionals.
-          </p>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="border-2 border-insta-blue shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="pt-6">
-                <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-                  <FileText className="text-insta-blue" />
-                  Content AI
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Create engaging social media posts, email newsletters, blog articles, and more through natural conversation.
-                </p>
-                <Link to="/content">
-                  <Button variant="outline" className="w-full border-insta-blue text-insta-blue hover:bg-insta-lightBlue">
-                    Explore Content AI
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-
-            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="pt-6">
-                <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-                  <Shield className="text-insta-blue" />
-                  Compliance AI
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Ensure all your marketing materials and communications comply with real estate regulations and best practices.
-                </p>
-                <Link to="/compliance">
-                  <Button variant="outline" className="w-full">
-                    Explore Compliance AI
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-
-            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="pt-6">
-                <h3 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-                  <MessageSquare className="text-insta-blue" />
-                  Coach AI
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Practice client interactions, objection handling, and improve your real estate communication skills.
-                </p>
-                <Link to="/coach">
-                  <Button variant="outline" className="w-full">
-                    Explore Coach AI
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </section>
