@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { MessageSquare, RefreshCw, FileText, Share2, Shield } from 'lucide-react';
+import { MessageSquare, RefreshCw, FileText, Share2, Shield, Calendar, Users, TrendingUp, DollarSign, Clock } from 'lucide-react';
 
 const LandingPage = () => {
   return (
@@ -12,15 +12,15 @@ const LandingPage = () => {
       <section className="pt-24 pb-16 px-4 text-center">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            Turn Conversations Into <span className="text-insta-blue">Multi-Platform Content</span>
+            24/7 AI-Driven <span className="text-insta-blue">Real Estate Coaching</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-            AIRE helps real estate professionals transform simple conversations into ready-to-use content for all your social platforms.
+            AIRE provides real estate professionals with instant, expert coaching at a fraction of the cost of traditional coaching. Get personalized guidance whenever you need it.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/content">
               <Button size="lg" className="bg-insta-blue hover:bg-insta-blue/90 text-white">
-                Try Content AI
+                Try Free for 7 Days
               </Button>
             </Link>
             <Link to="/coach">
@@ -29,29 +29,47 @@ const LandingPage = () => {
               </Button>
             </Link>
           </div>
+          <p className="text-sm text-gray-500 mt-4">No credit card required</p>
         </div>
       </section>
 
-      {/* AI Features Section - Moved above fold with enhanced design */}
+      {/* AI Features Section - Above the fold */}
       <section className="py-16 px-4 bg-gradient-to-br from-insta-blue-light to-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Complete AI Suite for Real Estate</h2>
+          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Complete AI Suite for Real Estate Professionals</h2>
           <p className="text-xl text-center text-gray-700 mb-12 max-w-3xl mx-auto">
-            AIRE provides multiple AI tools designed specifically for real estate professionals.
+            Get expert coaching and content creation at just $99/month - compared to $1,200-$1,500/month for traditional coaching with limited support.
           </p>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="border-2 border-insta-blue shadow-md hover:shadow-lg transition-all duration-300 bg-white/90 backdrop-blur">
+            <Card className="border-2 border-insta-blue shadow-md hover:shadow-lg transition-all duration-300 bg-white/90 backdrop-blur transform hover:-translate-y-1">
               <CardContent className="pt-8 pb-6 px-6">
                 <div className="mb-5 bg-insta-blue w-16 h-16 rounded-full flex items-center justify-center text-white mx-auto">
+                  <MessageSquare className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-semibold mb-4 text-center text-gray-900">Coach AI</h3>
+                <p className="text-gray-600 mb-6 text-center">
+                  Get 24/7 expert guidance on listing presentations, negotiations, buyer consultations, and lead generation—whenever you need it.
+                </p>
+                <Link to="/coach" className="block">
+                  <Button variant="default" className="w-full bg-insta-blue hover:bg-insta-blue/90 text-white">
+                    Explore Coach AI
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border shadow-md hover:shadow-lg transition-all duration-300 bg-white/90 backdrop-blur transform hover:-translate-y-1">
+              <CardContent className="pt-8 pb-6 px-6">
+                <div className="mb-5 bg-insta-lightBlue w-16 h-16 rounded-full flex items-center justify-center text-insta-blue mx-auto">
                   <FileText className="w-8 h-8" />
                 </div>
                 <h3 className="text-2xl font-semibold mb-4 text-center text-gray-900">Content AI</h3>
                 <p className="text-gray-600 mb-6 text-center">
-                  Create engaging social media posts, email newsletters, blog articles, and more through natural conversation.
+                  Transform conversations into ready-to-use marketing content for social media, email newsletters, and more through natural dialogue.
                 </p>
                 <Link to="/content" className="block">
-                  <Button variant="default" className="w-full bg-insta-blue hover:bg-insta-blue/90 text-white">
+                  <Button variant="outline" className="w-full border-insta-blue text-insta-blue hover:bg-insta-lightBlue">
                     Explore Content AI
                   </Button>
                 </Link>
@@ -65,7 +83,7 @@ const LandingPage = () => {
                 </div>
                 <h3 className="text-2xl font-semibold mb-4 text-center text-gray-900">Compliance AI</h3>
                 <p className="text-gray-600 mb-6 text-center">
-                  Ensure all your marketing materials and communications comply with real estate regulations and best practices.
+                  Ensure your marketing materials and communications comply with real estate regulations and industry best practices.
                 </p>
                 <Link to="/compliance" className="block">
                   <Button variant="outline" className="w-full border-insta-blue text-insta-blue hover:bg-insta-lightBlue">
@@ -74,41 +92,24 @@ const LandingPage = () => {
                 </Link>
               </CardContent>
             </Card>
-
-            <Card className="border border-border shadow-md hover:shadow-lg transition-all duration-300 bg-white/90 backdrop-blur transform hover:-translate-y-1">
-              <CardContent className="pt-8 pb-6 px-6">
-                <div className="mb-5 bg-insta-lightBlue w-16 h-16 rounded-full flex items-center justify-center text-insta-blue mx-auto">
-                  <MessageSquare className="w-8 h-8" />
-                </div>
-                <h3 className="text-2xl font-semibold mb-4 text-center text-gray-900">Coach AI</h3>
-                <p className="text-gray-600 mb-6 text-center">
-                  Practice client interactions, objection handling, and improve your real estate communication skills.
-                </p>
-                <Link to="/coach" className="block">
-                  <Button variant="outline" className="w-full border-insta-blue text-insta-blue hover:bg-insta-lightBlue">
-                    Explore Coach AI
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </section>
 
-      {/* Feature Section */}
+      {/* Value Proposition Section */}
       <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose AIRE?</h2>
           
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
               <CardContent className="pt-6">
                 <div className="mb-5 bg-insta-lightBlue w-12 h-12 rounded-full flex items-center justify-center text-insta-blue">
-                  <MessageSquare className="w-6 h-6" />
+                  <DollarSign className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Have a Conversation</h3>
+                <h3 className="text-xl font-semibold mb-2">Cost-Effective</h3>
                 <p className="text-gray-600">
-                  Simply answer a few questions about your recent transactions or real estate experiences.
+                  Just $99/month compared to $1,200-$1,500/month for traditional coaching. Add team members for only $49/month each.
                 </p>
               </CardContent>
             </Card>
@@ -116,11 +117,11 @@ const LandingPage = () => {
             <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
               <CardContent className="pt-6">
                 <div className="mb-5 bg-insta-lightBlue w-12 h-12 rounded-full flex items-center justify-center text-insta-blue">
-                  <FileText className="w-6 h-6" />
+                  <Clock className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">AI Generates Content</h3>
+                <h3 className="text-xl font-semibold mb-2">24/7 Availability</h3>
                 <p className="text-gray-600">
-                  Our AI automatically transforms your responses into polished content optimized for each platform.
+                  Get expert guidance whenever you need it, not just during scheduled weekly calls. Voice and mobile app access coming soon.
                 </p>
               </CardContent>
             </Card>
@@ -128,11 +129,11 @@ const LandingPage = () => {
             <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
               <CardContent className="pt-6">
                 <div className="mb-5 bg-insta-lightBlue w-12 h-12 rounded-full flex items-center justify-center text-insta-blue">
-                  <Share2 className="w-6 h-6" />
+                  <TrendingUp className="w-6 h-6" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Share Everywhere</h3>
+                <h3 className="text-xl font-semibold mb-2">Always Improving</h3>
                 <p className="text-gray-600">
-                  Get ready-to-post content for Facebook, Instagram, LinkedIn, Twitter, email and more.
+                  Knowledge base updated bi-weekly with industry trends and based on real agent requests and scenarios.
                 </p>
               </CardContent>
             </Card>
@@ -140,38 +141,44 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Product Screenshot Section */}
+      {/* Target Audience Section */}
       <section className="py-20 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="md:w-1/2">
-              <h2 className="text-3xl font-bold mb-6">Conversational Interview</h2>
+              <h2 className="text-3xl font-bold mb-6">Who Uses AIRE?</h2>
               <p className="text-lg text-gray-600 mb-4">
-                Our innovative interview format makes content creation effortless. Just answer simple questions about your real estate experiences.
+                AIRE is perfect for all types of real estate professionals who need expert coaching and guidance:
               </p>
               <ul className="space-y-3 mb-6">
                 <li className="flex items-start gap-2">
                   <div className="mt-1 bg-green-100 rounded-full p-1">
-                    <Shield className="w-4 h-4 text-green-600" />
+                    <Users className="w-4 h-4 text-green-600" />
                   </div>
-                  <span>Personalized questions about your transactions</span>
+                  <span>Compass agents looking for AI-powered support</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 bg-green-100 rounded-full p-1">
-                    <Shield className="w-4 h-4 text-green-600" />
+                    <Users className="w-4 h-4 text-green-600" />
                   </div>
-                  <span>Refresh questions with a single click</span>
+                  <span>New agents seeking affordable, on-demand guidance</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <div className="mt-1 bg-green-100 rounded-full p-1">
-                    <Shield className="w-4 h-4 text-green-600" />
+                    <Users className="w-4 h-4 text-green-600" />
                   </div>
-                  <span>Multi-platform output from one conversation</span>
+                  <span>Team members with specific coaching questions</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="mt-1 bg-green-100 rounded-full p-1">
+                    <Users className="w-4 h-4 text-green-600" />
+                  </div>
+                  <span>Experienced agents looking for a second opinion</span>
                 </li>
               </ul>
-              <Link to="/content">
+              <Link to="/coach">
                 <Button className="bg-insta-blue hover:bg-insta-blue/90 text-white">
-                  Try It Now
+                  Start Your Free Trial
                 </Button>
               </Link>
             </div>
@@ -186,18 +193,100 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Feature Section */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12">What AIRE Helps You With</h2>
+          
+          <div className="grid md:grid-cols-4 gap-6">
+            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="pt-6">
+                <h3 className="text-xl font-semibold mb-2">Listing Presentations</h3>
+                <p className="text-gray-600">
+                  Perfect your pitch with expert guidance on listing presentations.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="pt-6">
+                <h3 className="text-xl font-semibold mb-2">Negotiation Skills</h3>
+                <p className="text-gray-600">
+                  Learn effective negotiation tactics for any real estate scenario.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="pt-6">
+                <h3 className="text-xl font-semibold mb-2">Buyer Consultations</h3>
+                <p className="text-gray-600">
+                  Improve buyer consultation processes and conversion rates.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="pt-6">
+                <h3 className="text-xl font-semibold mb-2">Marketing Strategies</h3>
+                <p className="text-gray-600">
+                  Develop effective marketing campaigns for your listings.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="pt-6">
+                <h3 className="text-xl font-semibold mb-2">Lead Generation</h3>
+                <p className="text-gray-600">
+                  Discover proven techniques to generate quality leads.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="pt-6">
+                <h3 className="text-xl font-semibold mb-2">Social Media</h3>
+                <p className="text-gray-600">
+                  Create engaging social content that attracts clients.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="pt-6">
+                <h3 className="text-xl font-semibold mb-2">Lead Conversion</h3>
+                <p className="text-gray-600">
+                  Turn more leads into clients with proven methods.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="pt-6">
+                <h3 className="text-xl font-semibold mb-2">Buyer & Seller Systems</h3>
+                <p className="text-gray-600">
+                  Implement effective systems for both buyers and sellers.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 px-4 bg-insta-blue text-white">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-6">Ready to Transform Your Real Estate Content?</h2>
+          <h2 className="text-3xl font-bold mb-6">Ready for Expert Coaching at a Fraction of the Cost?</h2>
           <p className="text-xl mb-8">
-            Join thousands of real estate professionals who use AIRE to create engaging content and grow their business.
+            Try AIRE free for 7 days with no credit card required. Join thousands of real estate professionals already using AIRE to grow their business.
           </p>
           <Link to="/content">
             <Button size="lg" className="bg-white text-insta-blue hover:bg-gray-100">
-              Get Started Now
+              Start Your Free Trial
             </Button>
           </Link>
+          <p className="mt-4 text-white/80">Just $99/month after your trial ends - cancel anytime</p>
         </div>
       </section>
 
@@ -211,15 +300,15 @@ const LandingPage = () => {
                 alt="AIRE Logo" 
                 className="h-10" 
               />
-              <p className="mt-2 text-gray-400">AI-powered tools for real estate professionals</p>
+              <p className="mt-2 text-gray-400">AI-powered coaching for real estate professionals</p>
             </div>
             <div className="flex flex-wrap gap-8">
               <div>
                 <h4 className="font-semibold mb-3">Product</h4>
                 <ul className="space-y-2">
+                  <li><Link to="/coach" className="text-gray-400 hover:text-white">Coach AI</Link></li>
                   <li><Link to="/content" className="text-gray-400 hover:text-white">Content AI</Link></li>
                   <li><Link to="/compliance" className="text-gray-400 hover:text-white">Compliance AI</Link></li>
-                  <li><Link to="/coach" className="text-gray-400 hover:text-white">Coach AI</Link></li>
                 </ul>
               </div>
               <div>
