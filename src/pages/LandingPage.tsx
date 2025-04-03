@@ -11,7 +11,7 @@ const LandingPage = () => {
       <section className="pt-24 pb-16 px-4 text-center">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            The AI <span className="text-insta-blue">Operating System</span> for Real Estate<br />
+            The AI <span className="text-insta-blue">Operating System</span> for Real Estate<br className="md:inline hidden" />
             Agents and Loan Officers
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
