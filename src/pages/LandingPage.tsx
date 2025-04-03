@@ -12,7 +12,7 @@ const LandingPage = () => {
       <section className="pt-24 pb-16 px-4 text-center">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            24/7 AI-Driven <span className="text-insta-blue">Real Estate Coaching</span>
+            The AI <span className="text-insta-blue">Operating System</span> for Real Estate
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
             AIRE provides real estate professionals with instant, expert coaching at a fraction of the cost of traditional coaching. Get personalized guidance whenever you need it.
