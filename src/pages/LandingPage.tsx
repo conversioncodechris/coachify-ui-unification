@@ -50,7 +50,7 @@ const LandingPage = () => {
                   Get 24/7 expert guidance on listing presentations, negotiations, buyer consultations, and lead generation—whenever you need it.
                 </p>
                 <Link to="/coach" className="block">
-                  <Button variant="default" className="w-full bg-black hover:bg-black/90 text-white">
+                  <Button variant="default" className="w-full bg-black hover:bg-black/90 text-white border border-transparent hover:border-black">
                     Explore Coach AI
                   </Button>
                 </Link>
@@ -67,7 +67,7 @@ const LandingPage = () => {
                   Transform conversations into ready-to-use marketing content for social media, email newsletters, and more through natural dialogue.
                 </p>
                 <Link to="/content" className="block">
-                  <Button variant="outline" className="w-full border-black text-black hover:bg-gray-100">
+                  <Button variant="outline" className="w-full border-black text-black hover:bg-gray-100 hover:border-black">
                     Explore Content AI
                   </Button>
                 </Link>
@@ -84,7 +84,7 @@ const LandingPage = () => {
                   Ensure your marketing materials and communications comply with real estate regulations and industry best practices.
                 </p>
                 <Link to="/compliance" className="block">
-                  <Button variant="outline" className="w-full border-black text-black hover:bg-gray-100">
+                  <Button variant="outline" className="w-full border-black text-black hover:bg-gray-100 hover:border-black">
                     Explore Compliance AI
                   </Button>
                 </Link>
@@ -175,7 +175,7 @@ const LandingPage = () => {
                 </li>
               </ul>
               <Link to="/coach">
-                <Button className="bg-insta-blue hover:bg-insta-blue/90 text-white">
+                <Button className="bg-black hover:bg-black/90 text-white border border-transparent hover:border-black">
                   Start Your Free Trial
                 </Button>
               </Link>
@@ -280,7 +280,7 @@ const LandingPage = () => {
             Try AIRE free for 7 days with no credit card required. Join thousands of real estate professionals already using AIRE to grow your business.
           </p>
           <Link to="/content">
-            <Button size="lg" className="bg-white text-black hover:bg-gray-100">
+            <Button size="lg" className="bg-white text-black hover:bg-gray-100 border border-transparent hover:border-black">
               Start Your Free Trial
             </Button>
           </Link>
