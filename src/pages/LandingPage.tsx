@@ -48,6 +48,13 @@ const LandingPage = () => {
                 <p className="text-gray-600 mb-6 text-center">
                   Get 24/7 expert guidance on listing presentations, negotiations, buyer consultations, and lead generation—whenever you need it.
                 </p>
+                <div className="rounded-lg overflow-hidden mb-4 shadow-md">
+                  <img 
+                    src="/lovable-uploads/coach-ai-screenshot.png" 
+                    alt="Coach AI Screenshot" 
+                    className="w-full h-auto"
+                  />
+                </div>
                 <Link to="/coach" className="block">
                   <Button variant="default" className="w-full bg-black hover:bg-black/90 text-white border border-transparent hover:border-black">
                     Explore Coach AI
@@ -65,6 +72,13 @@ const LandingPage = () => {
                 <p className="text-gray-600 mb-6 text-center">
                   Transform conversations into ready-to-use marketing content for social media, email newsletters, and more through natural dialogue.
                 </p>
+                <div className="rounded-lg overflow-hidden mb-4 shadow-md">
+                  <img 
+                    src="/lovable-uploads/content-ai-screenshot.png" 
+                    alt="Content AI Screenshot" 
+                    className="w-full h-auto"
+                  />
+                </div>
                 <Link to="/content" className="block">
                   <Button variant="default" className="w-full bg-black hover:bg-black/90 text-white border border-transparent hover:border-black">
                     Explore Content AI
@@ -82,6 +96,13 @@ const LandingPage = () => {
                 <p className="text-gray-600 mb-6 text-center">
                   Ensure your marketing materials and communications comply with real estate regulations and industry best practices.
                 </p>
+                <div className="rounded-lg overflow-hidden mb-4 shadow-md">
+                  <img 
+                    src="/lovable-uploads/compliance-ai-screenshot.png" 
+                    alt="Compliance AI Screenshot" 
+                    className="w-full h-auto"
+                  />
+                </div>
                 <Link to="/compliance" className="block">
                   <Button variant="default" className="w-full bg-black hover:bg-black/90 text-white border border-transparent hover:border-black">
                     Explore Compliance AI
@@ -138,8 +159,55 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Target Audience Section - MOVED DOWN */}
+      {/* Customization Section - NEW */}
       <section className="py-20 px-4 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12">Customizable to Your Needs</h2>
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h3 className="text-2xl font-semibold mb-4">Powerful Admin Tools</h3>
+              <p className="text-lg text-gray-600 mb-6">
+                AIRE provides comprehensive customization options so you can tailor the platform to your specific business needs:
+              </p>
+              <ul className="space-y-3 mb-6">
+                <li className="flex items-start gap-2">
+                  <div className="mt-1 bg-green-100 rounded-full p-1">
+                    <FileText className="w-4 h-4 text-green-600" />
+                  </div>
+                  <span>Upload your own training materials and documents</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="mt-1 bg-green-100 rounded-full p-1">
+                    <MessageSquare className="w-4 h-4 text-green-600" />
+                  </div>
+                  <span>Create custom AI prompts for your specific needs</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <div className="mt-1 bg-green-100 rounded-full p-1">
+                    <Users className="w-4 h-4 text-green-600" />
+                  </div>
+                  <span>Manage team access and permissions</span>
+                </li>
+              </ul>
+              <Link to="/settings">
+                <Button className="bg-black hover:bg-black/90 text-white border border-transparent hover:border-black">
+                  Explore Admin Features
+                </Button>
+              </Link>
+            </div>
+            <div className="rounded-lg shadow-xl overflow-hidden border border-gray-200">
+              <img 
+                src="/lovable-uploads/admin-dashboard-screenshot.png" 
+                alt="AIRE Admin Dashboard" 
+                className="w-full h-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Target Audience Section - MOVED DOWN */}
+      <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="md:w-1/2">
@@ -267,6 +335,51 @@ const LandingPage = () => {
                 </p>
               </CardContent>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Product Showcase Section - NEW */}
+      <section className="py-20 px-4 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12">See AIRE in Action</h2>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="space-y-6">
+              <div className="rounded-lg overflow-hidden shadow-lg border border-gray-200">
+                <img 
+                  src="/lovable-uploads/coach-conversation-screenshot.png" 
+                  alt="Coach AI Conversation" 
+                  className="w-full h-auto"
+                />
+              </div>
+              <h3 className="text-xl font-semibold text-center">Coach AI Conversations</h3>
+              <p className="text-center text-gray-600">Get real-time coaching advice for specific scenarios and challenges.</p>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="rounded-lg overflow-hidden shadow-lg border border-gray-200">
+                <img 
+                  src="/lovable-uploads/content-generation-screenshot.png" 
+                  alt="Content AI Generation" 
+                  className="w-full h-auto"
+                />
+              </div>
+              <h3 className="text-xl font-semibold text-center">Content Generation</h3>
+              <p className="text-center text-gray-600">Quickly create marketing materials and social posts from conversations.</p>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="rounded-lg overflow-hidden shadow-lg border border-gray-200">
+                <img 
+                  src="/lovable-uploads/customization-screenshot.png" 
+                  alt="AIRE Customization" 
+                  className="w-full h-auto"
+                />
+              </div>
+              <h3 className="text-xl font-semibold text-center">Powerful Customization</h3>
+              <p className="text-center text-gray-600">Upload your own assets and create custom prompts tailored to your business.</p>
+            </div>
           </div>
         </div>
       </section>
