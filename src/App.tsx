@@ -12,6 +12,7 @@ import CoachAI from "./pages/CoachAI";
 import Settings from "./pages/Settings";
 import CustomizeAIRE from "./pages/CustomizeAIRE";
 import AppHeader from "./components/AppHeader";
+import LandingPage from "./pages/LandingPage";
 
 // Create a client with default options to prevent excessive re-fetching
 const queryClient = new QueryClient({
@@ -36,7 +37,8 @@ const App = () => (
       <BrowserRouter>
         <AppHeader userAvatar={userAvatarUrl} />
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/dashboard" element={<Index />} />
           <Route path="/compliance/*" element={<ComplianceAI />} />
           <Route path="/content/*" element={<ContentAI />} />
           <Route path="/coach/*" element={<CoachAI />} />
