@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -12,7 +13,7 @@ const LandingPage = () => {
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Complete AI Suite for Real Estate Professionals</h2>
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            <span className="inline-block whitespace-nowrap">The AI <span className="text-insta-blue">Operating System</span> for Real Estate</span>{' '}
+            <span className="inline-block whitespace-nowrap">The AI <span className="text-black">Operating System</span> for Real Estate</span>{' '}
             <span className="inline-block whitespace-nowrap">Agents and Loan Officers</span>
           </h1>
           <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
@@ -20,12 +21,12 @@ const LandingPage = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/content">
-              <Button size="lg" className="bg-insta-blue hover:bg-insta-blue/90 text-white">
+              <Button size="lg" className="bg-black hover:bg-black/90 text-white">
                 Try Free for 7 Days
               </Button>
             </Link>
             <Link to="/coach">
-              <Button size="lg" variant="outline" className="border-insta-blue text-insta-blue hover:bg-insta-lightBlue">
+              <Button size="lg" variant="outline" className="border-black text-black hover:bg-gray-100">
                 Explore Coach AI
               </Button>
             </Link>
@@ -35,13 +36,13 @@ const LandingPage = () => {
       </section>
 
       {/* AI Features Section - Above the fold */}
-      <section className="py-16 px-4 bg-gradient-to-br from-insta-blue-light to-white">
+      <section className="py-16 px-4 bg-gradient-to-br from-gray-50 to-white">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Complete AI Suite for Real Estate Professionals</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="feature-card">
               <CardContent className="pt-8 pb-6 px-6">
-                <div className="mb-5 bg-insta-blue w-16 h-16 rounded-full flex items-center justify-center text-white mx-auto">
+                <div className="feature-icon-container">
                   <MessageSquare className="w-8 h-8" />
                 </div>
                 <h3 className="text-2xl font-semibold mb-4 text-center text-gray-900">Coach AI</h3>
@@ -49,7 +50,7 @@ const LandingPage = () => {
                   Get 24/7 expert guidance on listing presentations, negotiations, buyer consultations, and lead generation—whenever you need it.
                 </p>
                 <Link to="/coach" className="block">
-                  <Button variant="default" className="w-full bg-insta-blue hover:bg-insta-blue/90 text-white">
+                  <Button variant="default" className="w-full bg-black hover:bg-black/90 text-white">
                     Explore Coach AI
                   </Button>
                 </Link>
@@ -58,7 +59,7 @@ const LandingPage = () => {
 
             <Card className="feature-card">
               <CardContent className="pt-8 pb-6 px-6">
-                <div className="mb-5 bg-insta-lightBlue w-16 h-16 rounded-full flex items-center justify-center text-insta-blue mx-auto">
+                <div className="feature-icon-container">
                   <FileText className="w-8 h-8" />
                 </div>
                 <h3 className="text-2xl font-semibold mb-4 text-center text-gray-900">Content AI</h3>
@@ -66,7 +67,7 @@ const LandingPage = () => {
                   Transform conversations into ready-to-use marketing content for social media, email newsletters, and more through natural dialogue.
                 </p>
                 <Link to="/content" className="block">
-                  <Button variant="outline" className="w-full border-insta-blue text-insta-blue hover:bg-insta-lightBlue">
+                  <Button variant="outline" className="w-full border-black text-black hover:bg-gray-100">
                     Explore Content AI
                   </Button>
                 </Link>
@@ -75,7 +76,7 @@ const LandingPage = () => {
 
             <Card className="feature-card">
               <CardContent className="pt-8 pb-6 px-6">
-                <div className="mb-5 bg-insta-lightBlue w-16 h-16 rounded-full flex items-center justify-center text-insta-blue mx-auto">
+                <div className="feature-icon-container">
                   <Shield className="w-8 h-8" />
                 </div>
                 <h3 className="text-2xl font-semibold mb-4 text-center text-gray-900">Compliance AI</h3>
@@ -83,7 +84,7 @@ const LandingPage = () => {
                   Ensure your marketing materials and communications comply with real estate regulations and industry best practices.
                 </p>
                 <Link to="/compliance" className="block">
-                  <Button variant="outline" className="w-full border-insta-blue text-insta-blue hover:bg-insta-lightBlue">
+                  <Button variant="outline" className="w-full border-black text-black hover:bg-gray-100">
                     Explore Compliance AI
                   </Button>
                 </Link>
@@ -101,7 +102,7 @@ const LandingPage = () => {
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
               <CardContent className="pt-6">
-                <div className="mb-5 bg-insta-lightBlue w-12 h-12 rounded-full flex items-center justify-center text-insta-blue">
+                <div className="mb-5 bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
                   <DollarSign className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Cost-Effective</h3>
@@ -113,7 +114,7 @@ const LandingPage = () => {
 
             <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
               <CardContent className="pt-6">
-                <div className="mb-5 bg-insta-lightBlue w-12 h-12 rounded-full flex items-center justify-center text-insta-blue">
+                <div className="mb-5 bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
                   <Clock className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">24/7 Availability</h3>
@@ -125,7 +126,7 @@ const LandingPage = () => {
 
             <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
               <CardContent className="pt-6">
-                <div className="mb-5 bg-insta-lightBlue w-12 h-12 rounded-full flex items-center justify-center text-insta-blue">
+                <div className="mb-5 bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
                   <TrendingUp className="w-6 h-6" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Always Improving</h3>
@@ -272,14 +273,14 @@ const LandingPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 bg-insta-blue text-white">
+      <section className="py-20 px-4 bg-black text-white">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-6">Ready for Expert Coaching at a Fraction of the Cost?</h2>
           <p className="text-xl mb-8">
             Try AIRE free for 7 days with no credit card required. Join thousands of real estate professionals already using AIRE to grow your business.
           </p>
           <Link to="/content">
-            <Button size="lg" className="bg-white text-insta-blue hover:bg-gray-100">
+            <Button size="lg" className="bg-white text-black hover:bg-gray-100">
               Start Your Free Trial
             </Button>
           </Link>
