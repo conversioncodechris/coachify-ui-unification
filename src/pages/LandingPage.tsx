@@ -39,7 +39,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* AI Features Section - Above the fold */}
+      {/* AI Features Section */}
       <section className="py-16 px-4 bg-gradient-to-br from-insta-blue-light to-white">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Complete AI Suite for Real Estate Professionals</h2>
