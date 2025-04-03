@@ -1,8 +1,21 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { MessageSquare, RefreshCw, FileText, Share2, Shield, Calendar, Users, TrendingUp, DollarSign, Clock, Star } from 'lucide-react';
+import { 
+  MessageSquare, 
+  RefreshCw, 
+  FileText, 
+  Share2, 
+  Shield, 
+  Calendar, 
+  Users, 
+  TrendingUp, 
+  DollarSign, 
+  Clock, 
+  Star 
+} from 'lucide-react';
 
 const LandingPage = () => {
   return (
@@ -99,7 +112,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Testimonials Section - NEW */}
+      {/* Testimonials Section */}
       <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">What Our Users Say</h2>
