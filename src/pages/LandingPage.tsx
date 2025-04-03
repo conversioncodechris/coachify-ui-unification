@@ -9,7 +9,7 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-blue-50">
       {/* Hero Section */}
-      <section className="pt-32 pb-24 px-4 text-center">
+      <section className="pt-36 pb-28 px-4 text-center">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             <span className="inline-block whitespace-nowrap">The AI <span className="text-black">Operating System</span> for Real Estate</span>{' '}
