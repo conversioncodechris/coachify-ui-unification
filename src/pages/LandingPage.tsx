@@ -10,7 +10,11 @@ const LandingPage = () => {
       {/* Hero Section */}
       <section className="pt-24 pb-16 px-4 text-center">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Complete AI Suite for Real Estate Professionals</h2>
+          <img 
+            src="/lovable-uploads/a447a281-4941-48cf-b026-3b8608c1f68a.png" 
+            alt="Complete AI Suite for Real Estate Professionals" 
+            className="max-w-full mx-auto mb-8"
+          />
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             <span className="inline-block whitespace-nowrap">The AI <span className="text-insta-blue">Operating System</span> for Real Estate</span>{' '}
             <span className="inline-block whitespace-nowrap">Agents and Loan Officers</span>
