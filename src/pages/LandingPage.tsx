@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -56,7 +57,7 @@ const LandingPage = () => {
               </CardContent>
             </Card>
 
-            <Card className="border border-border shadow-md hover:shadow-lg transition-all duration-300 bg-white/90 backdrop-blur transform hover:-translate-y-1">
+            <Card className="border border-border shadow-md hover:shadow-lg transition-all duration-300 bg-white/90 backdrop-blur transform hover:-translate-y-1 hover:border-insta-lightBlue hover:border-2">
               <CardContent className="pt-8 pb-6 px-6">
                 <div className="mb-5 bg-insta-lightBlue w-16 h-16 rounded-full flex items-center justify-center text-insta-blue mx-auto">
                   <FileText className="w-8 h-8" />
@@ -73,7 +74,7 @@ const LandingPage = () => {
               </CardContent>
             </Card>
 
-            <Card className="border border-border shadow-md hover:shadow-lg transition-all duration-300 bg-white/90 backdrop-blur transform hover:-translate-y-1">
+            <Card className="border border-border shadow-md hover:shadow-lg transition-all duration-300 bg-white/90 backdrop-blur transform hover:-translate-y-1 hover:border-insta-lightBlue hover:border-2">
               <CardContent className="pt-8 pb-6 px-6">
                 <div className="mb-5 bg-insta-lightBlue w-16 h-16 rounded-full flex items-center justify-center text-insta-blue mx-auto">
                   <Shield className="w-8 h-8" />
