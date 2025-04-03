@@ -101,7 +101,7 @@ const LandingPage = () => {
       {/* Why Choose AIRE? Section - MOVED UP */}
       <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-[1em] inline-block align-middle" />?</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-[1em] inline-block align-text-top" />?</h2>
           
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
@@ -148,7 +148,7 @@ const LandingPage = () => {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="md:w-1/2">
-              <h2 className="text-3xl font-bold mb-6">Who Uses <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-[1em] inline-block align-middle" />?</h2>
+              <h2 className="text-3xl font-bold mb-6">Who Uses <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-[1em] inline-block align-text-top" />?</h2>
               <p className="text-lg text-gray-600 mb-4">
                 Our platform is perfect for all types of real estate professionals who need expert coaching and guidance:
               </p>
@@ -198,7 +198,7 @@ const LandingPage = () => {
       {/* Feature Section */}
       <section className="py-20 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">What <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-[1em] inline-block align-middle" /> Helps You With</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">What <img src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" alt="AIRE Logo" className="h-[1em] inline-block align-text-top" /> Helps You With</h2>
           
           <div className="grid md:grid-cols-4 gap-6">
             <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
@@ -333,3 +333,4 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
+
