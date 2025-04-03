@@ -93,52 +93,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Value Proposition Section */}
-      <section className="py-20 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose AIRE?</h2>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="pt-6">
-                <div className="mb-5 bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
-                  <DollarSign className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Cost-Effective</h3>
-                <p className="text-gray-600">
-                  Just $99/month compared to $1,200-$1,500/month for traditional coaching. Add team members for only $49/month each.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="pt-6">
-                <div className="mb-5 bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
-                  <Clock className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">24/7 Availability</h3>
-                <p className="text-gray-600">
-                  Get expert guidance whenever you need it, not just during scheduled weekly calls. Voice and mobile app access coming soon.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
-              <CardContent className="pt-6">
-                <div className="mb-5 bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
-                  <TrendingUp className="w-6 h-6" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Always Improving</h3>
-                <p className="text-gray-600">
-                  Knowledge base updated bi-weekly with industry trends and based on real agent requests and scenarios.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Target Audience Section */}
+      {/* Target Audience Section - MOVED UP */}
       <section className="py-20 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center gap-12">
@@ -186,6 +141,51 @@ const LandingPage = () => {
                 className="w-full h-auto"
               />
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Value Proposition Section - MOVED DOWN */}
+      <section className="py-20 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose AIRE?</h2>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="pt-6">
+                <div className="mb-5 bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
+                  <DollarSign className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Cost-Effective</h3>
+                <p className="text-gray-600">
+                  Just $99/month compared to $1,200-$1,500/month for traditional coaching. Add team members for only $49/month each.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="pt-6">
+                <div className="mb-5 bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
+                  <Clock className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">24/7 Availability</h3>
+                <p className="text-gray-600">
+                  Get expert guidance whenever you need it, not just during scheduled weekly calls. Voice and mobile app access coming soon.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-border shadow-sm hover:shadow-md transition-shadow">
+              <CardContent className="pt-6">
+                <div className="mb-5 bg-black w-12 h-12 rounded-full flex items-center justify-center text-white">
+                  <TrendingUp className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Always Improving</h3>
+                <p className="text-gray-600">
+                  Knowledge base updated bi-weekly with industry trends and based on real agent requests and scenarios.
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
@@ -328,3 +328,4 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
+
