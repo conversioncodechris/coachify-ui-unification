@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -50,7 +49,7 @@ const LandingPage = () => {
                 </p>
                 <div className="rounded-lg overflow-hidden mb-4 shadow-md">
                   <img 
-                    src="/lovable-uploads/coach-ai-screenshot.png" 
+                    src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" 
                     alt="Coach AI Screenshot" 
                     className="w-full h-auto"
                   />
@@ -74,7 +73,7 @@ const LandingPage = () => {
                 </p>
                 <div className="rounded-lg overflow-hidden mb-4 shadow-md">
                   <img 
-                    src="/lovable-uploads/content-ai-screenshot.png" 
+                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f" 
                     alt="Content AI Screenshot" 
                     className="w-full h-auto"
                   />
@@ -98,7 +97,7 @@ const LandingPage = () => {
                 </p>
                 <div className="rounded-lg overflow-hidden mb-4 shadow-md">
                   <img 
-                    src="/lovable-uploads/compliance-ai-screenshot.png" 
+                    src="https://images.unsplash.com/photo-1581092795360-fd1ca04f0952" 
                     alt="Compliance AI Screenshot" 
                     className="w-full h-auto"
                   />
@@ -197,7 +196,7 @@ const LandingPage = () => {
             </div>
             <div className="rounded-lg shadow-xl overflow-hidden border border-gray-200">
               <img 
-                src="/lovable-uploads/admin-dashboard-screenshot.png" 
+                src="https://images.unsplash.com/photo-1498936178812-4b2e558d2937" 
                 alt="AIRE Admin Dashboard" 
                 className="w-full h-auto"
               />
@@ -249,7 +248,7 @@ const LandingPage = () => {
             </div>
             <div className="md:w-1/2 border border-border rounded-lg shadow-lg overflow-hidden">
               <img 
-                src="/lovable-uploads/4cee2dca-3183-4356-a206-c5d44201ce91.png" 
+                src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7" 
                 alt="Conversational Interview Interface" 
                 className="w-full h-auto"
               />
@@ -348,7 +347,7 @@ const LandingPage = () => {
             <div className="space-y-6">
               <div className="rounded-lg overflow-hidden shadow-lg border border-gray-200">
                 <img 
-                  src="/lovable-uploads/coach-conversation-screenshot.png" 
+                  src="https://images.unsplash.com/photo-1487958449943-2429e8be8625" 
                   alt="Coach AI Conversation" 
                   className="w-full h-auto"
                 />
@@ -360,7 +359,7 @@ const LandingPage = () => {
             <div className="space-y-6">
               <div className="rounded-lg overflow-hidden shadow-lg border border-gray-200">
                 <img 
-                  src="/lovable-uploads/content-generation-screenshot.png" 
+                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" 
                   alt="Content AI Generation" 
                   className="w-full h-auto"
                 />
@@ -372,7 +371,7 @@ const LandingPage = () => {
             <div className="space-y-6">
               <div className="rounded-lg overflow-hidden shadow-lg border border-gray-200">
                 <img 
-                  src="/lovable-uploads/customization-screenshot.png" 
+                  src="https://images.unsplash.com/photo-1487252665478-49b61b47f302" 
                   alt="AIRE Customization" 
                   className="w-full h-auto"
                 />
@@ -405,11 +404,7 @@ const LandingPage = () => {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-6 md:mb-0">
-              <img 
-                src="/lovable-uploads/4f2f6671-26a1-4ac4-9350-e6b774f20421.png" 
-                alt="AIRE Logo" 
-                className="h-10" 
-              />
+              <h2 className="text-2xl font-bold">AIRE</h2>
               <p className="mt-2 text-gray-700">AI-powered coaching for real estate professionals</p>
             </div>
             <div className="flex flex-wrap gap-8">
