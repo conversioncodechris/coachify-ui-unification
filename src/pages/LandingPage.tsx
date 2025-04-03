@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -10,7 +11,6 @@ const LandingPage = () => {
       {/* Hero Section */}
       <section className="pt-24 pb-16 px-4 text-center">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Complete AI Suite for Real Estate Professionals</h2>
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             <span className="inline-block whitespace-nowrap">The AI <span className="text-black">Operating System</span> for Real Estate</span>{' '}
             <span className="inline-block whitespace-nowrap">Agents and Loan Officers</span>
