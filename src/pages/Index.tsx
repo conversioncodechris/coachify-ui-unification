@@ -1,9 +1,10 @@
 
 import React from 'react';
-import LandingPage from './LandingPage';
+import { Navigate } from 'react-router-dom';
 
 const Index = () => {
-  return <LandingPage />;
+  // Redirect to Coach AI as the default experience
+  return <Navigate to="/coach" replace />;
 };
 
 export default Index;

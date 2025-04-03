@@ -1,21 +1,8 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { 
-  MessageSquare, 
-  RefreshCw, 
-  FileText, 
-  Share2, 
-  Shield, 
-  Calendar, 
-  Users, 
-  TrendingUp, 
-  DollarSign, 
-  Clock, 
-  Star 
-} from 'lucide-react';
+import { MessageSquare, RefreshCw, FileText, Share2, Shield, Calendar, Users, TrendingUp, DollarSign, Clock } from 'lucide-react';
 
 const LandingPage = () => {
   return (
@@ -23,11 +10,7 @@ const LandingPage = () => {
       {/* Hero Section */}
       <section className="pt-24 pb-16 px-4 text-center">
         <div className="max-w-5xl mx-auto">
-          <img 
-            src="/lovable-uploads/a447a281-4941-48cf-b026-3b8608c1f68a.png" 
-            alt="Complete AI Suite for Real Estate Professionals" 
-            className="max-w-full mx-auto mb-8"
-          />
+          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">Complete AI Suite for Real Estate Professionals</h2>
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             <span className="inline-block whitespace-nowrap">The AI <span className="text-insta-blue">Operating System</span> for Real Estate</span>{' '}
             <span className="inline-block whitespace-nowrap">Agents and Loan Officers</span>
@@ -51,12 +34,10 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* AI Features Section */}
+      {/* AI Features Section - Above the fold */}
       <section className="py-16 px-4 bg-gradient-to-br from-insta-blue-light to-white">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Complete AI Suite for Real Estate Professionals</h2>
-          
-          {/* Cards Grid */}
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="border-2 border-insta-blue shadow-md hover:shadow-lg transition-all duration-300 bg-white/90 backdrop-blur transform hover:-translate-y-1">
               <CardContent className="pt-8 pb-6 px-6">
@@ -106,90 +87,6 @@ const LandingPage = () => {
                     Explore Compliance AI
                   </Button>
                 </Link>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-20 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-4 text-gray-900">What Our Users Say</h2>
-          <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto">
-            Real estate professionals across the country are transforming their businesses with AIRE.
-          </p>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="border border-border shadow-lg hover:shadow-xl transition-all">
-              <CardContent className="pt-8 pb-6 px-6">
-                <div className="flex mb-4 text-amber-400">
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                </div>
-                <p className="text-gray-700 mb-6 italic">
-                  "AIRE has completely transformed how I approach my business. The 24/7 coaching has helped me close 5 additional deals this quarter alone!"
-                </p>
-                <div className="flex items-center">
-                  <div className="bg-insta-lightBlue w-12 h-12 rounded-full flex items-center justify-center text-insta-blue font-bold">
-                    JD
-                  </div>
-                  <div className="ml-4">
-                    <h4 className="font-semibold">Jessica Davis</h4>
-                    <p className="text-sm text-gray-500">Compass Agent, Seattle</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border border-border shadow-lg hover:shadow-xl transition-all">
-              <CardContent className="pt-8 pb-6 px-6">
-                <div className="flex mb-4 text-amber-400">
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                </div>
-                <p className="text-gray-700 mb-6 italic">
-                  "The Content AI saves me hours every week creating social media posts and email newsletters. It's like having a marketing team in my pocket."
-                </p>
-                <div className="flex items-center">
-                  <div className="bg-insta-lightBlue w-12 h-12 rounded-full flex items-center justify-center text-insta-blue font-bold">
-                    MR
-                  </div>
-                  <div className="ml-4">
-                    <h4 className="font-semibold">Michael Rodriguez</h4>
-                    <p className="text-sm text-gray-500">Team Lead, Miami</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border border-border shadow-lg hover:shadow-xl transition-all">
-              <CardContent className="pt-8 pb-6 px-6">
-                <div className="flex mb-4 text-amber-400">
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                  <Star className="w-5 h-5 fill-current" />
-                </div>
-                <p className="text-gray-700 mb-6 italic">
-                  "After 15 years in real estate, I was skeptical of AI coaching. Now I can't imagine working without AIRE. It's worth every penny."
-                </p>
-                <div className="flex items-center">
-                  <div className="bg-insta-lightBlue w-12 h-12 rounded-full flex items-center justify-center text-insta-blue font-bold">
-                    SJ
-                  </div>
-                  <div className="ml-4">
-                    <h4 className="font-semibold">Sarah Johnson</h4>
-                    <p className="text-sm text-gray-500">Independent Broker, Chicago</p>
-                  </div>
-                </div>
               </CardContent>
             </Card>
           </div>
