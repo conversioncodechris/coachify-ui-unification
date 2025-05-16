@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -57,7 +58,7 @@ const GeneratedContent: React.FC<GeneratedContentProps> = ({
   
   // Determine if content should display images
   const shouldShowImages = (contentType: ContentType) => {
-    return hasImages && ['instagram', 'facebook'].includes(contentType.platform);
+    return hasImages;
   };
 
   // Toggle between edit and preview modes
@@ -180,15 +181,13 @@ const GeneratedContent: React.FC<GeneratedContentProps> = ({
                     )}
                   </>
                 ) : (
-                  // Show platform-specific mockup
-                  ['facebook', 'instagram', 'twitter'].includes(contentType.platform) && (
-                    <SocialMediaMockup
-                      platform={contentType.platform}
-                      content={generatedContent[contentType.id] || ''}
-                      listingDetails={listingDetails}
-                      contentType={contentType}
-                    />
-                  )
+                  // Show mockup preview for all platform types
+                  <SocialMediaMockup
+                    platform={contentType.platform}
+                    content={generatedContent[contentType.id] || ''}
+                    listingDetails={listingDetails}
+                    contentType={contentType}
+                  />
                 )}
               </Card>
             ))}

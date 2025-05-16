@@ -11,7 +11,7 @@ export const generateMockContent = (
   const hasImages = listingDetails.images && listingDetails.images.length > 0;
   
   // Image reference text to include in appropriate content types
-  const imageReference = hasImages && ['instagram', 'facebook'].includes(contentType.platform)
+  const imageReference = hasImages && ['instagram', 'facebook', 'linkedin', 'twitter', 'twitter/x', 'x', 'tiktok'].includes(contentType.platform.toLowerCase())
     ? "[Image will be attached when posting]\n\n"
     : "";
 
@@ -23,6 +23,14 @@ export const generateMockContent = (
     
     case 'coming-soon-instagram':
       return `${imageReference}🔑 SNEAK PEEK 🔑\n\nThis gorgeous ${bedrooms || '4'} bedroom home is hitting the market next week! Located in desirable ${formattedAddress.split(',')[1] || 'Anytown'} and priced at ${formattedPrice}.\n\n👀 Early birds get first dibs!\n\n#ComingSoon #RealEstate #NewListing #${formattedAddress.split(',')[1]?.replace(/\s/g, '') || 'Anytown'}RealEstate`;
+    
+    // LinkedIn content
+    case 'linkedin-listing':
+      return `${imageReference}Excited to share a new property coming to the market!\n\nI'm pleased to present this exceptional ${bedrooms || '4'} bedroom, ${bathrooms || '3'} bathroom home in ${formattedAddress.split(',')[1] || 'Anytown'}. At ${formattedPrice}, this property offers incredible value with ${squareFootage || '2,500'} square feet of thoughtfully designed living space.\n\nKey features include:\n• ${highlights?.split('.')[0] || 'Renovated kitchen with high-end appliances'}\n• ${highlights?.split('.')[1]?.trim() || 'Spacious primary suite with en-suite bathroom'}\n• ${highlights?.split('.')[2]?.trim() || 'Excellent location near top schools and amenities'}\n\nInterested in scheduling a viewing or learning more? Connect with me directly.\n\n#RealEstate #NewListing #PropertyForSale #${formattedAddress.split(',')[1]?.replace(/\s/g, '') || 'Anytown'}`;
+    
+    // TikTok content
+    case 'tiktok-property-tour':
+      return `${imageReference}Wait till you see this INCREDIBLE ${bedrooms || '4'} bedroom home in ${formattedAddress.split(',')[1] || 'Anytown'} 🤯\n\nPriced at ONLY ${formattedPrice} with:\n- ${highlights?.split('.')[0]?.toLowerCase() || 'renovated kitchen with top appliances'}\n- ${highlights?.split('.')[1]?.toLowerCase()?.trim() || 'huge primary suite'}\n\nDM me for a private showing before it's gone! #RealEstateTikTok #DreamHome #HouseTour`;
     
     case 'coming-soon-email':
       return `Subject: Exclusive Preview: Stunning Property Coming to ${formattedAddress.split(',')[1] || 'Anytown'} Next Week\n\nDear [Client Name],\n\nI'm reaching out with an exclusive opportunity to preview a remarkable property before it officially hits the market next week.\n\nProperty Details:\n- ${bedrooms || '4'} bedrooms, ${bathrooms || '3'} bathrooms\n- ${squareFootage || '2,500'} square feet of living space\n- Located at ${formattedAddress}\n- Offered at ${formattedPrice}\n\nKey Features:\n${highlights || '• Completely renovated kitchen with stainless steel appliances\n• Hardwood floors throughout the main level\n• Large primary suite with walk-in closet\n• Spacious backyard with covered patio\n• Excellent school district'}\n\nI have availability for private showings this weekend before the property goes live on the MLS. This gives you a valuable opportunity to see the home without competition from other buyers.\n\nPlease let me know if you'd like to schedule a viewing or if you have any questions about this exciting new listing.\n\nBest regards,\n[Your Name]`;
@@ -39,6 +47,11 @@ export const generateMockContent = (
     
     case 'just-listed-instagram':
       return `${imageReference}💎 NEW LISTING ALERT 💎\n\nSwipe through to see this immaculate ${bedrooms || '4'} bed/${bathrooms || '3'} bath home just listed at ${formattedPrice}!\n\nLocated in the heart of ${formattedAddress.split(',')[1] || 'Anytown'}, this ${squareFootage || '2,500'} sq ft home features ${highlights?.split('.')[0]?.toLowerCase() || 'a gorgeous renovated kitchen'} and ${highlights?.split('.')[1]?.toLowerCase() || 'spacious backyard perfect for entertaining'}.\n\nContact me for a showing before it's gone!\n\n#JustListed #RealEstate #${formattedAddress.split(',')[1]?.replace(/\s/g, '') || 'Anytown'}RealEstate #NewListing #DreamHome`;
+    
+    // X/Twitter content
+    case 'twitter-listing':
+    case 'x-listing':
+      return `${imageReference}🏠 JUST LISTED: Stunning ${bedrooms || '4'} bed, ${bathrooms || '3'} bath home in ${formattedAddress.split(',')[1] || 'Anytown'} for ${formattedPrice}!\n\nFeatures ${highlights?.split('.')[0]?.toLowerCase() || 'renovated kitchen'} and ${squareFootage || '2,500'} sq ft of living space.\n\nDM for details! #RealEstate #JustListed #${formattedAddress.split(',')[1]?.replace(/\s/g, '') || 'Anytown'}`;
     
     case 'property-description':
       return `EXCEPTIONAL ${formattedAddress.split(',')[1] || 'ANYTOWN'} HOME WITH MODERN AMENITIES\n\nWelcome to ${formattedAddress}, a stunning ${bedrooms || '4'} bedroom, ${bathrooms || '3'} bathroom residence offering ${squareFootage || '2,500'} square feet of thoughtfully designed living space.\n\nAs you enter, you'll be impressed by the bright, open floor plan that seamlessly connects the living spaces. The heart of this home is the ${highlights?.includes('kitchen') ? highlights.split('.').find(h => h.includes('kitchen')) || 'gourmet kitchen featuring high-end appliances, custom cabinetry, and stone countertops' : 'gourmet kitchen featuring high-end appliances, custom cabinetry, and stone countertops'}.\n\nThe spacious primary suite serves as a private retreat, complete with a luxurious en-suite bathroom and generous closet space. Additional bedrooms provide comfortable accommodations for family members or guests.\n\nOutdoor living is equally impressive with ${highlights?.includes('yard') || highlights?.includes('backyard') || highlights?.includes('outdoor') ? highlights.split('.').find(h => h.includes('yard') || h.includes('backyard') || h.includes('outdoor')) || 'a beautifully landscaped backyard offering the perfect setting for relaxation and entertainment' : 'a beautifully landscaped backyard offering the perfect setting for relaxation and entertainment'}.\n\nLocated in the highly desirable ${formattedAddress.split(',')[1] || 'Anytown'} neighborhood, this home offers convenient access to top-rated schools, shopping, dining, and recreation.\n\nOffered at ${formattedPrice}, this exceptional property represents the perfect blend of location, space, and modern amenities.`;

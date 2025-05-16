@@ -18,6 +18,8 @@ export const PROMPT_PLATFORMS: PromptPlatform[] = [
   "Instagram",
   "LinkedIn",
   "Twitter/X",
+  "X",
+  "TikTok",
   "Email",
   "Video Script",
   "SMS Message",

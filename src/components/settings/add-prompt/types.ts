@@ -17,6 +17,8 @@ export type PromptPlatform =
   | "Instagram"
   | "LinkedIn"
   | "Twitter/X"
+  | "X"
+  | "TikTok"
   | "Email"
   | "Video Script"
   | "SMS Message"
