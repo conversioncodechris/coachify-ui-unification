@@ -7,7 +7,8 @@ import { ContentType } from './ContentTypeSelector';
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from '@/hooks/use-toast';
-import { Image } from 'lucide-react';
+import { Image, Eye, Copy, FileEdit } from 'lucide-react';
+import SocialMediaMockup from './SocialMediaMockup';
 
 interface GeneratedContentProps {
   listingDetails: any;
@@ -24,6 +25,7 @@ const GeneratedContent: React.FC<GeneratedContentProps> = ({
 }) => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('all');
+  const [viewMode, setViewMode] = useState<'edit' | 'preview'>('edit');
   const platforms = Array.from(new Set(selectedContentTypes.map(type => type.platform)));
   const hasImages = listingDetails.images && listingDetails.images.length > 0;
   
@@ -59,6 +61,11 @@ const GeneratedContent: React.FC<GeneratedContentProps> = ({
     return hasImages && ['instagram', 'facebook'].includes(contentType.platform);
   };
 
+  // Toggle between edit and preview modes
+  const toggleViewMode = () => {
+    setViewMode(viewMode === 'edit' ? 'preview' : 'edit');
+  };
+
   return (
     <div className="mx-auto max-w-5xl w-full">
       <Card className="p-6 bg-white shadow-sm border border-border rounded-lg">
@@ -74,7 +81,21 @@ const GeneratedContent: React.FC<GeneratedContentProps> = ({
           </div>
           <div className="flex gap-4">
             <Button variant="outline" onClick={handleCopyAll}>
+              <Copy className="mr-2 h-4 w-4" />
               Copy All
+            </Button>
+            <Button variant="outline" onClick={toggleViewMode}>
+              {viewMode === 'edit' ? (
+                <>
+                  <Eye className="mr-2 h-4 w-4" />
+                  Preview
+                </>
+              ) : (
+                <>
+                  <FileEdit className="mr-2 h-4 w-4" />
+                  Edit
+                </>
+              )}
             </Button>
             <Button variant="outline" onClick={onNewListing}>
               New Listing
@@ -129,32 +150,46 @@ const GeneratedContent: React.FC<GeneratedContentProps> = ({
                   </Button>
                 </div>
                 
-                {shouldShowImages(contentType) && (
-                  <div className="mb-3 flex gap-2 overflow-x-auto py-2">
-                    {listingDetails.images.slice(0, 3).map((image: any, index: number) => (
-                      <img
-                        key={`${image.id}-${index}`}
-                        src={image.src}
-                        alt={image.alt || `Listing image ${index + 1}`}
-                        className="h-20 w-24 object-cover rounded-md border border-border"
-                      />
-                    ))}
-                  </div>
-                )}
-                
-                <Textarea 
-                  value={generatedContent[contentType.id] || 'Content generation in progress...'}
-                  className="min-h-[120px] text-sm"
-                  readOnly
-                />
-                
-                {shouldShowImages(contentType) && (
-                  <div className="mt-2 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Image className="w-3 h-3" />
-                      <span>Images will be included when posting</span>
-                    </span>
-                  </div>
+                {viewMode === 'edit' ? (
+                  <>
+                    {shouldShowImages(contentType) && (
+                      <div className="mb-3 flex gap-2 overflow-x-auto py-2">
+                        {listingDetails.images.slice(0, 3).map((image: any, index: number) => (
+                          <img
+                            key={`${image.id}-${index}`}
+                            src={image.src}
+                            alt={image.alt || `Listing image ${index + 1}`}
+                            className="h-20 w-24 object-cover rounded-md border border-border"
+                          />
+                        ))}
+                      </div>
+                    )}
+                    
+                    <Textarea 
+                      value={generatedContent[contentType.id] || 'Content generation in progress...'}
+                      className="min-h-[120px] text-sm"
+                      readOnly
+                    />
+                    
+                    {shouldShowImages(contentType) && (
+                      <div className="mt-2 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1">
+                          <Image className="w-3 h-3" />
+                          <span>Images will be included when posting</span>
+                        </span>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  // Show platform-specific mockup
+                  ['facebook', 'instagram', 'twitter'].includes(contentType.platform) && (
+                    <SocialMediaMockup
+                      platform={contentType.platform}
+                      content={generatedContent[contentType.id] || ''}
+                      listingDetails={listingDetails}
+                      contentType={contentType}
+                    />
+                  )
                 )}
               </Card>
             ))}
