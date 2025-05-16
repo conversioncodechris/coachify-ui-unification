@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
-import { Facebook, Instagram, Twitter, Linkedin, MessageSquare, Mail, Video, FileText, X, Tiktok } from 'lucide-react';
+import { Facebook, Instagram, Twitter, Linkedin, MessageSquare, Mail, Video, FileText, X } from 'lucide-react';
 import { ContentType } from './ContentTypeSelector';
 
 interface SocialMediaMockupProps {
@@ -58,7 +58,9 @@ const SocialMediaMockup: React.FC<SocialMediaMockupProps> = ({
       case 'linkedin':
         return <Linkedin className="h-5 w-5 text-blue-700" />;
       case 'tiktok':
-        return <Tiktok className="h-5 w-5 text-black" />;
+        return <div className="h-5 w-5 flex items-center justify-center">
+          <span className="text-xs font-bold">TT</span>
+        </div>;
       case 'email':
         return <Mail className="h-5 w-5 text-blue-500" />;
       case 'sms message':
