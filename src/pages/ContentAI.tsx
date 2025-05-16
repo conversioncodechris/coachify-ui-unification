@@ -19,6 +19,7 @@ const ContentAI = () => {
   const [generatedContent, setGeneratedContent] = useState<Record<string, string>>({});
   
   const handleListingSubmit = (details: any) => {
+    // Preserve any images from the listing details
     setListingDetails(details);
     setStep('select');
     
@@ -35,8 +36,9 @@ const ContentAI = () => {
       description: `Creating ${contentTypes.length} items for your listing...`,
     });
     
-    // Simulate API call delay
+    // Simulate API call delay - would be replaced with actual API call
     setTimeout(() => {
+      // Generate content that includes image references where applicable
       const generatedItems = generateAllContent(contentTypes, listingDetails);
       setGeneratedContent(generatedItems);
       

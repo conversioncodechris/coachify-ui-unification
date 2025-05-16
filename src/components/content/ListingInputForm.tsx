@@ -8,9 +8,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Card } from "@/components/ui/card";
-import { Link, Calendar, FileText } from "lucide-react";
+import { Link, Calendar, FileText, Image } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 const manualListingSchema = z.object({
   address: z.string().min(5, { message: "Address is required" }),
@@ -24,14 +25,26 @@ const manualListingSchema = z.object({
   lotSize: z.string().optional(),
 });
 
+// Sample listing images to choose from
+const mockListingImages = [
+  { id: 'exterior1', src: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&auto=format', alt: 'House Exterior' },
+  { id: 'kitchen1', src: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&auto=format', alt: 'Modern Kitchen' },
+  { id: 'living1', src: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&auto=format', alt: 'Living Room' },
+  { id: 'bathroom1', src: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&auto=format', alt: 'Bathroom' },
+  { id: 'bedroom1', src: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&auto=format', alt: 'Bedroom' },
+  { id: 'backyard1', src: 'https://images.unsplash.com/photo-1564013434775-f71db0030976?w=800&auto=format', alt: 'Backyard' },
+];
+
 interface ListingInputFormProps {
   onListingSubmit: (listingDetails: any) => void;
 }
 
 const ListingInputForm: React.FC<ListingInputFormProps> = ({ onListingSubmit }) => {
+  const { toast } = useToast();
   const [isComingSoon, setIsComingSoon] = useState(false);
   const [listingUrl, setListingUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
 
   const form = useForm<z.infer<typeof manualListingSchema>>({
     resolver: zodResolver(manualListingSchema),
@@ -69,10 +82,17 @@ const ListingInputForm: React.FC<ListingInputFormProps> = ({ onListingSubmit }) 
         squareFootage: '2,500',
         propertyType: 'Single Family Home',
         highlights: 'Renovated kitchen, hardwood floors throughout, large backyard with pool',
-        images: ['/placeholder.svg', '/placeholder.svg']
+        images: selectedImages.length > 0 
+          ? selectedImages.map(id => mockListingImages.find(img => img.id === id))
+          : mockListingImages.slice(0, 3) // Default to first 3 images if none selected
       };
       
       onListingSubmit(mockListingData);
+      
+      toast({
+        title: "Listing data retrieved",
+        description: "Successfully extracted details from the listing URL"
+      });
     }, 1500);
   };
 
@@ -84,9 +104,26 @@ const ListingInputForm: React.FC<ListingInputFormProps> = ({ onListingSubmit }) 
       onListingSubmit({
         source: 'manual',
         ...data,
-        images: [] // No images for coming soon properties
+        images: selectedImages.length > 0 
+          ? selectedImages.map(id => mockListingImages.find(img => img.id === id))
+          : [] // No default images for manual listings unless selected
+      });
+      
+      toast({
+        title: "Listing details saved",
+        description: "Your listing information has been recorded"
       });
     }, 1000);
+  };
+
+  const handleImageToggle = (imageId: string) => {
+    setSelectedImages(prev => {
+      if (prev.includes(imageId)) {
+        return prev.filter(id => id !== imageId);
+      } else {
+        return [...prev, imageId];
+      }
+    });
   };
 
   return (
@@ -134,6 +171,38 @@ const ListingInputForm: React.FC<ListingInputFormProps> = ({ onListingSubmit }) 
               <p className="text-xs text-muted-foreground mt-1">
                 We support links from Zillow, Realtor.com, Redfin and MLS systems
               </p>
+            </div>
+            
+            <div className="mt-4">
+              <label className="text-sm font-medium mb-2 block">
+                Choose sample listing images (optional)
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-2">
+                {mockListingImages.map((image) => (
+                  <div 
+                    key={image.id}
+                    onClick={() => handleImageToggle(image.id)}
+                    className={`relative cursor-pointer rounded-lg overflow-hidden border-2 ${
+                      selectedImages.includes(image.id) 
+                        ? 'border-primary ring-2 ring-primary/30' 
+                        : 'border-transparent hover:border-gray-300'
+                    }`}
+                  >
+                    <img 
+                      src={image.src} 
+                      alt={image.alt}
+                      className="h-24 w-full object-cover"
+                    />
+                    {selectedImages.includes(image.id) && (
+                      <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
+                        <span className="bg-primary text-white text-xs font-medium px-2 py-1 rounded-full">
+                          Selected
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
             
             <div className="mt-6 text-sm text-center text-muted-foreground">
@@ -286,6 +355,44 @@ const ListingInputForm: React.FC<ListingInputFormProps> = ({ onListingSubmit }) 
                   </FormItem>
                 )}
               />
+
+              <div className="mt-4">
+                <label className="text-sm font-medium mb-2 block">
+                  Choose listing images
+                </label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-2">
+                  {mockListingImages.map((image) => (
+                    <div 
+                      key={image.id}
+                      onClick={() => handleImageToggle(image.id)}
+                      className={`relative cursor-pointer rounded-lg overflow-hidden border-2 ${
+                        selectedImages.includes(image.id) 
+                          ? 'border-primary ring-2 ring-primary/30' 
+                          : 'border-transparent hover:border-gray-300'
+                      }`}
+                    >
+                      <img 
+                        src={image.src} 
+                        alt={image.alt}
+                        className="h-24 w-full object-cover"
+                      />
+                      {selectedImages.includes(image.id) && (
+                        <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
+                          <span className="bg-primary text-white text-xs font-medium px-2 py-1 rounded-full">
+                            Selected
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  {selectedImages.length === 0 
+                    ? "Select at least one image for your listing" 
+                    : `${selectedImages.length} image${selectedImages.length !== 1 ? 's' : ''} selected`
+                  }
+                </p>
+              </div>
               
               <div className="pt-4">
                 <Button type="submit" className="w-full" disabled={isLoading}>
@@ -304,6 +411,10 @@ const ListingInputForm: React.FC<ListingInputFormProps> = ({ onListingSubmit }) 
           <div className="flex items-center justify-center text-xs text-muted-foreground gap-2">
             <FileText className="w-4 h-4" />
             <span>We'll create customized content for multiple platforms</span>
+          </div>
+          <div className="flex items-center justify-center text-xs text-muted-foreground gap-2">
+            <Image className="w-4 h-4" />
+            <span>Your listing images will be incorporated into the content</span>
           </div>
         </div>
       </Card>

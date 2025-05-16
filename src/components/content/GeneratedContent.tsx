@@ -7,6 +7,7 @@ import { ContentType } from './ContentTypeSelector';
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from '@/hooks/use-toast';
+import { Image } from 'lucide-react';
 
 interface GeneratedContentProps {
   listingDetails: any;
@@ -24,6 +25,7 @@ const GeneratedContent: React.FC<GeneratedContentProps> = ({
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('all');
   const platforms = Array.from(new Set(selectedContentTypes.map(type => type.platform)));
+  const hasImages = listingDetails.images && listingDetails.images.length > 0;
   
   const filteredContent = activeTab === 'all' 
     ? selectedContentTypes
@@ -50,6 +52,11 @@ const GeneratedContent: React.FC<GeneratedContentProps> = ({
         description: "All generated content has been copied to your clipboard.",
       });
     });
+  };
+  
+  // Determine if content should display images
+  const shouldShowImages = (contentType: ContentType) => {
+    return hasImages && ['instagram', 'facebook'].includes(contentType.platform);
   };
 
   return (
@@ -104,6 +111,12 @@ const GeneratedContent: React.FC<GeneratedContentProps> = ({
                         <Badge variant="outline" className="text-xs">
                           {contentType.category.replace('-', ' ')}
                         </Badge>
+                        {shouldShowImages(contentType) && (
+                          <Badge variant="outline" className="text-xs flex items-center gap-1">
+                            <Image className="w-3 h-3" />
+                            <span>With Images</span>
+                          </Badge>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -115,11 +128,34 @@ const GeneratedContent: React.FC<GeneratedContentProps> = ({
                     Copy
                   </Button>
                 </div>
+                
+                {shouldShowImages(contentType) && (
+                  <div className="mb-3 flex gap-2 overflow-x-auto py-2">
+                    {listingDetails.images.slice(0, 3).map((image: any, index: number) => (
+                      <img
+                        key={`${image.id}-${index}`}
+                        src={image.src}
+                        alt={image.alt || `Listing image ${index + 1}`}
+                        className="h-20 w-24 object-cover rounded-md border border-border"
+                      />
+                    ))}
+                  </div>
+                )}
+                
                 <Textarea 
                   value={generatedContent[contentType.id] || 'Content generation in progress...'}
                   className="min-h-[120px] text-sm"
                   readOnly
                 />
+                
+                {shouldShowImages(contentType) && (
+                  <div className="mt-2 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <Image className="w-3 h-3" />
+                      <span>Images will be included when posting</span>
+                    </span>
+                  </div>
+                )}
               </Card>
             ))}
           </TabsContent>
