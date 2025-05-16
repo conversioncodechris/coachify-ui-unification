@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Card } from "@/components/ui/card";
-import { Link, Calendar, FileText, Image } from "lucide-react";
+import { Link, Calendar, FileText, Image, Check } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
@@ -45,6 +45,8 @@ const ListingInputForm: React.FC<ListingInputFormProps> = ({ onListingSubmit }) 
   const [listingUrl, setListingUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [foundListing, setFoundListing] = useState<any>(null);
+  const [showImageSelector, setShowImageSelector] = useState(false);
 
   const form = useForm<z.infer<typeof manualListingSchema>>({
     resolver: zodResolver(manualListingSchema),
@@ -82,18 +84,32 @@ const ListingInputForm: React.FC<ListingInputFormProps> = ({ onListingSubmit }) 
         squareFootage: '2,500',
         propertyType: 'Single Family Home',
         highlights: 'Renovated kitchen, hardwood floors throughout, large backyard with pool',
-        images: selectedImages.length > 0 
-          ? selectedImages.map(id => mockListingImages.find(img => img.id === id))
-          : mockListingImages.slice(0, 3) // Default to first 3 images if none selected
       };
       
-      onListingSubmit(mockListingData);
+      setFoundListing(mockListingData);
+      setShowImageSelector(true);
       
       toast({
-        title: "Listing data retrieved",
-        description: "Successfully extracted details from the listing URL"
+        title: "Listing found",
+        description: "We found the listing details. Is this the correct property?"
       });
     }, 1500);
+  };
+
+  const confirmListing = () => {
+    const finalListing = {
+      ...foundListing,
+      images: selectedImages.length > 0 
+        ? selectedImages.map(id => mockListingImages.find(img => img.id === id))
+        : mockListingImages.slice(0, 3) // Default to first 3 images if none selected
+    };
+    
+    onListingSubmit(finalListing);
+    
+    toast({
+      title: "Listing data confirmed",
+      description: "Successfully extracted details from the listing URL"
+    });
   };
 
   const onSubmitManualListing = (data: z.infer<typeof manualListingSchema>) => {
@@ -162,55 +178,128 @@ const ListingInputForm: React.FC<ListingInputFormProps> = ({ onListingSubmit }) 
                   onChange={(e) => setListingUrl(e.target.value)}
                   className="flex-1"
                   required
-                  disabled={isLoading}
+                  disabled={isLoading || foundListing !== null}
                 />
-                <Button type="submit" disabled={!listingUrl.trim() || isLoading}>
-                  {isLoading ? "Loading..." : "Next"}
-                </Button>
+                {!foundListing ? (
+                  <Button type="submit" disabled={!listingUrl.trim() || isLoading}>
+                    {isLoading ? "Searching..." : "Find Listing"}
+                  </Button>
+                ) : (
+                  <Button type="button" variant="outline" onClick={() => {
+                    setFoundListing(null);
+                    setShowImageSelector(false);
+                    setSelectedImages([]);
+                  }}>
+                    Change URL
+                  </Button>
+                )}
               </div>
               <p className="text-xs text-muted-foreground mt-1">
                 We support links from Zillow, Realtor.com, Redfin and MLS systems
               </p>
             </div>
             
-            <div className="mt-4">
-              <label className="text-sm font-medium mb-2 block">
-                Choose sample listing images (optional)
-              </label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-2">
-                {mockListingImages.map((image) => (
-                  <div 
-                    key={image.id}
-                    onClick={() => handleImageToggle(image.id)}
-                    className={`relative cursor-pointer rounded-lg overflow-hidden border-2 ${
-                      selectedImages.includes(image.id) 
-                        ? 'border-primary ring-2 ring-primary/30' 
-                        : 'border-transparent hover:border-gray-300'
-                    }`}
-                  >
-                    <img 
-                      src={image.src} 
-                      alt={image.alt}
-                      className="h-24 w-full object-cover"
-                    />
-                    {selectedImages.includes(image.id) && (
-                      <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
-                        <span className="bg-primary text-white text-xs font-medium px-2 py-1 rounded-full">
-                          Selected
-                        </span>
-                      </div>
-                    )}
+            {foundListing && (
+              <div className="mt-4 p-4 border rounded-md bg-muted/50">
+                <h3 className="font-medium text-lg mb-2">Listing Details</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm font-medium">Address:</p>
+                    <p className="text-sm">{foundListing.address}</p>
                   </div>
-                ))}
+                  <div>
+                    <p className="text-sm font-medium">Price:</p>
+                    <p className="text-sm">{foundListing.price}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">Bedrooms:</p>
+                    <p className="text-sm">{foundListing.bedrooms}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">Bathrooms:</p>
+                    <p className="text-sm">{foundListing.bathrooms}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">Square Footage:</p>
+                    <p className="text-sm">{foundListing.squareFootage}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">Property Type:</p>
+                    <p className="text-sm">{foundListing.propertyType}</p>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <p className="text-sm font-medium">Highlights:</p>
+                  <p className="text-sm">{foundListing.highlights}</p>
+                </div>
+                <div className="mt-4 flex items-center justify-center gap-2 text-primary">
+                  <Check className="h-4 w-4" />
+                  <span className="text-sm font-medium">Listing found successfully</span>
+                </div>
               </div>
-            </div>
+            )}
             
-            <div className="mt-6 text-sm text-center text-muted-foreground">
-              <div className="flex items-center justify-center gap-2">
-                <Link className="w-4 h-4" />
-                <span>We'll extract all the details and images from your listing URL</span>
+            {showImageSelector && (
+              <div className="mt-4">
+                <label className="text-sm font-medium mb-2 block">
+                  Choose listing images
+                </label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-2">
+                  {mockListingImages.map((image) => (
+                    <div 
+                      key={image.id}
+                      onClick={() => handleImageToggle(image.id)}
+                      className={`relative cursor-pointer rounded-lg overflow-hidden border-2 ${
+                        selectedImages.includes(image.id) 
+                          ? 'border-primary ring-2 ring-primary/30' 
+                          : 'border-transparent hover:border-gray-300'
+                      }`}
+                    >
+                      <img 
+                        src={image.src} 
+                        alt={image.alt}
+                        className="h-24 w-full object-cover"
+                      />
+                      {selectedImages.includes(image.id) && (
+                        <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
+                          <span className="bg-primary text-white text-xs font-medium px-2 py-1 rounded-full">
+                            Selected
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">
+                  {selectedImages.length === 0 
+                    ? "Select at least one image for your listing" 
+                    : `${selectedImages.length} image${selectedImages.length !== 1 ? 's' : ''} selected`
+                  }
+                </p>
+                
+                {foundListing && (
+                  <div className="mt-4">
+                    <Button 
+                      type="button" 
+                      onClick={confirmListing}
+                      className="w-full"
+                      disabled={selectedImages.length === 0}
+                    >
+                      Confirm Listing
+                    </Button>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
+            
+            {!foundListing && (
+              <div className="mt-6 text-sm text-center text-muted-foreground">
+                <div className="flex items-center justify-center gap-2">
+                  <Link className="w-4 h-4" />
+                  <span>We'll extract all the details and images from your listing URL</span>
+                </div>
+              </div>
+            )}
           </form>
         ) : (
           <Form {...form}>

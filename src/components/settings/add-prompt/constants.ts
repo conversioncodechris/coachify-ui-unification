@@ -17,7 +17,7 @@ export const PROMPT_PLATFORMS: PromptPlatform[] = [
   "Facebook",
   "Instagram",
   "LinkedIn",
-  "Twitter/X",
+  "Twitter",
   "X",
   "TikTok",
   "Email",
