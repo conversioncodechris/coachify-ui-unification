@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, MessageSquare, Plus } from 'lucide-react';
+import { Home, FileText, Plus } from 'lucide-react';
 import { useContentSidebar } from '../../hooks/useContentSidebar';
 import SidebarItem from './SidebarItem';
 import ChatList from './ChatList';
@@ -28,14 +28,14 @@ const ContentSidebar = () => {
       path: '/content' 
     },
     { 
-      icon: <MessageSquare size={20} />, 
-      label: 'Chats', 
-      path: '/content/chats',
+      icon: <FileText size={20} />, 
+      label: 'Listing Content', 
+      path: '/content',
       subItems: activeChats
     },
     { 
       icon: <Plus size={20} />, 
-      label: 'New Chat', 
+      label: 'New Content', 
       path: '/content/new-chat',
       onClick: handleNewChat
     },
@@ -44,7 +44,7 @@ const ContentSidebar = () => {
   return (
     <aside className="w-64 h-[calc(100vh-4rem)] bg-insta-gray border-r border-border overflow-auto">
       <div className="p-4 text-sm font-medium text-insta-darkGray uppercase">
-        Type
+        Listing Content
       </div>
       
       <nav className="flex flex-col space-y-1 px-2">

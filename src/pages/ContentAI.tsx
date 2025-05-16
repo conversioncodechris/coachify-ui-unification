@@ -1,114 +1,114 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ContentSidebar from '../components/sidebar/ContentSidebar';
-import TopicsManager from '../components/content/TopicsManager';
-import ChatSessionManager from '../components/content/ChatSessionManager';
-import ContentChatInterface from '../components/ContentChatInterface';
-import { DEFAULT_CONTENT_TOPICS, DEFAULT_EMOJI_OPTIONS } from '../data/defaultContentTopics';
-import { useContentChatSessions } from '../hooks/useContentChatSessions';
-import { ContentTopic } from '../components/content/ContentTopicCard';
-import { useContentSidebar } from '../hooks/useContentSidebar';
+import ListingInputForm from '../components/content/ListingInputForm';
+import ContentTypeSelector, { ContentType } from '../components/content/ContentTypeSelector';
+import GeneratedContent from '../components/content/GeneratedContent';
+import { generateAllContent } from '../utils/contentGenerator';
+import { useToast } from '../hooks/use-toast';
 
 const ContentAI = () => {
-  const [topics, setTopics] = useState<ContentTopic[]>(DEFAULT_CONTENT_TOPICS);
   const location = useLocation();
   const navigate = useNavigate();
+  const { toast } = useToast();
   
-  const chatMatch = location.pathname.match(/\/content\/chat\/(\d+)/);
-  const chatId = chatMatch ? chatMatch[1] : null;
+  const [step, setStep] = useState<'input' | 'select' | 'results'>('input');
+  const [listingDetails, setListingDetails] = useState<any>(null);
+  const [selectedContentTypes, setSelectedContentTypes] = useState<ContentType[]>([]);
+  const [generatedContent, setGeneratedContent] = useState<Record<string, string>>({});
   
-  const { currentTopic, createNewChatSession } = useContentChatSessions(
-    null,
-    chatId
-  );
-
-  const { activeChats, setActiveChats } = useContentSidebar();
-
-  // Load active chats from localStorage when on the main content page
-  useEffect(() => {
-    if (!chatId) {
-      const savedChats = localStorage.getItem('contentActiveChats');
-      if (savedChats) {
-        try {
-          const chats = JSON.parse(savedChats);
-          if (Array.isArray(chats)) {
-            setActiveChats(chats);
-          } else {
-            // Invalid data structure, clear localStorage
-            localStorage.removeItem('contentActiveChats');
-            setActiveChats([]);
-          }
-        } catch (error) {
-          console.error('Error parsing active chats:', error);
-          localStorage.removeItem('contentActiveChats');
-          setActiveChats([]);
-        }
-      } else {
-        setActiveChats([]);
-      }
+  const handleListingSubmit = (details: any) => {
+    setListingDetails(details);
+    setStep('select');
+    
+    // Scroll to top for best UX
+    window.scrollTo(0, 0);
+  };
+  
+  const handleContentTypesSubmit = (contentTypes: ContentType[]) => {
+    setSelectedContentTypes(contentTypes);
+    setStep('results');
+    
+    toast({
+      title: "Generating content",
+      description: `Creating ${contentTypes.length} items for your listing...`,
+    });
+    
+    // Simulate API call delay
+    setTimeout(() => {
+      const generatedItems = generateAllContent(contentTypes, listingDetails);
+      setGeneratedContent(generatedItems);
+      
+      toast({
+        title: "Content ready!",
+        description: `Successfully generated ${contentTypes.length} content items.`,
+      });
+    }, 3000);
+    
+    // Scroll to top for best UX
+    window.scrollTo(0, 0);
+  };
+  
+  const handleNewListing = () => {
+    setStep('input');
+    setListingDetails(null);
+    setSelectedContentTypes([]);
+    setGeneratedContent({});
+    
+    // Navigate back to main content page
+    navigate('/content');
+    
+    toast({
+      title: "Ready for a new listing",
+      description: "Start by entering your listing details or URL.",
+    });
+  };
+  
+  const renderCurrentStep = () => {
+    switch (step) {
+      case 'input':
+        return <ListingInputForm onListingSubmit={handleListingSubmit} />;
+      case 'select':
+        return (
+          <ContentTypeSelector 
+            listingDetails={listingDetails}
+            onContentTypesSubmit={handleContentTypesSubmit}
+            onBack={() => setStep('input')}
+          />
+        );
+      case 'results':
+        return (
+          <GeneratedContent 
+            listingDetails={listingDetails}
+            selectedContentTypes={selectedContentTypes}
+            generatedContent={generatedContent}
+            onNewListing={handleNewListing}
+          />
+        );
+      default:
+        return <ListingInputForm onListingSubmit={handleListingSubmit} />;
     }
-  }, [chatId, setActiveChats]);
-
-  // Listen for contentAssetsUpdated event to refresh topics
-  useEffect(() => {
-    const handleContentAssetsUpdated = () => {
-      console.log("ContentAI: contentAssetsUpdated event received");
-      // No need to do anything here, the TopicsManager component will handle this
-    };
-    
-    window.addEventListener('contentAssetsUpdated', handleContentAssetsUpdated as EventListener);
-    
-    return () => {
-      window.removeEventListener('contentAssetsUpdated', handleContentAssetsUpdated as EventListener);
-    };
-  }, []);
-
-  // Handle browser navigation events
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      // Ensure localStorage is in sync with current state before page changes
-      if (!location.pathname.includes('/content/chat/')) {
-        localStorage.removeItem('contentActiveChats');
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, [location.pathname]);
-
-  const handleTopicClick = (topic: string) => {
-    createNewChatSession(topic);
   };
   
-  const handleBackToTopics = () => {
-    // Clear localStorage for content chats
-    localStorage.removeItem('contentActiveChats');
-    
-    // Force navigation with replace to prevent history issues
-    navigate('/content', { replace: true });
-  };
-
   return (
     <div className="flex flex-col h-screen bg-background">
       <div className="flex flex-1 overflow-hidden pt-16">
         <ContentSidebar />
         
-        <div className="flex flex-col flex-1 overflow-hidden">
-          <ChatSessionManager topic={currentTopic} chatId={chatId} />
-          
-          {currentTopic && chatId ? (
-            <ContentChatInterface 
-              topic={currentTopic}
-              onBackToTopics={handleBackToTopics}
-            />
-          ) : (
-            <TopicsManager
-              topics={topics}
-              setTopics={setTopics}
-              onTopicClick={handleTopicClick}
-              emojiOptions={DEFAULT_EMOJI_OPTIONS}
-            />
-          )}
+        <div className="flex flex-col flex-1 overflow-auto">
+          <div className="py-8 px-4 md:px-8 bg-white">
+            <div className="max-w-6xl mx-auto">
+              <div className="mb-8">
+                <h1 className="text-3xl font-semibold mb-2">Listing Content Creator</h1>
+                <p className="text-muted-foreground">
+                  Transform your listing into multiple pieces of marketing content with just a few clicks
+                </p>
+              </div>
+              
+              {renderCurrentStep()}
+            </div>
+          </div>
         </div>
       </div>
     </div>
