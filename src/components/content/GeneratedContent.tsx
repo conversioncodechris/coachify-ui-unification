@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -25,7 +24,7 @@ const GeneratedContent: React.FC<GeneratedContentProps> = ({
 }) => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('all');
-  const [viewMode, setViewMode] = useState<'edit' | 'preview'>('edit');
+  const [viewMode, setViewMode] = useState<'edit' | 'preview'>('preview'); // Changed default from 'edit' to 'preview'
   const platforms = Array.from(new Set(selectedContentTypes.map(type => type.platform)));
   const hasImages = listingDetails.images && listingDetails.images.length > 0;
   
