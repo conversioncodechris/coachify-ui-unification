@@ -53,6 +53,16 @@ The best part? ${userResponses[3]?.substring(0, 80)}...
 The best part? ${userResponses[3]?.substring(0, 80)}...
 
 #RealEstate #Success #ClosedDeal`,
+
+      tiktok: `POV: When you finally close on that perfect property after weeks of negotiation! 🏠✨
+
+What made it special: ${userResponses[0]?.substring(0, 100)}... 
+
+Biggest challenge we faced: ${userResponses[1]?.substring(0, 80)}...
+
+Worth it for: ${userResponses[3]?.substring(0, 80)}...
+
+#RealEstateTikTok #ClosingDay #RealEstateAgent #PropertySuccess`,
       
       email: `Subject: How We Overcame Challenges to Close on a Unique Property
 

@@ -17,6 +17,8 @@ export interface ContentOutput {
   instagram?: string;
   twitter?: string;
   linkedin?: string;
+  x?: string;
+  tiktok?: string;
   email?: string;
   videoScript?: string;
   smsMessage?: string;
