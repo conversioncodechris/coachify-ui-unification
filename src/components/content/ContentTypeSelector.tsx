@@ -11,7 +11,7 @@ export interface ContentType {
   title: string;
   description: string;
   category: 'coming-soon' | 'just-listed' | 'open-house' | 'price-change' | 'just-sold';
-  platform: 'facebook' | 'instagram' | 'twitter' | 'email' | 'website' | 'video' | 'text';
+  platform: 'facebook' | 'instagram' | 'twitter' | 'linkedin' | 'email' | 'website' | 'video' | 'text';
   icon: string;
   estimatedTime: number;
 }

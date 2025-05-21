@@ -126,7 +126,7 @@ Contact:
 [Phone]
 [Email]`,
 
-      blogPost: `# How I Navigated a Challenging Real Estate Transaction to Success
+      longFormBlog: `# How I Navigated a Challenging Real Estate Transaction to Success
 
 In the world of real estate, each transaction tells a unique story. Today, I'd like to share a recent success story that showcases the importance of perseverance, adaptability, and client-focused service.
 
@@ -154,7 +154,7 @@ Through this experience, I've refined my approach to handling complex real estat
 
 If you're facing similar challenges in your real estate journey, I'd love to share how these strategies might help you too. Reach out today for a consultation!`,
 
-      // Adding all 23 content types from the list
+      // Adding all content types
       comingSoon: `🏠 COMING SOON! 🏠
 
 Excited to announce a beautiful property coming to the market next week! This is your exclusive sneak peek.
