@@ -24,6 +24,7 @@ export interface ContentOutput {
   smsMessage?: string;
   pressRelease?: string;
   blogPost?: string;
+  longFormBlog?: string;
   comingSoon?: string;
   justListed?: string;
   neighborhoodHighlight?: string;
