@@ -145,6 +145,42 @@ const ContentTypeSelector: React.FC<ContentTypeSelectorProps> = ({
       icon: '📋',
       estimatedTime: 6
     },
+    {
+      id: 'google-business-profile',
+      title: 'Google Business Profile Post',
+      description: 'Post for your Google Business Profile',
+      category: 'just-listed',
+      platform: 'website',
+      icon: '🌐',
+      estimatedTime: 5
+    },
+    {
+      id: 'youtube-walkthrough',
+      title: 'YouTube Walkthrough Script',
+      description: 'Script for a comprehensive YouTube property tour',
+      category: 'just-listed',
+      platform: 'video',
+      icon: '🎥',
+      estimatedTime: 15
+    },
+    {
+      id: 'seller-story',
+      title: 'Seller\'s Story',
+      description: 'Content focused on the seller\'s experience in the home',
+      category: 'just-listed',
+      platform: 'website',
+      icon: '📖',
+      estimatedTime: 8
+    },
+    {
+      id: 'hero-feature',
+      title: 'Hero Feature Highlight',
+      description: 'Content focusing on one standout feature of the property',
+      category: 'just-listed',
+      platform: 'instagram',
+      icon: '✨',
+      estimatedTime: 5
+    },
     
     // Open House
     {
@@ -183,6 +219,24 @@ const ContentTypeSelector: React.FC<ContentTypeSelectorProps> = ({
       icon: '📄',
       estimatedTime: 6
     },
+    {
+      id: 'live-open-house',
+      title: 'Live Open House Script',
+      description: 'Script for hosting a live social media open house',
+      category: 'open-house',
+      platform: 'video',
+      icon: '🔴',
+      estimatedTime: 10
+    },
+    {
+      id: 'open-house-story-poll',
+      title: 'Open House Story Poll',
+      description: 'Interactive poll to drive engagement before open house',
+      category: 'open-house',
+      platform: 'instagram',
+      icon: '📊',
+      estimatedTime: 3
+    },
     
     // Price Change
     {
@@ -211,6 +265,15 @@ const ContentTypeSelector: React.FC<ContentTypeSelectorProps> = ({
       platform: 'email',
       icon: '✉️',
       estimatedTime: 7
+    },
+    {
+      id: 'offer-story',
+      title: 'Offer Story Post',
+      description: 'Post about a recent offer without revealing confidential details',
+      category: 'price-change',
+      platform: 'facebook',
+      icon: '🎯',
+      estimatedTime: 5
     },
     
     // Just Sold
@@ -257,6 +320,69 @@ const ContentTypeSelector: React.FC<ContentTypeSelectorProps> = ({
       category: 'just-sold',
       platform: 'text',
       icon: '📊',
+      estimatedTime: 10
+    },
+    {
+      id: 'buyer-feedback',
+      title: 'Buyer Feedback Highlights',
+      description: 'Compilation of buyer feedback from showings',
+      category: 'just-sold',
+      platform: 'facebook',
+      icon: '💬',
+      estimatedTime: 7
+    },
+    {
+      id: 'cma-mailing',
+      title: 'CMA Neighborhood Mailing',
+      description: 'Template for circle prospecting with comparable home values',
+      category: 'just-sold',
+      platform: 'email',
+      icon: '📧',
+      estimatedTime: 10
+    },
+    {
+      id: 'marketing-case-study',
+      title: 'Marketing Case Study',
+      description: 'Detailed breakdown of your marketing strategy for the listing',
+      category: 'just-sold',
+      platform: 'linkedin',
+      icon: '📈',
+      estimatedTime: 15
+    },
+    {
+      id: 'behind-the-scenes',
+      title: 'Behind The Scenes Post',
+      description: 'Content showing the work that went into selling the property',
+      category: 'just-sold',
+      platform: 'instagram',
+      icon: '🎬',
+      estimatedTime: 8
+    },
+    {
+      id: 'walk-score-highlight',
+      title: 'Walk Score Highlight',
+      description: 'Content highlighting the property\'s walkability score',
+      category: 'just-sold',
+      platform: 'facebook',
+      icon: '🚶',
+      estimatedTime: 6
+    },
+    {
+      id: 'property-quiz',
+      title: 'Property Feature Quiz',
+      description: 'Interactive quiz about the property\'s features',
+      category: 'just-sold',
+      platform: 'instagram',
+      icon: '🤔',
+      estimatedTime: 5
+    },
+    {
+      id: 'email-newsletter',
+      title: 'Email Newsletter Feature',
+      description: 'Feature in your regular email newsletter',
+      category: 'just-sold',
+      platform: 'email',
+      icon: '📰',
       estimatedTime: 10
     }
   ];

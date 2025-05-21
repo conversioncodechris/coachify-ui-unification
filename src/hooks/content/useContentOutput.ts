@@ -154,7 +154,7 @@ Through this experience, I've refined my approach to handling complex real estat
 
 If you're facing similar challenges in your real estate journey, I'd love to share how these strategies might help you too. Reach out today for a consultation!`,
 
-      // New content types based on the marketing strategies
+      // Adding all 23 content types from the list
       comingSoon: `🏠 COMING SOON! 🏠
 
 Excited to announce a beautiful property coming to the market next week! This is your exclusive sneak peek.
@@ -183,6 +183,113 @@ Interested in a private showing? Contact me today before this gem is gone!
 
 #JustListed #RealEstate #DreamHome #NewListing`,
 
+      sellerStory: `📖 THE STORY BEHIND THE SALE
+
+Every home has a story, and this one is special.
+
+The sellers shared: "${userResponses[0]?.substring(0, 150)}..."
+
+What they'll miss most about this home:
+"${userResponses[2]?.substring(0, 100)}..."
+
+I'm honored to help transition this beloved home to its next chapter. Interested in being part of this home's continuing story? Let's talk!
+
+#HomeStories #RealEstateLegacy #MovingOn`,
+
+      heroFeature: `✨ FEATURE SPOTLIGHT: The Heart of This Home
+
+Some features truly define a property. For this listing, it's definitely ${userResponses[0]?.substring(0, 100)}...
+
+What makes it special:
+• ${userResponses[1]?.substring(0, 80)}...
+• ${userResponses[2]?.substring(0, 80)}...
+
+This is the kind of feature that turns a house into a dream home. Come see it in person!
+
+#DreamHomeFeatures #RealEstateDetails #HomeDesign`,
+
+      blogPost: `# The Story Behind This Exceptional Property
+
+Every home has a unique story, and today I'm excited to share one that's particularly special. As the listing agent for this property, I've had the privilege of learning what makes it not just a house, but a home.
+
+## What Makes This Property Special
+
+${userResponses[0]}
+
+## The Neighborhood
+
+${userResponses[1]}
+
+## Why This Home Could Be Perfect For You
+
+${userResponses[2]}
+
+## Final Thoughts
+
+${userResponses[3]}
+
+If you're interested in learning more about this property or would like to schedule a viewing, please don't hesitate to contact me directly.
+
+#RealEstateBlog #HomeStory #PropertyListing`,
+
+      googleBusinessProfile: `NEW LISTING: ${userResponses[0]?.substring(0, 100)}...
+
+I'm excited to present this exceptional property to the market! Located in a highly desirable area with ${userResponses[1]?.substring(0, 80)}...
+
+Key features include:
+• ${userResponses[2]?.substring(0, 80)}...
+
+Contact me for more information or to schedule a showing!
+
+#JustListed #RealEstate #NewProperty`,
+
+      youtubeWalkthrough: `[INTRO]
+Welcome to this exclusive property tour! Today, I'm excited to walk you through this exceptional home that just hit the market.
+
+[PROPERTY OVERVIEW]
+This property is special because ${userResponses[0]?.substring(0, 100)}...
+
+[ROOM-BY-ROOM TOUR]
+As we enter, notice ${userResponses[1]?.substring(0, 100)}...
+
+The kitchen features ${userResponses[2]?.substring(0, 80)}...
+
+Let's head upstairs to see the bedrooms...
+
+[NEIGHBORHOOD HIGHLIGHTS]
+This home is perfectly situated to enjoy ${userResponses[3]?.substring(0, 80)}...
+
+[CALL TO ACTION]
+If you're interested in seeing this property in person, contact me at the information below to schedule a showing. Don't forget to like and subscribe for more property tours!
+
+Thanks for watching!`,
+
+      buyerFeedback: `📊 BUYER FEEDBACK INSIGHTS
+
+After multiple showings of this property, here's what potential buyers are saying:
+
+"${userResponses[0]?.substring(0, 100)}..." - Buyer from [Location]
+
+"${userResponses[1]?.substring(0, 100)}..." - Couple relocating from [Location]
+
+"${userResponses[2]?.substring(0, 100)}..." - First-time homebuyer
+
+This kind of feedback helps us understand what today's buyers are looking for in this market. Interested in what buyers might say about your home? Let's talk!
+
+#BuyerInsights #RealEstateFeedback #MarketTrends`,
+
+      offerStory: `🎯 YOU WON'T BELIEVE THIS OFFER!
+
+Every property has a story, and this one just took an exciting turn! 
+
+Without revealing confidential details, I can share that this listing just received an offer that demonstrates just how hot our market is right now!
+
+What made this property attract such attention? ${userResponses[0]?.substring(0, 100)}...
+
+If you're thinking of selling, now might be the perfect time to capitalize on this seller's market. Let's discuss your options!
+
+#HotMarket #RealEstateOffer #SellerSuccess`,
+
       neighborhoodHighlight: `📍 NEIGHBORHOOD SPOTLIGHT: Why This Location Matters
 
 Location is everything in real estate, and this property delivers!
@@ -198,6 +305,19 @@ ${userResponses[0]?.substring(0, 150)}...
 The neighborhood vibe is exactly what today's buyers are looking for - convenient, connected, and character-filled.
 
 #NeighborhoodGuide #LocationLocationLocation #CommunityLiving`,
+
+      quizContent: `🤔 PROPERTY QUIZ: Can You Guess...?
+
+1. Which room in this listing has the most natural light?
+2. What unique feature makes the primary bedroom stand out?
+3. How many total rooms does this property have?
+4. What unexpected bonus space might surprise you?
+
+Comment your guesses below! I'll reveal the answers tomorrow.
+
+Hint: One of these features is completely unique to this property and rarely found in this neighborhood.
+
+#RealEstateQuiz #PropertyFeatures #GuessTheRoom`,
 
       marketUpdate: `📊 MARKET UPDATE: What Today's Real Estate Trends Mean For You
 
@@ -237,31 +357,6 @@ What impressed us most was ${userResponses[3]?.substring(0, 100)}..."
 Your real estate goals deserve this level of dedicated service. Let's talk about how I can help you achieve similar results!
 
 #ClientTestimonial #RealEstateSuccess #TrustedAdvisor`,
-
-      sellerStory: `📖 THE STORY BEHIND THE SALE
-
-Every home has a story, and this one is special.
-
-The sellers shared: "${userResponses[0]?.substring(0, 150)}..."
-
-What they'll miss most about this home:
-"${userResponses[2]?.substring(0, 100)}..."
-
-I'm honored to help transition this beloved home to its next chapter. Interested in being part of this home's continuing story? Let's talk!
-
-#HomeStories #RealEstateLegacy #MovingOn`,
-
-      heroFeature: `✨ FEATURE SPOTLIGHT: The Heart of This Home
-
-Some features truly define a property. For this listing, it's definitely ${userResponses[0]?.substring(0, 100)}...
-
-What makes it special:
-• ${userResponses[1]?.substring(0, 80)}...
-• ${userResponses[2]?.substring(0, 80)}...
-
-This is the kind of feature that turns a house into a dream home. Come see it in person!
-
-#DreamHomeFeatures #RealEstateDetails #HomeDesign`,
 
       behindTheScenes: `🎬 BEHIND THE SCENES: Preparing This Listing
 
@@ -319,19 +414,6 @@ Today's buyers value convenience and lifestyle. This location delivers both in a
 
 #WalkScore #LocationAdvantage #UrbanLiving #ConvenientLifestyle`,
 
-      quizContent: `🤔 PROPERTY QUIZ: Can You Guess...?
-
-1. Which room in this listing has the most natural light?
-2. What unique feature makes the primary bedroom stand out?
-3. How many total rooms does this property have?
-4. What unexpected bonus space might surprise you?
-
-Comment your guesses below! I'll reveal the answers tomorrow.
-
-Hint: One of these features is completely unique to this property and rarely found in this neighborhood.
-
-#RealEstateQuiz #PropertyFeatures #GuessTheRoom`,
-
       emailNewsletter: `Subject: Behind the Scenes: The Making of an Exceptional Listing
 
 Dear [Name],
@@ -352,7 +434,81 @@ I'd be happy to discuss how these insights might apply to your specific situatio
 Best regards,
 [Your Name]
 
-P.S. If you know anyone who might be interested in this property, I'd greatly appreciate you forwarding this email to them.`
+P.S. If you know anyone who might be interested in this property, I'd greatly appreciate you forwarding this email to them.`,
+
+      cmaMailing: `Subject: Property Value Update for [Neighborhood Name] - Exclusive Insights from Recent Listing
+
+Dear [Neighbor's Name],
+
+As a resident of [Neighborhood], I thought you'd be interested in some new market data I've compiled. My recent listing at [Address] offers valuable insights into our local real estate market.
+
+NEIGHBORHOOD MARKET UPDATE:
+• Average sale price in [Neighborhood]: [Price]
+• Average days on market: [Number]
+• Current inventory levels: [Low/Medium/High]
+
+HOW YOUR HOME COMPARES:
+Properties similar to yours in size and style are currently valued between [Price Range]. This is a [percentage]% increase from last year at this time.
+
+I'd be happy to provide you with a personalized Comparative Market Analysis to give you a more precise valuation of your property, without any obligation.
+
+Would you like to schedule a quick 15-minute consultation to discuss your specific property? I'm available [Days/Times].
+
+Best regards,
+[Your Name]
+[Your Phone]
+[Your Email]`,
+
+      liveOpenHouse: `🔴 GOING LIVE for our Open House at [Address]!
+
+Join me as I tour this beautiful property and answer your questions in real time.
+
+Property highlights:
+• ${userResponses[0]?.substring(0, 80)}...
+• ${userResponses[1]?.substring(0, 80)}...
+
+Can't make it in person? Drop your questions in the comments and I'll show you any part of the house you'd like to see more of!
+
+Share this with friends who might be interested in this [Neighborhood] property!
+
+#LiveOpenHouse #RealEstateTour #VirtualShowing`,
+
+      storyPoll: `📊 QUICK QUESTION:
+
+Would you move for a kitchen like this? 👇
+
+[Image of kitchen]
+
+[] YES! Dream kitchen alert!
+[] No, not my style
+[] Only if the rest of the house is just as nice
+[] I'd need to see more
+
+The kitchen in my newest listing has been getting a lot of attention from buyers. What features make a kitchen a "must-have" for you? Comment below!
+
+#KitchenGoals #RealEstatePolls #HomeFeatures`,
+
+      marketingCaseStudy: `📈 HOW WE MARKETED THIS PROPERTY: A Case Study
+
+For real estate agents and sellers who want to understand effective marketing strategies, here's a detailed breakdown of how we promoted this recent listing:
+
+STRATEGY OVERVIEW:
+• Pre-listing: Teaser campaign with "coming soon" announcements
+• Launch: Multi-platform announcement with professional photography
+• Ongoing: Weekly content schedule across platforms
+
+RESULTS:
+• [X] showings in the first weekend
+• [X] qualified buyer inquiries through social media
+• Offer received within [X] days
+
+KEY LEARNINGS:
+${userResponses[3]?.substring(0, 200)}...
+
+For sellers: This approach can help your property stand out in a competitive market.
+For agents: I'm happy to share more detailed insights about this marketing approach.
+
+#RealEstateMarketing #ListingStrategy #MarketingCaseStudy`
     };
   };
 

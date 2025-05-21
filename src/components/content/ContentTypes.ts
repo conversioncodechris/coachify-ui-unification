@@ -38,4 +38,12 @@ export interface ContentOutput {
   walkScore?: string;
   quizContent?: string;
   emailNewsletter?: string;
+  googleBusinessProfile?: string;
+  youtubeWalkthrough?: string;
+  buyerFeedback?: string;
+  offerStory?: string;
+  cmaMailing?: string;
+  liveOpenHouse?: string;
+  storyPoll?: string;
+  marketingCaseStudy?: string;
 }

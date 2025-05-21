@@ -35,7 +35,15 @@ export type PromptPlatform =
   | "Hero Feature"
   | "Email Newsletter"
   | "Testimonial"
-  | "Just Sold";
+  | "Just Sold"
+  | "Google Business Profile"
+  | "YouTube Walkthrough"
+  | "Buyer Feedback"
+  | "Offer Story"
+  | "CMA Mailing"
+  | "Live Open House"
+  | "Story Poll"
+  | "Marketing Case Study";
 
 export interface UseAddPromptFormProps {
   defaultAiType: "content" | "compliance" | "coach";
