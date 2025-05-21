@@ -24,4 +24,18 @@ export interface ContentOutput {
   smsMessage?: string;
   pressRelease?: string;
   blogPost?: string;
+  comingSoon?: string;
+  justListed?: string;
+  neighborhoodHighlight?: string;
+  marketUpdate?: string;
+  openHouseAnnouncement?: string;
+  testimonial?: string;
+  sellerStory?: string;
+  heroFeature?: string;
+  behindTheScenes?: string;
+  marketingBreakdown?: string;
+  justSold?: string;
+  walkScore?: string;
+  quizContent?: string;
+  emailNewsletter?: string;
 }
