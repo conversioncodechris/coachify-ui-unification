@@ -7,7 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import AITypeSelector from './AITypeSelector';
 import EmojiSelector from './EmojiSelector';
-import { PromptPurpose, PromptPlatform } from './useAddPromptForm';
+import { PromptPurpose, PromptPlatform } from './types';
+import { PROMPT_PURPOSES, PROMPT_PLATFORMS } from './constants';
 
 interface PromptFormFieldsProps {
   selectedEmoji: string;
@@ -29,23 +30,13 @@ interface PromptFormFieldsProps {
   onSelectAllPlatforms?: (checked: boolean) => void;
 }
 
-const PURPOSES: PromptPurpose[] = [
-  "Open House",
-  "Price Reduction",
-  "Market Report",
-  "New Listing",
-  "Just Sold",
-  "Testimonial",
-  "Neighborhood Highlight",
-  "Home Improvement Tips",
-  "Other"
-];
-
+// Using the imported constants instead of hardcoding the arrays here
 const PLATFORMS: PromptPlatform[] = [
   "Facebook",
   "Instagram",
   "LinkedIn",
-  "Twitter/X",
+  "X",
+  "TikTok",
   "Email",
   "Video Script",
   "SMS Message",
@@ -124,7 +115,7 @@ const PromptFormFields: React.FC<PromptFormFieldsProps> = ({
               <SelectValue placeholder="Select purpose" />
             </SelectTrigger>
             <SelectContent>
-              {PURPOSES.map((purpose) => (
+              {PROMPT_PURPOSES.map((purpose) => (
                 <SelectItem key={purpose} value={purpose}>
                   {purpose}
                 </SelectItem>
